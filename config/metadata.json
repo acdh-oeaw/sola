@@ -1,0 +1,26 @@
+{
+  "en": {
+    "url": "https://sola.acdh.oeaw.ac.at",
+    "title": "Sunday Observance in Late Antiquity",
+    "shortTitle": "SOLA",
+    "description": "",
+    "image": {
+      "src": "public/assets/images/logo.svg"
+    },
+    "twitter": {
+      "handle": ""
+    }
+  },
+  "de": {
+    "url": "https://sola.acdh.oeaw.ac.at",
+    "title": "Sunday Observance in Late Antiquity",
+    "shortTitle": "SOLA",
+    "description": "",
+    "image": {
+      "src": "public/assets/images/logo.svg"
+    },
+    "twitter": {
+      "handle": ""
+    }
+  }
+}
