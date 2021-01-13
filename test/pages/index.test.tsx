@@ -1,9 +1,11 @@
-import IndexPage from '@/pages/index'
+import IndexPage, { labels } from '@/pages/index'
 import { render } from '~/test/render'
 
 describe('IndexPage', () => {
   it('should render static content', async () => {
-    const { getByText } = render(<IndexPage />, {
+    const props = { labels: labels['en'] }
+
+    const { getByText } = render(<IndexPage {...props} />, {
       router: { pathname: '/', asPath: '/' },
     })
 
