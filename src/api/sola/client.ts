@@ -108,8 +108,46 @@ export interface SolaTextAnnotation {
 
 export interface SolaTextType extends SolaVocabulary {
   entity: SolaEntityType
-  /** This is always "deu". */
-  lang: 'deu'
+}
+
+export interface SolaRelation {
+  id: number
+
+  primary_date: string
+  end_date: string | null
+  end_date_is_exact: boolean | null
+  end_date_written: string | null
+  start_date: string | null
+  start_date_is_exact: boolean | null
+  start_date_written: string | null
+
+  relation_type: { id: number; label: string }
+}
+export interface SolaPassagePublicationRelation extends SolaRelation {
+  related_passage: { id: number; label: string }
+  related_publication: { id: number; label: string }
+
+  bible_book_ref: string | null
+  bible_chapter_ref: string | null
+  bible_verse_ref: string | null
+}
+
+export interface SolaBibsonomyReference {
+  pk: number
+  /** The entity attribute the reference is attached to, or `null` for the entity itself. */
+  attribute: string | null
+
+  entrytype: string // 'book'
+  author: string
+  title: string
+  address: string
+  publisher: string
+  year: string
+  pages_end: string
+  pages_start: string
+  url: string
+  /** Link to entry in bibsonomy collection. */
+  href: string
 }
 
 type URLString = string
@@ -135,7 +173,9 @@ interface GetByIdRequestConfig<
   query?: T
 }
 
-export interface Results<T extends SolaEntity | SolaText | SolaVocabulary> {
+export interface Results<
+  T extends SolaEntity | SolaRelation | SolaText | SolaVocabulary
+> {
   limit: number
   offset: number
   count: number
@@ -391,11 +431,14 @@ export async function getSolaPassageTypes({
   }
 }
 
+type GetSolaTexts = GetAllRequestConfig<{
+  id__in?: Array<number>
+}>
 export async function getSolaTexts({
   query,
   // locale,
   options,
-}: GetAllRequestConfig): Promise<Results<SolaText>> {
+}: GetSolaTexts): Promise<Results<SolaText>> {
   const data = await request<Results<SolaText>>({
     path: '/apis/api/metainfo/text/',
     baseUrl,
@@ -450,6 +493,54 @@ export async function getSolaTextTypes({
     ...data,
     results: data.results.map((result) => localise(result, locale)),
   }
+}
+
+type GetSolaPassagePublicationRelations = GetAllRequestConfig<{
+  id__in?: Array<number>
+}>
+export async function getSolaPassagePublicationRelations({
+  query,
+  // locale,
+  options,
+}: GetSolaPassagePublicationRelations): Promise<
+  Results<SolaPassagePublicationRelation>
+> {
+  const data = await request<Results<SolaPassagePublicationRelation>>({
+    path: '/apis/api/relations/passagepublication/',
+    baseUrl,
+    query,
+    options,
+  })
+  return data
+}
+
+type GetSolaEntityBibliographyById = GetByIdRequestConfig<{
+  /**
+   * When no `attribute` is specified, will return all bibsonomy references on
+   * the entity itself.
+   * When `?attribute=all`, will return all bibsonomy references on entity
+   * attributes.
+   * When `?attribute=include`, will return all bibsonomy references on the
+   * entity itself, as well as references on entity attributes.
+   * When `?attribute=[key: string]`, will return all bibsonomy references on
+   * this specific attribute.
+   */
+  attribute?: 'all' | 'include' | string
+  contenttype: SolaEntityType
+}>
+export async function getSolaEntityBibliographyById({
+  id,
+  query,
+  // locale,
+  options,
+}: GetSolaEntityBibliographyById): Promise<Array<SolaBibsonomyReference>> {
+  const data = await request<Array<SolaBibsonomyReference>>({
+    path: '/bibsonomy/save_get/',
+    baseUrl,
+    query: { object_pk: id, ...query },
+    options,
+  })
+  return data
 }
 
 /**

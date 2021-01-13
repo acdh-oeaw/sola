@@ -1,20 +1,25 @@
 import { useRouter } from 'next/router'
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import type {
   Results,
   SolaEntity,
   SolaEntityDetails,
+  SolaEntityRelation,
   SolaEntityType,
+  SolaPassageDetails,
+  SolaTextDetails,
   SolaVocabulary,
 } from '@/api/sola/client'
 import {
+  getSolaEntityBibliographyById,
   getSolaEventById,
   getSolaEvents,
   getSolaInstitutionById,
   getSolaInstitutions,
   getSolaPassageById,
+  getSolaPassagePublicationRelations,
   getSolaPassages,
   getSolaPassageTopics,
   getSolaPassageTypes,
@@ -26,9 +31,12 @@ import {
   getSolaTextById,
   getSolaTextTypes,
 } from '@/api/sola/client'
+import { capitalize } from '@/lib/capitalize'
 import type { SiteLocale } from '@/lib/getCurrentLocale'
 import { getCurrentLocale } from '@/lib/getCurrentLocale'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
+
+import { getQueryParam } from '../url/getQueryParam'
 
 /** No entitiy type has more than 1000 entries. */
 const defaultQuery = { limit: 1000 }
@@ -139,6 +147,21 @@ export function useSolaFilteredPassages(filter: SolaPassagesFilter) {
 }
 
 /**
+ * Type guard for valid SOLA entity type.
+ */
+export function isSolaEntityType(type: string): type is SolaEntityType {
+  const allowedTypes: Array<SolaEntityType> = [
+    'Event',
+    'Institution',
+    'Passage',
+    'Person',
+    'Place',
+    'Publication',
+  ]
+  return (allowedTypes as Array<unknown>).includes(type)
+}
+
+/**
  * Fetches currently selected SOLA entity.
  */
 export function useSolaSelectedEntity() {
@@ -146,6 +169,26 @@ export function useSolaSelectedEntity() {
   const locale = getCurrentLocale(router)
 
   const [selected, setSelected] = useState<SolaSelectedEntity | null>(null)
+
+  function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
+    const { id, type } = entity ?? {}
+    router.push({ query: { ...router.query, id, type } }, undefined, {
+      shallow: true,
+    })
+  }
+
+  useEffect(() => {
+    if (router.isReady) {
+      const { query } = router
+      const id = getQueryParam(query.id, false, Number)
+      if (id !== undefined && id > 0) {
+        const type = getQueryParam(query.type, false, capitalize)
+        if (type !== undefined && isSolaEntityType(type)) {
+          setSelected({ id, type })
+        }
+      }
+    }
+  }, [router])
 
   const selectedSolaEntity = useQuery<SolaEntityDetails>(
     ['getSolaEntityById', locale, selected, {}],
@@ -172,7 +215,7 @@ export function useSolaSelectedEntity() {
 
   return {
     selectedSolaEntity,
-    setSelectedSolaEntity: setSelected,
+    setSelectedSolaEntity,
   }
 }
 
@@ -213,7 +256,190 @@ export function useSolaFilterOptions() {
 }
 
 /**
+ * Returns relation type ids, mapped by entity type.
+ */
+export function useSolaRelationTypes() {
+  const relationTypes = {
+    passage: {
+      hasBibleCitation: 205,
+      hasBibleReference: 204,
+      isIncludedIn: 189,
+    },
+    person: {
+      isAuthorOf: 187,
+    },
+  }
+  return relationTypes
+}
+
+/**
+ * Returns SOLA entity metadata specific for passages:
+ * publication authors and bible passages.
+ */
+export function useSolaPassageMetadata(
+  passage: SolaPassageDetails | undefined,
+) {
+  const router = useRouter()
+  const locale = getCurrentLocale(router)
+
+  const relationTypes = useSolaRelationTypes()
+
+  /**
+   * Fetch publication author: first fetch related publication with relation type
+   * "is_included_in" (id 189), then get related author of that publication with
+   * relation type "is_author_of" (id 187).
+   */
+  const isIncludedInRelation = passage?.relations.find(
+    (relation) =>
+      relation.related_entity.type === 'Publication' &&
+      relation.relation_type.id === relationTypes.passage.isIncludedIn,
+  )
+  const publicationId = isIncludedInRelation?.related_entity.id
+
+  /**
+   * No need to fetch authors with `getSolaPersons?id__in=authorIds`,
+   * since we already have all persons cached.
+   */
+  const { persons } = useSolaEntities()
+
+  const authors = useQuery(
+    ['getPublicationById', locale, publicationId, {}],
+    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+    () => getSolaPublicationById({ id: publicationId!, locale }),
+    {
+      enabled: publicationId !== undefined && persons.data !== undefined,
+      select: (results) => {
+        const isAuthorOfRelations = results.relations.filter(
+          (relation) =>
+            relation.related_entity.type === 'Person' &&
+            relation.relation_type.id === relationTypes.person.isAuthorOf,
+        )
+        const authorIds = isAuthorOfRelations.map(
+          (relation) => relation.related_entity.id,
+        )
+        /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+        return authorIds.map((id) => persons.data![id]!)
+      },
+    },
+  )
+
+  /**
+   * Fetch relations to bible and corresponding bible passages.
+   */
+  const bibleRelations = passage?.relations.filter(
+    (relation) =>
+      relation.related_entity.type === 'Publication' &&
+      relation.related_entity.id === 248 /* bible id */ &&
+      [
+        relationTypes.passage.hasBibleCitation ||
+          relationTypes.passage.hasBibleReference,
+      ].includes(relation.relation_type.id),
+  )
+
+  /**
+   * Info about the referenced/cited bible passage is a property of
+   * passage->publication relation.
+   */
+  const bibleRelationIds = bibleRelations?.map((relation) => relation.id) ?? []
+  const query = { id__in: bibleRelations }
+  const biblePassages = useQuery(
+    ['getSolaPassagePublicationRelations', locale, query],
+    () => getSolaPassagePublicationRelations({ locale }),
+    {
+      enabled: bibleRelationIds.length > 0,
+      select: (results) => {
+        const map: Record<string, string> = {}
+        results.results.forEach((result) => {
+          const reference = [
+            result.bible_book_ref,
+            [result.bible_chapter_ref, result.bible_verse_ref].join(':'),
+          ].join('.')
+          const url = new URL('https://stepbible.org')
+          url.searchParams.set('q', `reference=${reference}`)
+          map[reference] = String(url)
+        })
+        return map
+      },
+    },
+  )
+
+  return {
+    authors,
+    biblePassages,
+  }
+}
+
+/**
+ * Maps entity relations by type of related entity.
+ */
+export function useSolaEntityRelations(entity: SolaEntityDetails | undefined) {
+  return useMemo(() => {
+    const map: Record<SolaEntityType, Array<SolaEntityRelation>> = {
+      Event: [],
+      Institution: [],
+      Passage: [],
+      Person: [],
+      Place: [],
+      Publication: [],
+    }
+    if (entity === undefined) return map
+    entity.relations.forEach((relation) => {
+      map[relation.related_entity.type].push(relation)
+    })
+    return map
+  }, [entity])
+}
+
+/**
+ * Fetches bibliography for SOLA entity.
+ */
+export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
+  const router = useRouter()
+  const locale = getCurrentLocale(router)
+
+  const id = entity?.id
+  const query = {
+    attribute: 'include',
+    contenttype: entity?.type as SolaEntityType,
+  }
+
+  const bibliography = useQuery(
+    ['getSolaEntityBibliographyById', locale, id, query],
+    () => getSolaEntityBibliographyById({ id: id!, query, locale }),
+    { enabled: id !== undefined },
+  )
+
+  return bibliography
+}
+
+/**
+ * Returns text type ids mapped by entity type and locale.
+ *
+ * These are hardcoded to avoid fetching *all* text types, and because there is
+ * currently no way to retrieve info about the texttype locale from the backend.
+ * `{ id: 5, label: 'Original text / citation' }` is included in all locales.
+ * `{ id: 176: label: 'Inhalt (ist zu übertragen zu publications)' }` is ignored.
+ */
+export function useSolaTextTypes() {
+  const textTypesByLocale: Record<
+    SolaEntityType,
+    Record<SiteLocale, Array<number>>
+  > = {
+    Event: { de: [253], en: [254] },
+    Institution: { de: [180], en: [181] },
+    Passage: { de: [2, 5, 6], en: [3, 5, 61] },
+    Person: { de: [185], en: [186] },
+    Place: { de: [], en: [] },
+    Publication: { de: [178], en: [179] },
+  }
+  return textTypesByLocale
+}
+
+/**
  * Fetches associated texts for a SOLA entity, filtered by current locale.
+ *
+ * The order of the returned texts matches the order of text type ids
+ * in `useSolaTextTypes`.
  */
 export function useSolaTexts(entity: SolaEntityDetails | undefined) {
   const router = useRouter()
@@ -234,23 +460,7 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 
   const ids = entity?.text.map((text) => text.id) ?? []
 
-  /**
-   * These are hardcoded because there is currently no way to retrieve
-   * info about the texttype locale from the backend.
-   * `{ id: 5, label: 'Original text / citation' }` is included in all locales.
-   * `{ id: 176: label: 'Inhalt (ist zu übertragen zu publications)' }` is ignored.
-   */
-  const textTypesByLocale: Record<
-    SolaEntityType,
-    Record<SiteLocale, Array<number>>
-  > = {
-    Event: { de: [253], en: [254] },
-    Institution: { de: [180], en: [181] },
-    Passage: { de: [2, 5, 6], en: [3, 5, 61] },
-    Person: { de: [185], en: [186] },
-    Place: { de: [], en: [] },
-    Publication: { de: [178], en: [179] },
-  }
+  const textTypesByLocale = useSolaTextTypes()
 
   const texts = useQuery(
     ['getSolaTextsByIds', locale, ids, query],
@@ -259,11 +469,21 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
       enabled:
         entity !== undefined && ids.length > 0 && textTypes.data !== undefined,
       select: (results) => {
-        const textsForCurrentLocale = results.filter((text) => {
-          /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-          return textTypesByLocale[entity!.type][locale].includes(text.kind.id)
+        const map: Record<number, SolaTextDetails> = {}
+        results.forEach((text) => {
+          map[text.kind.id] = text
         })
-        return textsForCurrentLocale.map((text) => {
+
+        const textsForCurrentLocale: Array<SolaTextDetails> = []
+        /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+        textTypesByLocale[entity!.type][locale].forEach((textTypeId) => {
+          const text = map[textTypeId]
+          if (text) {
+            textsForCurrentLocale.push(text)
+          }
+        })
+
+        const textsWithLocalisedLabel = textsForCurrentLocale.map((text) => {
           return {
             ...text,
             kind: {
@@ -273,6 +493,8 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
             },
           }
         })
+
+        return textsWithLocalisedLabel
       },
     },
   )
