@@ -5,6 +5,8 @@ backend:
   name: gitlab
   repo: acdh-oeaw/sola
   branch: main
+  auth_type: implicit
+  app_id: 84710241877757360c75a3099c7f09bf65c1fa29ebe6f4663672ff17694d875d
   squash_merges: true
   commit_messages:
     create: "content(create): {{collection}} '{{slug}}'"
