@@ -1,6 +1,6 @@
 {
   "en": {
-    "url": "https://sola.acdh.oeaw.ac.at",
+    "url": "https://sola-preview.acdh-dev.oeaw.ac.at/",
     "title": "Sunday Observance in Late Antiquity",
     "shortTitle": "SOLA",
     "description": "",
@@ -12,8 +12,8 @@
     }
   },
   "de": {
-    "url": "https://sola.acdh.oeaw.ac.at",
-    "title": "Sunday Observance in Late Antiquity",
+    "url": "https://sola-preview.acdh-dev.oeaw.ac.at/",
+    "title": "Der Sonntag in der Spätantike",
     "shortTitle": "SOLA",
     "description": "",
     "image": {

@@ -1,4 +1,4 @@
-site_url: https://sola.acdh.oeaw.ac.at/
+site_url: https://sola-preview.acdh-dev.oeaw.ac.at/
 load_config_file: true
 local_backend: true
 backend:
