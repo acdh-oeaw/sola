@@ -84,6 +84,7 @@ collections:
         i18n: true
       - name: attachments
         label: Attachments
+        label_singular: Attachment
         widget: list
         required: false
         i18n: true
@@ -95,13 +96,14 @@ collections:
             widget: file
       - name: gallery
         label: Image gallery
+        label_singular: Image
         widget: list
         required: false
         i18n: true
         fields:
-          - name: file
-            label: File
-            widget: file
+          - name: image
+            label: Image
+            widget: image
           - name: alt
             label: Description (Alt text)
             required: false
