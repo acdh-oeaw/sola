@@ -925,7 +925,12 @@ function Authors({
 }) {
   const t = useLabels() as typeof labels[SiteLocale]
 
-  if (authors.status === 'loading') return <span>Loading&hellip;</span>
+  if (authors.status === 'loading')
+    return (
+      <div className="py-1">
+        <Spinner className="w-4 h-4 text-gray-700" />
+      </div>
+    )
   if (authors.data === undefined || authors.data.length === 0) return null
 
   return (
