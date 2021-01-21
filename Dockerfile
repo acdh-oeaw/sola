@@ -28,6 +28,7 @@ COPY --chown=node:node scripts ./scripts
 COPY --chown=node:node postcss.config.js tailwind.config.js ./
 COPY --chown=node:node public ./public
 COPY --chown=node:node src ./src
+COPY --chown=node:node content ./content
 
 RUN yarn build
 
