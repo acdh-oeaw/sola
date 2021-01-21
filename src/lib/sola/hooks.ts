@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useEffect, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import type {
@@ -25,18 +25,19 @@ import {
   getSolaPassageTypes,
   getSolaPersonById,
   getSolaPersons,
+  getSolaPlaceById,
   getSolaPlaces,
   getSolaPublicationById,
   getSolaPublications,
   getSolaTextById,
   getSolaTextTypes,
 } from '@/api/sola/client'
-import { capitalize } from '@/lib/capitalize'
-import type { SiteLocale } from '@/lib/getCurrentLocale'
-import { getCurrentLocale } from '@/lib/getCurrentLocale'
+import { useHierarchicalData } from '@/lib/data/useHierarchicalData'
+import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
+import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
-
-import { getQueryParam } from '../url/getQueryParam'
+import { getQueryParam } from '@/lib/url/getQueryParam'
+import { capitalize } from '@/lib/util/capitalize'
 
 /** No entitiy type has more than 1000 entries. */
 const defaultQuery = { limit: 1000 }
@@ -45,8 +46,7 @@ const defaultQuery = { limit: 1000 }
  * Fetches all SOLA entities and returns entities mapped by id.
  */
 export function useSolaEntities() {
-  const router = useRouter()
-  const locale = getCurrentLocale(router)
+  const locale = useCurrentLocale()
 
   const events = useQuery(
     ['getSolaEvents', locale, {}],
@@ -107,9 +107,12 @@ export function useSolaEntities() {
 export function useSolaPassagesFilter() {
   const [filter, setFilter] = useState<SolaPassagesFilter>({})
 
-  function setSolaPassagesFilter(filter: SolaPassagesFilter) {
+  const setSolaPassagesFilter = useCallback(function setSolaPassagesFilter(
+    filter: SolaPassagesFilter,
+  ) {
     setFilter((prev) => ({ ...prev, ...filter }))
-  }
+  },
+  [])
 
   return {
     solaPassagesFilter: filter,
@@ -121,19 +124,29 @@ export function useSolaPassagesFilter() {
  * Fetches SOLA passages matching the currently active filter.
  */
 export function useSolaFilteredPassages(filter: SolaPassagesFilter) {
-  const router = useRouter()
-  const locale = getCurrentLocale(router)
+  const locale = useCurrentLocale()
 
-  const query = useMemo(
-    () =>
-      sanitize({
-        name__icontains: filter.name,
-        kind__id__in: filter.types,
-        topic__id__in: filter.topics,
-        publication_set__id__in: filter.publications,
-      }),
-    [filter],
-  )
+  const { person, passage } = useSolaRelationTypes()
+
+  const query = useMemo(() => {
+    const hasAuthorsFilter =
+      filter.authors !== undefined && filter.authors.length > 0
+
+    return sanitize({
+      name__icontains: filter.name,
+      kind__id__in: filter.types,
+      topic__id__in: filter.topics,
+      publication_set__id__in: filter.publications,
+      /** Filter passage by publication authors. */
+      publication_set__person_set__id__in: filter.authors,
+      publication_set__person_relationtype_set__id: hasAuthorsFilter
+        ? person.isAuthorOf
+        : undefined,
+      publication_relationtype_set__id: hasAuthorsFilter
+        ? passage.isIncludedIn
+        : undefined,
+    })
+  }, [filter, person, passage])
 
   const passages = useQuery(
     ['getSolaPassages', locale, query],
@@ -166,16 +179,19 @@ export function isSolaEntityType(type: string): type is SolaEntityType {
  */
 export function useSolaSelectedEntity() {
   const router = useRouter()
-  const locale = getCurrentLocale(router)
+  const locale = useCurrentLocale()
 
   const [selected, setSelected] = useState<SolaSelectedEntity | null>(null)
 
-  function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
-    const { id, type } = entity ?? {}
-    router.push({ query: { ...router.query, id, type } }, undefined, {
-      shallow: true,
-    })
-  }
+  const setSelectedSolaEntity = useCallback(
+    function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
+      const { id, type } = entity ?? {}
+      router.push({ query: { ...router.query, id, type } }, undefined, {
+        shallow: true,
+      })
+    },
+    [router],
+  )
 
   useEffect(() => {
     if (router.isReady) {
@@ -193,7 +209,7 @@ export function useSolaSelectedEntity() {
   const selectedSolaEntity = useQuery<SolaEntityDetails>(
     ['getSolaEntityById', locale, selected, {}],
     () => {
-      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+      /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
       const { id, type } = selected!
       switch (type) {
         case 'Event':
@@ -205,7 +221,7 @@ export function useSolaSelectedEntity() {
         case 'Person':
           return getSolaPersonById({ id, locale })
         case 'Place':
-          return getSolaPassageById({ id, locale })
+          return getSolaPlaceById({ id, locale })
         case 'Publication':
           return getSolaPublicationById({ id, locale })
       }
@@ -223,8 +239,9 @@ export function useSolaSelectedEntity() {
  * Fetches possible values for SOLA passage filters.
  */
 export function useSolaFilterOptions() {
-  const router = useRouter()
-  const locale = getCurrentLocale(router)
+  const locale = useCurrentLocale()
+
+  const { person } = useSolaRelationTypes()
 
   const passageTopics = useQuery(
     ['getSolaPassageTopics', locale, {}],
@@ -247,8 +264,20 @@ export function useSolaFilterOptions() {
     },
     { select: mapResultsById },
   )
+  const authorQuery = { publication_relationtype_set__id: person.isAuthorOf }
+  const authors = useQuery(
+    ['getSolaPersons', locale, authorQuery],
+    () => {
+      return getSolaPersons({
+        query: { ...authorQuery, ...defaultQuery },
+        locale,
+      })
+    },
+    { select: mapResultsById },
+  )
 
   return {
+    authors,
     passageTopics,
     passageTypes,
     publications,
@@ -256,19 +285,109 @@ export function useSolaFilterOptions() {
 }
 
 /**
+ * Adds necessary modifications to SOLA passages filter options
+ * for use in listboxes.
+ */
+export function useSolaPassagesFilterOptionsTree(
+  passageTopics: Record<number, SolaVocabulary> | undefined,
+  passageTypes: Record<number, SolaVocabulary> | undefined,
+  translation: string,
+) {
+  const getParentId = useCallback((entity) => entity.parent_class?.id, [])
+  const _passageTopics = useHierarchicalData(passageTopics, getParentId)
+  const _passageTypes = useHierarchicalData(passageTypes, getParentId)
+
+  /**
+   * TODO: Instead of the Array<=>Set actobatics below, we should probably just
+   * make `useHierarchicalData` immutable (i.e. clone the input map,
+   * and make children regular arrays). Compare perf to current approach!
+   */
+
+  /**
+   * Add a "Other" entry for every top-level passage topic,
+   * since topics which have child topics can themselves have
+   * passages associated with them.
+   */
+  const passageTopicsTree = useMemo(() => {
+    return _passageTopics.map((parent) => {
+      if (parent.children === undefined) return parent
+
+      const childTopics = Array.from(parent.children)
+      if (!childTopics.find((topic) => topic.id === parent.id)) {
+        parent.children.add({
+          id: parent.id,
+          name: translation,
+          parent_class: null,
+        })
+      }
+
+      return parent
+    })
+  }, [_passageTopics, translation])
+
+  /**
+   * Add a "Other" entry for every top-level passage type,
+   * since types which have child types can themselves have
+   * passages associated with them.
+   * Also, group types without children in their own section.
+   */
+  const passageTypesTree = useMemo(() => {
+    const otherSection = _passageTypes.find((type) => type.id === -1) ?? {
+      id: -1,
+      name: translation,
+      children: new Set(),
+    }
+
+    const result = [otherSection]
+
+    _passageTypes.forEach((parent) => {
+      if (parent.id === -1) return
+
+      if (parent.children === undefined) {
+        if (otherSection.children === undefined) {
+          otherSection.children = new Set()
+        }
+        otherSection.children.add(parent)
+        return
+      }
+
+      const childTopics = Array.from(parent.children)
+      if (!childTopics.find((topic) => topic.id === parent.id)) {
+        parent.children.add({
+          id: parent.id,
+          name: translation,
+          parent_class: null,
+        })
+      }
+      result.unshift(parent)
+    })
+
+    return result
+  }, [_passageTypes, translation])
+
+  return {
+    passageTopicsTree,
+    passageTypesTree,
+  }
+}
+
+/**
  * Returns relation type ids, mapped by entity type.
  */
 export function useSolaRelationTypes() {
-  const relationTypes = {
-    passage: {
-      hasBibleCitation: 205,
-      hasBibleReference: 204,
-      isIncludedIn: 189,
-    },
-    person: {
-      isAuthorOf: 187,
-    },
-  }
+  const relationTypes = useMemo(
+    () => ({
+      passage: {
+        hasBibleCitation: 205,
+        hasBibleReference: 204,
+        isIncludedIn: 189,
+      },
+      person: {
+        isAuthorOf: 187,
+      },
+    }),
+    [],
+  )
   return relationTypes
 }
 
@@ -279,8 +398,7 @@ export function useSolaRelationTypes() {
 export function useSolaPassageMetadata(
   passage: SolaPassageDetails | undefined,
 ) {
-  const router = useRouter()
-  const locale = getCurrentLocale(router)
+  const locale = useCurrentLocale()
 
   const relationTypes = useSolaRelationTypes()
 
@@ -341,19 +459,30 @@ export function useSolaPassageMetadata(
    * passage->publication relation.
    */
   const bibleRelationIds = bibleRelations?.map((relation) => relation.id) ?? []
-  const query = { id__in: bibleRelations }
+  const query = { id__in: bibleRelationIds }
   const biblePassages = useQuery(
     ['getSolaPassagePublicationRelations', locale, query],
-    () => getSolaPassagePublicationRelations({ locale }),
+    () => getSolaPassagePublicationRelations({ query, locale }),
     {
       enabled: bibleRelationIds.length > 0,
       select: (results) => {
         const map: Record<string, string> = {}
         results.results.forEach((result) => {
+          if (
+            result.bible_book_ref == null &&
+            result.bible_chapter_ref == null &&
+            result.bible_verse_ref == null
+          ) {
+            return
+          }
           const reference = [
             result.bible_book_ref,
-            [result.bible_chapter_ref, result.bible_verse_ref].join(':'),
-          ].join('.')
+            [result.bible_chapter_ref, result.bible_verse_ref]
+              .filter(Boolean)
+              .join(':'),
+          ]
+            .filter(Boolean)
+            .join('.')
           const url = new URL('https://stepbible.org')
           url.searchParams.set('q', `reference=${reference}`)
           map[reference] = String(url)
@@ -394,8 +523,7 @@ export function useSolaEntityRelations(entity: SolaEntityDetails | undefined) {
  * Fetches bibliography for SOLA entity.
  */
 export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
-  const router = useRouter()
-  const locale = getCurrentLocale(router)
+  const locale = useCurrentLocale()
 
   const id = entity?.id
   const query = {
@@ -424,14 +552,17 @@ export function useSolaTextTypes() {
   const textTypesByLocale: Record<
     SolaEntityType,
     Record<SiteLocale, Array<number>>
-  > = {
-    Event: { de: [253], en: [254] },
-    Institution: { de: [180], en: [181] },
-    Passage: { de: [2, 5, 6], en: [3, 5, 61] },
-    Person: { de: [185], en: [186] },
-    Place: { de: [], en: [] },
-    Publication: { de: [178], en: [179] },
-  }
+  > = useMemo(
+    () => ({
+      Event: { de: [253], en: [254] },
+      Institution: { de: [180], en: [181] },
+      Passage: { de: [5, 2, 6], en: [5, 3, 61] },
+      Person: { de: [185], en: [186] },
+      Place: { de: [], en: [] },
+      Publication: { de: [178], en: [179] },
+    }),
+    [],
+  )
   return textTypesByLocale
 }
 
@@ -442,8 +573,7 @@ export function useSolaTextTypes() {
  * in `useSolaTextTypes`.
  */
 export function useSolaTexts(entity: SolaEntityDetails | undefined) {
-  const router = useRouter()
-  const locale = getCurrentLocale(router)
+  const locale = useCurrentLocale()
 
   /**
    * Fetch all text types so we can get the localised text type label, because

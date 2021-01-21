@@ -1,8 +1,7 @@
-import { useRouter } from 'next/router'
 import { createContext, useMemo } from 'react'
 
-import type { SiteLocale } from '@/lib/getCurrentLocale'
-import { getCurrentLocale } from '@/lib/getCurrentLocale'
+import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
+import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import metadata from '~/config/metadata.json'
 
 export type SiteMetadata = typeof metadata[SiteLocale]
@@ -19,8 +18,7 @@ export interface SiteMetadataProviderProps {
 export function SiteMetadataProvider(
   props: SiteMetadataProviderProps,
 ): JSX.Element {
-  const router = useRouter()
-  const locale = getCurrentLocale(router)
+  const locale = useCurrentLocale()
 
   const siteMetadata = useMemo(() => metadata[locale], [locale])
 

@@ -1,4 +1,5 @@
 {
   "locales": ["de", "en"],
-  "defaultLocale": "en"
+  "defaultLocale": "en",
+  "url": "https://sola.acdh.oeaw.ac.at"
 }

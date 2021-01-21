@@ -10,7 +10,7 @@ export default function NotFoundPage(): JSX.Element {
   return (
     <Fragment>
       <Metadata noindex nofollow title="Page not found" />
-      <main>
+      <main className="flex flex-col items-center justify-center">
         <Error message="Page not found." statusCode={404} />
       </main>
     </Fragment>

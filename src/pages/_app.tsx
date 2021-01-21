@@ -1,3 +1,4 @@
+import 'focus-visible'
 import '@/styles/custom-properties.css'
 import '@/styles/globals.css'
 import 'tailwindcss/tailwind.css'

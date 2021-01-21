@@ -1,11 +1,13 @@
 import { request } from '@/api/sola/runtime'
-import type { SiteLocale } from '@/lib/getCurrentLocale'
+import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 
 export interface SolaEntityBase {
   id: number
   name: string
 
-  primary_date: string
+  assigned_user: { id: number; label: string } | null
+
+  primary_date: string | null
   end_date: string | null
   end_date_is_exact: boolean | null
   end_date_written: string | null

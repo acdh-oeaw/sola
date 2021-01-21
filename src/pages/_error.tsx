@@ -17,7 +17,7 @@ export default function InternalErrorPage({
   return (
     <Fragment>
       <Metadata noindex nofollow title="Unexpected error" />
-      <main>
+      <main className="flex flex-col items-center justify-center">
         <Error
           message="An unexpected error has occurred."
           statusCode={statusCode}

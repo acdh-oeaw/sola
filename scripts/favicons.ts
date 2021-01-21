@@ -1,6 +1,6 @@
 import generate from '@stefanprobst/favicons'
 
-import { log } from '@/lib/log'
+import { log } from '@/lib/util/log'
 import metadata from '~/config/metadata.json'
 
 Promise.all(

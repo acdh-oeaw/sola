@@ -1,0 +1,159 @@
+site_url: https://sola.acdh.oeaw.ac.at/
+load_config_file: true
+local_backend: true
+backend:
+  name: gitlab
+  repo: acdh-oeaw/sola
+  branch: main
+  squash_merges: true
+  commit_messages:
+    create: "content(create): {{collection}} '{{slug}}'"
+    update: "content(update): {{collection}} '{{slug}}'"
+    delete: "content(delete): {{collection}} '{{slug}}'"
+    uploadMedia: "content(upload): '{{path}}'"
+    deleteMedia: "content(delete): '{{path}}'"
+slug:
+  encoding: ascii
+  clean_accents: true
+media_folder: /public/assets
+public_folder: /assets
+i18n:
+  structure: multiple_folders
+  locales:
+    - en
+    - de
+  default_locale: en
+collections:
+  - name: pages
+    label: Pages
+    editor:
+      preview: false
+    # use a folder collection for pages for i18n support
+    folder: content/pages
+    # disallow creating collection items
+    create: false
+    i18n: true
+    fields:
+      - name: title
+        label: Title
+        i18n: true
+      - name: body
+        label: Text
+        widget: markdown
+        required: false
+        i18n: true
+
+  - name: posts
+    label: Posts
+    label_singular: Post
+    editor:
+      preview: false
+    folder: content/posts
+    create: true
+    media_folder: /public/assets/posts
+    public_folder: /assets/posts
+    preview_path: '/posts/{{slug}}'
+    sortableFields:
+      - commit_date
+      - date
+      - title
+    i18n: true
+    fields:
+      - name: title
+        label: Title
+        i18n: true
+      - name: shortTitle
+        label: Short title
+        required: false
+        i18n: true
+      - name: date
+        label: Date
+        widget: datetime
+        timeFormat: false
+        i18n: duplicate
+      - name: abstract
+        label: Abstract
+        widget: text
+        required: false
+        i18n: true
+      - name: body
+        label: Text
+        widget: markdown
+        i18n: true
+      - name: attachments
+        label: Attachments
+        widget: list
+        required: false
+        i18n: true
+        fields:
+          - name: label
+            label: Label
+          - name: file
+            label: File
+            widget: file
+      - name: gallery
+        label: Image gallery
+        widget: list
+        required: false
+        i18n: true
+        fields:
+          - name: file
+            label: File
+            widget: file
+          - name: alt
+            label: Description (Alt text)
+            required: false
+
+  - name: team
+    label: Team
+    label_singular: Team member
+    editor:
+      preview: false
+    folder: content/data/team
+    create: true
+    format: yaml
+    media_folder: /public/assets/team
+    public_folder: /assets/team
+    sortableFields:
+      - commit_date
+      - lastName
+    slug: '{{lastName}}-{{firstName}}'
+    summary: '{{firstName}} {{lastName}}'
+    identifier_field: lastName
+    i18n: true
+    fields:
+      - name: firstName
+        label: First name
+        i18n: duplicate
+      - name: lastName
+        label: Last name
+        i18n: duplicate
+      - name: title
+        label: Title
+        required: false
+        i18n: duplicate
+      - name: affiliation
+        label: Affiliation
+        required: false
+        i18n: true
+      - name: image
+        label: Image
+        widget: image
+        required: false
+        i18n: duplicate
+      - name: email
+        label: Email
+        required: false
+        i18n: duplicate
+      - name: phone
+        label: Phone
+        required: false
+        i18n: duplicate
+      - name: website
+        label: Website
+        required: false
+        i18n: duplicate
+      - name: biography
+        label: Biography
+        widget: text
+        i18n: true

@@ -1,0 +1,16 @@
+{
+  "de": [
+    { "label": "Startseite", "path": "/" },
+    { "label": "Passagen", "path": "/dataset" },
+    { "label": "Über das Projekt", "path": "/about" },
+    { "label": "Team", "path": "/team" },
+    { "label": "Neuigkeiten", "path": "/posts" }
+  ],
+  "en": [
+    { "label": "Home", "path": "/" },
+    { "label": "Passages", "path": "/dataset" },
+    { "label": "About the project", "path": "/about" },
+    { "label": "Team", "path": "/team" },
+    { "label": "News", "path": "/posts" }
+  ]
+}

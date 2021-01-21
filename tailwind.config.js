@@ -10,6 +10,7 @@ function px(px) {
 
 module.exports = {
   purge: [
+    'config/**/*.@(json)',
     'src/**/*.@(css|html|js|jsx|ts|tsx)',
     'stories/**/*.@(css|html|js|jsx|ts|tsx)',
   ],
@@ -22,6 +23,7 @@ module.exports = {
       fontFamily: {
         body: ['Inter', ...defaultTheme.fontFamily.sans],
         display: ['Inter', ...defaultTheme.fontFamily.sans],
+        sans: ['Inter', ...defaultTheme.fontFamily.sans],
       },
       fontSize: {
         sm: px(13),
@@ -30,6 +32,18 @@ module.exports = {
       maxWidth: {
         '65ch': '65ch',
         '80ch': '80ch',
+      },
+      typography: {
+        DEFAULT: {
+          css: {
+            'ul > li.list-none': {
+              paddingLeft: 0,
+            },
+            'ul > li.list-none::before': {
+              display: 'none',
+            },
+          },
+        },
       },
       zIndex: {
         '-10': -10,
@@ -47,7 +61,14 @@ module.exports = {
     },
   },
   variants: {
-    extend: {},
+    extend: {
+      backgroundColor: ['focus-visible'],
+      ringColor: ['focus-visible'],
+      ringOffsetColor: ['focus-visible'],
+      ringOffsetWidth: ['focus-visible'],
+      ringOpacity: ['focus-visible'],
+      ringWidth: ['focus-visible'],
+    },
   },
-  plugins: [],
+  plugins: [require('@tailwindcss/typography')],
 }

@@ -1,5 +1,5 @@
-import { ensureArray } from '@/lib/ensureArray'
-import { ensureScalar } from '@/lib/ensureScalar'
+import { ensureArray } from '@/lib/util/ensureArray'
+import { ensureScalar } from '@/lib/util/ensureScalar'
 
 /**
  * Gets query params as single value or array of values.
@@ -45,8 +45,7 @@ export function getQueryParam(
     const value = ensureScalar(param) as string
     if (isEmptyString(value)) return undefined
     if (!transform) return value
-    const transformed = transform(value)
-    return isUndefined(transformed) ? undefined : transformed
+    return transform(value)
   }
 }
 

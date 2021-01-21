@@ -8,3 +8,10 @@
   --screen-2xl: 1600px;
   --screen-3xl: 1920px;
 }
+
+:root {
+  --header-height: 60px;
+  --sidepanel-width: 256px;
+  --details-sidepanel-width: 320px;
+  --visualization-height: 400px;
+}
