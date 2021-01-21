@@ -22,9 +22,9 @@ install:
       - yarn.lock
 
 .docker:
-  image: docker:stable
+  image: docker:19-dind
   services:
-    - docker:dind
+    - docker:19-dind
   tags:
     - cluster
   variables:
