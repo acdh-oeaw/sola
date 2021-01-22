@@ -909,7 +909,7 @@ function EntityType({ type }: { type?: SolaEntityType }) {
   if (type === undefined) return null
 
   const classNames = cx(
-    'text-xs font-semibold tracking-wider uppercase',
+    'text-xs font-semibold tracking-wider uppercase pointer-events-none',
     colors.text[type],
   )
 
