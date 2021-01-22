@@ -33,18 +33,6 @@ module.exports = {
         '65ch': '65ch',
         '80ch': '80ch',
       },
-      typography: {
-        DEFAULT: {
-          css: {
-            'ul > li.list-none': {
-              paddingLeft: 0,
-            },
-            'ul > li.list-none::before': {
-              display: 'none',
-            },
-          },
-        },
-      },
       zIndex: {
         '-10': -10,
       },

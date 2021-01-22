@@ -77,13 +77,15 @@ export default function PostsPage(props: PostsPageProps): JSX.Element {
   return (
     <Fragment>
       <Metadata title={props.labels.page.title} canonicalUrl={canonicalUrl} />
-      <Container className="prose" as="main">
-        <h1>{props.page.metadata.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: props.page.html }} />
-        <ul>
+      <Container as="main">
+        <div className="prose">
+          <h1>{props.page.metadata.title}</h1>
+          <div dangerouslySetInnerHTML={{ __html: props.page.html }} />
+        </div>
+        <ul className="my-8 space-y-10">
           {props.data.posts.slice(0, MAX_POSTS).map((post) => {
             return (
-              <li key={post.id} className="list-none">
+              <li key={post.id}>
                 <Post post={post} t={props.labels.data} />
               </li>
             )
@@ -106,16 +108,20 @@ function Post({
   return (
     <Fragment>
       <Link href={`/posts/${post.id}`}>
-        <a>
-          <h2>{post.metadata.title}</h2>
+        <a className="focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+          <h2 className="my-4 text-2xl font-bold text-gray-700">
+            {post.metadata.title}
+          </h2>
         </a>
       </Link>
-      <time dateTime={post.metadata.date}>
+      <time className="text-gray-500" dateTime={post.metadata.date}>
         {formatDate(post.metadata.date, locale)}
       </time>
-      <p>{post.metadata.abstract}</p>
+      <p className="my-3 leading-7 text-gray-700">{post.metadata.abstract}</p>
       <Link href={`/posts/${post.id}`}>
-        <a>{t.readMore}</a>
+        <a className="inline-block px-4 py-2 text-sm font-semibold tracking-wider text-gray-700 uppercase transition bg-yellow-400 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-yellow-500">
+          {t.readMore}
+        </a>
       </Link>
     </Fragment>
   )

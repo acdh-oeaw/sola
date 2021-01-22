@@ -35,7 +35,7 @@ export function Disclosure({
         aria-controls={panelId}
         aria-expanded={isOpen}
         className={cx(
-          'py-1 rounded flex items-center space-x-2 text-left justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300',
+          'py-1 rounded flex items-center space-x-2 text-left justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400',
           className,
         )}
         onClick={toggleOpen}

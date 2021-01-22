@@ -268,7 +268,7 @@ function FilterPanel({
           <h2 className="font-semibold text-gray-300">{t.filterPassages}</h2>
           <ClearButton
             aria-label={t.reset}
-            className="p-2 text-gray-300 transition rounded hover:text-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300 hover:bg-gray-800"
+            className="p-2 text-gray-300 transition rounded hover:text-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-gray-800"
             onClick={() => {
               setFilter({
                 authors: undefined,
@@ -284,7 +284,7 @@ function FilterPanel({
           label={t.title}
           value={title}
           onChange={setTitle}
-          className="transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+          className="transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
         />
         <Disclosure
           id="authors-filter"
@@ -662,7 +662,7 @@ function ActiveFilterList({
             <Badge className="inline-flex items-center mb-1 space-x-2 text-gray-100 bg-gray-900 cursor-default select-none">
               <span>{name}</span>
               <ClearButton
-                className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+                className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                 onClick={() => {
                   setFilter({ name: undefined })
                 }}
@@ -681,7 +681,7 @@ function ActiveFilterList({
                 >
                   <span>{options.authors.data?.[id]?.name}</span>
                   <ClearButton
-                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                     onClick={() => {
                       setFilter({
                         authors:
@@ -712,7 +712,7 @@ function ActiveFilterList({
                 >
                   <span>{options.publications.data?.[id]?.name}</span>
                   <ClearButton
-                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                     onClick={() => {
                       setFilter({
                         publications:
@@ -741,7 +741,7 @@ function ActiveFilterList({
                 >
                   <span>{options.passageTopics.data?.[id]?.name}</span>
                   <ClearButton
-                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                     onClick={() => {
                       setFilter({
                         topics:
@@ -768,7 +768,7 @@ function ActiveFilterList({
                 >
                   <span>{options.passageTypes.data?.[id]?.name}</span>
                   <ClearButton
-                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                     onClick={() => {
                       setFilter({
                         types:
@@ -1037,7 +1037,7 @@ function PassageProperties({
                     className="text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200"
                   >
                     <InlineButton
-                      className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+                      className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                       onPress={() =>
                         setFilter({
                           topics: [topic.id],
@@ -1063,7 +1063,7 @@ function PassageProperties({
                     className="text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200"
                   >
                     <InlineButton
-                      className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+                      className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                       onPress={() =>
                         setFilter({
                           types: [kind.id],

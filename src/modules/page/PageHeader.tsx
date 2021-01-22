@@ -33,7 +33,7 @@ export function PageHeader(): JSX.Element {
               return (
                 <li key={path}>
                   <Link href={path}>
-                    <a className="px-2 py-2 text-sm font-medium text-gray-700 transition border-b border-transparent hover:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300">
+                    <a className="px-2 py-2 text-sm font-medium text-gray-700 transition border-b border-transparent hover:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
                       {label}
                     </a>
                   </Link>

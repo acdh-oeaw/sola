@@ -31,7 +31,7 @@ export function PageFooter(): JSX.Element {
       <ul className="flex items-center justify-center space-x-12 text-xs text-gray-700">
         <li>
           <a
-            className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+            className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
             href="https://www.univie.ac.at"
             rel="noopener noreferrer"
             target="_blank"
@@ -46,7 +46,7 @@ export function PageFooter(): JSX.Element {
         </li>
         <li>
           <a
-            className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+            className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
             href="https://www.fwf.ac.at"
             rel="noopener noreferrer"
             target="_blank"
@@ -61,7 +61,7 @@ export function PageFooter(): JSX.Element {
         </li>
         <li>
           <a
-            className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300"
+            className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
             href="https://acdh.oeaw.ac.at"
             rel="noopener noreferrer"
             target="_blank"
@@ -78,7 +78,7 @@ export function PageFooter(): JSX.Element {
       <div className="text-xs text-center text-gray-500">
         <span>&copy; {new Date().getFullYear()} | </span>
         <Link href="/imprint">
-          <a className="p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-300">
+          <a className="p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
             {labels[locale].imprint}
           </a>
         </Link>

@@ -16,7 +16,9 @@ export function Container({
   as: Component = 'div',
 }: ContainerProps): JSX.Element {
   return (
-    <Component className={cx(className, 'w-full px-6 py-12 mx-auto')}>
+    <Component
+      className={cx(className, 'w-full px-6 py-12 mx-auto max-w-65ch')}
+    >
       {children}
     </Component>
   )
