@@ -46,7 +46,6 @@ import { useCanonicalUrl } from '@/modules/metadata/useCanonicalUrl'
 import { Badge } from '@/modules/ui/Badge'
 import { ClearButton } from '@/modules/ui/ClearButton'
 import { Disclosure } from '@/modules/ui/Disclosure'
-import { InlineButton } from '@/modules/ui/InlineButton'
 import { Item, ListBox, Section } from '@/modules/ui/ListBox'
 import { Spinner } from '@/modules/ui/Spinner'
 import { Item as TabItem, Tabs } from '@/modules/ui/Tabs'
@@ -651,139 +650,165 @@ function ActiveFilterList({
     !hasPassageTopicsFilter &&
     !hasPassageTypesFilter
   ) {
-    return <div className="h-6">&nbsp;</div>
+    return <div className="pb-2 text-sm">&nbsp;</div>
   }
 
   return (
-    <div className="flex items-center space-x-2 text-xs text-gray-500">
-      <div className="flex-shrink-0 mb-1">{t.filteredBy}:</div>
-      <ul className="inline space-x-2">
+    <div className="flex flex-wrap items-center justify-end text-sm text-gray-500">
+      <h2 className="sr-only">{t.filteredBy}:</h2>
+      <ul className="flex flex-wrap items-center justify-end space-x-1">
         {hasNameFilter ? (
-          <li>
-            <span className="mb-1 font-medium">{t.title}: </span>
-            <Badge className="inline-flex items-center mb-1 space-x-2 text-gray-100 bg-gray-900 cursor-default select-none">
-              <span>{name}</span>
-              <ClearButton
-                className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-                onClick={() => {
-                  setFilter({ name: undefined })
-                }}
-              />
-            </Badge>
+          <li className="mb-1">
+            <dl className="flex items-center space-x-2">
+              <dt className="sr-only">{t.title}:</dt>
+              <dd>
+                <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                  <span>{name}</span>
+                  <ClearButton
+                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                    onClick={() => {
+                      setFilter({ name: undefined })
+                    }}
+                  />
+                </Badge>
+              </dd>
+            </dl>
           </li>
         ) : null}
         {hasAuthorsFilter ? (
           <li>
-            <span className="mb-1 font-medium">{t.authors[1]}:</span>{' '}
-            {authors?.map((id) => {
-              return (
-                <Badge
-                  key={id}
-                  className="inline-flex items-center mb-1 space-x-2 text-gray-100 bg-gray-900 cursor-default select-none"
-                >
-                  <span>{options.authors.data?.[id]?.name}</span>
-                  <ClearButton
-                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-                    onClick={() => {
-                      setFilter({
-                        authors:
-                          filter.authors === undefined ||
-                          filter.authors.length === 1
-                            ? undefined
-                            : filter.authors.filter(
-                                (authorId) => authorId !== id,
-                              ),
-                      })
-                    }}
-                  />
-                </Badge>
-              )
-            })}
+            <dl className="flex items-center space-x-2">
+              <dt className="sr-only">{t.authors[1]}:</dt>
+              <dd>
+                <ul className="flex flex-wrap items-center justify-end space-x-1">
+                  {authors?.map((id) => {
+                    return (
+                      <li className="mb-1" key={id}>
+                        <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                          <span>{options.authors.data?.[id]?.name}</span>
+                          <ClearButton
+                            className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                            onClick={() => {
+                              setFilter({
+                                authors:
+                                  filter.authors === undefined ||
+                                  filter.authors.length === 1
+                                    ? undefined
+                                    : filter.authors.filter(
+                                        (authorId) => authorId !== id,
+                                      ),
+                              })
+                            }}
+                          />
+                        </Badge>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </dd>
+            </dl>
           </li>
         ) : null}
         {hasPublicationFilter ? (
           <li>
-            <span className="mb-1 font-medium">
-              {t.entityType.Publication[1]}:
-            </span>{' '}
-            {publications?.map((id) => {
-              return (
-                <Badge
-                  key={id}
-                  className="inline-flex items-center mb-1 space-x-2 text-gray-100 bg-gray-900 cursor-default select-none"
-                >
-                  <span>{options.publications.data?.[id]?.name}</span>
-                  <ClearButton
-                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-                    onClick={() => {
-                      setFilter({
-                        publications:
-                          filter.publications === undefined ||
-                          filter.publications.length === 1
-                            ? undefined
-                            : filter.publications.filter(
-                                (publicationId) => publicationId !== id,
-                              ),
-                      })
-                    }}
-                  />
-                </Badge>
-              )
-            })}
+            <dl className="flex items-center space-x-2">
+              <dt className="sr-only">{t.entityType.Publication[1]}:</dt>
+              <dd>
+                <ul className="flex flex-wrap items-center justify-end space-x-1">
+                  {publications?.map((id) => {
+                    return (
+                      <li className="mb-1" key={id}>
+                        <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                          <span>{options.publications.data?.[id]?.name}</span>
+                          <ClearButton
+                            className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                            onClick={() => {
+                              setFilter({
+                                publications:
+                                  filter.publications === undefined ||
+                                  filter.publications.length === 1
+                                    ? undefined
+                                    : filter.publications.filter(
+                                        (publicationId) => publicationId !== id,
+                                      ),
+                              })
+                            }}
+                          />
+                        </Badge>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </dd>
+            </dl>
           </li>
         ) : null}
         {hasPassageTopicsFilter ? (
           <li>
-            <span className="mb-1 font-medium">{t.topics[1]}:</span>{' '}
-            {topics?.map((id) => {
-              return (
-                <Badge
-                  key={id}
-                  className="inline-flex items-center mb-1 space-x-2 text-gray-100 bg-gray-900 cursor-default select-none"
-                >
-                  <span>{options.passageTopics.data?.[id]?.name}</span>
-                  <ClearButton
-                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-                    onClick={() => {
-                      setFilter({
-                        topics:
-                          filter.topics === undefined ||
-                          filter.topics.length === 1
-                            ? undefined
-                            : filter.topics.filter((topicId) => topicId !== id),
-                      })
-                    }}
-                  />
-                </Badge>
-              )
-            })}
+            <dl className="flex items-center space-x-2">
+              <dt className="sr-only">{t.topics[1]}:</dt>
+              <dd>
+                <ul className="flex flex-wrap items-center justify-end space-x-1">
+                  {topics?.map((id) => {
+                    return (
+                      <li className="mb-1" key={id}>
+                        <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                          <span>{options.passageTopics.data?.[id]?.name}</span>
+                          <ClearButton
+                            className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                            onClick={() => {
+                              setFilter({
+                                topics:
+                                  filter.topics === undefined ||
+                                  filter.topics.length === 1
+                                    ? undefined
+                                    : filter.topics.filter(
+                                        (topicId) => topicId !== id,
+                                      ),
+                              })
+                            }}
+                          />
+                        </Badge>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </dd>
+            </dl>
           </li>
         ) : null}
         {hasPassageTypesFilter ? (
           <li>
-            <span className="mb-1 font-medium">{t.types[1]}:</span>{' '}
-            {types?.map((id) => {
-              return (
-                <Badge
-                  key={id}
-                  className="inline-flex items-center mb-1 space-x-2 text-gray-100 bg-gray-900 cursor-default select-none"
-                >
-                  <span>{options.passageTypes.data?.[id]?.name}</span>
-                  <ClearButton
-                    className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-                    onClick={() => {
-                      setFilter({
-                        types:
-                          filter.types === undefined ||
-                          filter.types.length === 1
-                            ? undefined
-                            : filter.types.filter((typeId) => typeId !== id),
-                      })
-                    }}
-                  />
-                </Badge>
-              )
-            })}
+            <dl className="flex items-center space-x-2">
+              <dt className="sr-only">{t.types[1]}:</dt>
+              <dd>
+                <ul className="flex flex-wrap items-center justify-end space-x-1">
+                  {types?.map((id) => {
+                    return (
+                      <li className="mb-1" key={id}>
+                        <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                          <span>{options.passageTypes.data?.[id]?.name}</span>
+                          <ClearButton
+                            className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                            onClick={() => {
+                              setFilter({
+                                types:
+                                  filter.types === undefined ||
+                                  filter.types.length === 1
+                                    ? undefined
+                                    : filter.types.filter(
+                                        (typeId) => typeId !== id,
+                                      ),
+                              })
+                            }}
+                          />
+                        </Badge>
+                      </li>
+                    )
+                  })}
+                </ul>
+              </dd>
+            </dl>
           </li>
         ) : null}
       </ul>
@@ -849,11 +874,13 @@ function DetailsPanel({
         }}
       >
         <div className="space-y-4">
-          <div className="flex space-x-2">
-            <CopyLinkButton />
-          </div>
-          <div className="space-y-1">
-            <EntityType type={selectedSolaEntity.data.type} />
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between">
+              <EntityType type={selectedSolaEntity.data.type} />
+              <div className="space-x-2">
+                <CopyLinkButton />
+              </div>
+            </div>
             <h2 className="text-xl font-semibold leading-6 text-gray-700">
               {selectedSolaEntity.data.name}
             </h2>
@@ -947,9 +974,9 @@ function Authors({
               key={author.id}
               className={cx('transition', colors.bg.Person)}
             >
-              <InlineButton
+              <button
                 className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
-                onPress={() => {
+                onClick={() => {
                   setSelectedSolaEntity({
                     id: author.id,
                     type: 'Person',
@@ -957,7 +984,7 @@ function Authors({
                 }}
               >
                 {author.name}
-              </InlineButton>
+              </button>
             </Badge>
           )
         })}
@@ -1031,52 +1058,54 @@ function PassageProperties({
         {hasPassageTopics ? (
           <div>
             <dt className="sr-only">{t.topics[1]}</dt>
-            <dd className="leading-7">
-              {entity.topic.map((topic) => {
-                return (
-                  <Badge
-                    key={topic.id}
-                    className="text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200"
-                  >
-                    <InlineButton
-                      className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-                      onPress={() =>
-                        setFilter({
-                          topics: [topic.id],
-                        })
-                      }
-                    >
-                      {topic.label}
-                    </InlineButton>
-                  </Badge>
-                )
-              })}
+            <dd>
+              <ul className="flex flex-wrap space-y-1 overflow-x-hidden">
+                {entity.topic.map((topic) => {
+                  return (
+                    <li className="min-w-0" key={topic.id}>
+                      <Badge className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200">
+                        <button
+                          className="inline-block truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                          onClick={() =>
+                            setFilter({
+                              topics: [topic.id],
+                            })
+                          }
+                        >
+                          {topic.label}
+                        </button>
+                      </Badge>
+                    </li>
+                  )
+                })}
+              </ul>
             </dd>
           </div>
         ) : null}
         {hasPassageTypes ? (
           <div>
             <dt className="sr-only">{t.types[1]}</dt>
-            <dd className="leading-7">
-              {entity.kind.map((kind) => {
-                return (
-                  <Badge
-                    key={kind.id}
-                    className="text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200"
-                  >
-                    <InlineButton
-                      className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-                      onPress={() =>
-                        setFilter({
-                          types: [kind.id],
-                        })
-                      }
-                    >
-                      {kind.label}
-                    </InlineButton>
-                  </Badge>
-                )
-              })}
+            <dd>
+              <ul className="flex flex-wrap space-y-1 overflow-x-hidden">
+                {entity.kind.map((kind) => {
+                  return (
+                    <li className="min-w-0" key={kind.id}>
+                      <Badge className="text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200">
+                        <button
+                          className="inline-block truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                          onClick={() =>
+                            setFilter({
+                              types: [kind.id],
+                            })
+                          }
+                        >
+                          {kind.label}
+                        </button>
+                      </Badge>
+                    </li>
+                  )
+                })}
+              </ul>
             </dd>
           </div>
         ) : null}
@@ -1119,30 +1148,33 @@ function Relations({
               <dt className="sr-only">
                 {t.entityType[type as SolaEntityType][1]}
               </dt>
-              <dd className="leading-7">
-                {relations.map((relation) => {
-                  return (
-                    <Badge
-                      key={relation.id}
-                      className={cx(
-                        'transition',
-                        colors.bg[type as SolaEntityType],
-                      )}
-                    >
-                      <InlineButton
-                        className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
-                        onPress={() => {
-                          setSelectedSolaEntity({
-                            id: relation.related_entity.id,
-                            type: relation.related_entity.type,
-                          })
-                        }}
-                      >
-                        {relation.related_entity.label}
-                      </InlineButton>
-                    </Badge>
-                  )
-                })}
+              <dd>
+                <ul className="flex flex-wrap space-y-1 overflow-x-hidden">
+                  {relations.map((relation) => {
+                    return (
+                      <li className="min-w-0" key={relation.id}>
+                        <Badge
+                          className={cx(
+                            'inline-block max-w-full transition',
+                            colors.bg[type as SolaEntityType],
+                          )}
+                        >
+                          <button
+                            className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+                            onClick={() => {
+                              setSelectedSolaEntity({
+                                id: relation.related_entity.id,
+                                type: relation.related_entity.type,
+                              })
+                            }}
+                          >
+                            {relation.related_entity.label}
+                          </button>
+                        </Badge>
+                      </li>
+                    )
+                  })}
+                </ul>
               </dd>
             </div>
           )

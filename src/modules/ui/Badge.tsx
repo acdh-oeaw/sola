@@ -13,7 +13,7 @@ export function Badge({
   as: Component = 'span',
 }: BadgeProps): JSX.Element {
   const classNames = cx(
-    'py-1 px-2 rounded inline mr-1 box-decoration-clone',
+    'py-0.5 px-2 rounded inline-flex items-center',
     className ?? 'bg-gray-300 text-gray-700',
   )
   return <Component className={classNames}>{children}</Component>
