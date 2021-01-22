@@ -909,8 +909,8 @@ function EntityType({ type }: { type?: SolaEntityType }) {
   if (type === undefined) return null
 
   const classNames = cx(
-    'text-xs font-semibold tracking-wider uppercase pointer-events-none',
-    colors.text[type],
+    'text-xs font-medium tracking-wider uppercase pointer-events-none py-1 px-2 rounded inline-block mb-1',
+    colors.bg[type],
   )
 
   return <span className={classNames}>{type}</span>
