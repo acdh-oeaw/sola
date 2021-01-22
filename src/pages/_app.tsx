@@ -53,10 +53,14 @@ async function startMockServiceWorker() {
   if (process.env.NEXT_PUBLIC_API_MOCKING === 'enabled') {
     if (typeof window === 'undefined') {
       const { server } = await import('@/api/mocks/server')
-      server.listen()
+      server.listen({
+        onUnhandledRequest: 'warn',
+      })
     } else {
       const { worker } = await import('@/api/mocks/worker')
-      worker.start()
+      worker.start({
+        onUnhandledRequest: 'warn',
+      })
     }
   }
 }

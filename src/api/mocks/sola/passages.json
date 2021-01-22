@@ -1,0 +1,306 @@
+{
+  "next": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/passage/?limit=3&offset=3",
+  "previous": null,
+  "count": 386,
+  "limit": 3,
+  "offset": 0,
+  "results": [
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/passage/3/",
+      "id": 3,
+      "name": "Codex Theodosianus 2,8,1",
+      "review": false,
+      "start_date": "0321-07-04",
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": true,
+      "end_date": null,
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": null,
+      "primary_date": "0321-07-04",
+      "start_date_written": "03.07.0321",
+      "end_date_written": null,
+      "status": "Uta Heil - in Bearbeitung",
+      "references": "",
+      "notes": "",
+      "published": false,
+      "migne_number": null,
+      "source": null,
+      "assigned_user": {
+        "id": 10,
+        "label": "UHeil",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/10/"
+      },
+      "text": [
+        {
+          "id": 1,
+          "label": "ID: 1 - Kaiser Konstantin an Help",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/1/"
+        },
+        {
+          "id": 2,
+          "label": "ID: 2 - Dieses Gesetz ist neben C",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/2/"
+        },
+        {
+          "id": 5,
+          "label": "ID: 5 - IMP. CONSTANT(INUS) A. HE",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/5/"
+        },
+        {
+          "id": 6,
+          "label": "ID: 6 - Emperor Constantine Augus",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/6/"
+        },
+        {
+          "id": 33,
+          "label": "ID: 33",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/33/"
+        },
+        {
+          "id": 272,
+          "label": "ID: 272 - This law, along with C.J.",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/272/"
+        }
+      ],
+      "collection": [
+        {
+          "id": 2,
+          "label": "COLADay",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/2/"
+        }
+      ],
+      "topic": [
+        {
+          "id": 84,
+          "label": "Bezeichnungen des Sonntags >> Sonntag / Tag der Sonne",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/84/",
+          "parent_id": 80
+        },
+        {
+          "id": 86,
+          "label": "Bezeichnungen des Sonntags >> Herrentag",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/86/",
+          "parent_id": 80
+        },
+        {
+          "id": 126,
+          "label": "Tätigkeiten >> Gericht halten",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/126/",
+          "parent_id": 123
+        },
+        {
+          "id": 129,
+          "label": "Tätigkeiten >> ruhen",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/129/",
+          "parent_id": 123
+        },
+        {
+          "id": 174,
+          "label": "Personen/Gruppen >> Kaiser/Kaiserinnen",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/174/",
+          "parent_id": 214
+        }
+      ],
+      "kind": [
+        {
+          "id": 17,
+          "label": "Gesetze >> staatliche Gesetze",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetype/17/",
+          "parent_id": 16
+        }
+      ]
+    },
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/passage/10/",
+      "id": 10,
+      "name": "Codex Theodosianus 2,8,18",
+      "review": false,
+      "start_date": "0385-11-04",
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": true,
+      "end_date": null,
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": null,
+      "primary_date": "0385-11-04",
+      "start_date_written": "03.11.0385",
+      "end_date_written": null,
+      "status": "Uta Heil - in Bearbeitung",
+      "references": "Zum Original: vgl. Mommsen, Code Théodosien I-XV,  42-45. \r\nZur Übersetzung: Pharr, The Theodosian Code, 44.",
+      "notes": "Datum: 24.11.386 = 03.11.385, 25.01.386?",
+      "published": false,
+      "migne_number": null,
+      "source": null,
+      "assigned_user": {
+        "id": 10,
+        "label": "UHeil",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/10/"
+      },
+      "text": [
+        {
+          "id": 13,
+          "label": "ID: 13 - Kaiser Gratian, Valentini",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/13/"
+        },
+        {
+          "id": 14,
+          "label": "ID: 14 - Es handelt sich um eines ",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/14/"
+        },
+        {
+          "id": 15,
+          "label": "ID: 15 - [IMPPP. GRATIANUS VALENTI",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/15/"
+        },
+        {
+          "id": 16,
+          "label": "ID: 16 - Emperors Gratian, Valenti",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/16/"
+        },
+        {
+          "id": 45,
+          "label": "ID: 45",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/45/"
+        },
+        {
+          "id": 287,
+          "label": "ID: 287 - This is one of the Theodo",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/287/"
+        }
+      ],
+      "collection": [
+        {
+          "id": 2,
+          "label": "COLADay",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/2/"
+        }
+      ],
+      "topic": [
+        {
+          "id": 84,
+          "label": "Bezeichnungen des Sonntags >> Sonntag / Tag der Sonne",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/84/",
+          "parent_id": 80
+        },
+        {
+          "id": 126,
+          "label": "Tätigkeiten >> Gericht halten",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/126/",
+          "parent_id": 123
+        },
+        {
+          "id": 174,
+          "label": "Personen/Gruppen >> Kaiser/Kaiserinnen",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/174/",
+          "parent_id": 214
+        }
+      ],
+      "kind": [
+        {
+          "id": 17,
+          "label": "Gesetze >> staatliche Gesetze",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetype/17/",
+          "parent_id": 16
+        }
+      ]
+    },
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/passage/12/",
+      "id": 12,
+      "name": "Codex Theodosianus 2,8,19",
+      "review": false,
+      "start_date": "0389-08-08",
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": true,
+      "end_date": null,
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": null,
+      "primary_date": "0389-08-08",
+      "start_date_written": "07.08.0389",
+      "end_date_written": null,
+      "status": "Uta Heil - in Bearbeitung",
+      "references": "",
+      "notes": "Original: vgl. Mommsen, Code Théodosien I-XV, 44-49.\r\nEngl. Übersetzung: vgl. Pharr, The Theodosian Code, 44-45.",
+      "published": false,
+      "migne_number": null,
+      "source": null,
+      "assigned_user": {
+        "id": 10,
+        "label": "UHeil",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/10/"
+      },
+      "text": [
+        {
+          "id": 17,
+          "label": "ID: 17 - Die Kaiser Valentinian II",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/17/"
+        },
+        {
+          "id": 18,
+          "label": "ID: 18 - Das Gesetz listet gericht",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/18/"
+        },
+        {
+          "id": 19,
+          "label": "ID: 19 - IMPPP. VAL(ENTINIANUS) TH",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/19/"
+        },
+        {
+          "id": 20,
+          "label": "ID: 20 - Emperors Valentinian, The",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/20/"
+        },
+        {
+          "id": 288,
+          "label": "ID: 288 - The law lists days off fr",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/288/"
+        },
+        {
+          "id": 289,
+          "label": "ID: 289",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/289/"
+        }
+      ],
+      "collection": [
+        {
+          "id": 2,
+          "label": "COLADay",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/2/"
+        }
+      ],
+      "topic": [
+        {
+          "id": 84,
+          "label": "Bezeichnungen des Sonntags >> Sonntag / Tag der Sonne",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/84/",
+          "parent_id": 80
+        },
+        {
+          "id": 126,
+          "label": "Tätigkeiten >> Gericht halten",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/126/",
+          "parent_id": 123
+        },
+        {
+          "id": 174,
+          "label": "Personen/Gruppen >> Kaiser/Kaiserinnen",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/174/",
+          "parent_id": 214
+        }
+      ],
+      "kind": [
+        {
+          "id": 17,
+          "label": "Gesetze >> staatliche Gesetze",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetype/17/",
+          "parent_id": 16
+        }
+      ]
+    }
+  ]
+}

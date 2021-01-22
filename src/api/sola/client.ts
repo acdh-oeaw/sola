@@ -1,5 +1,6 @@
 import { request } from '@/api/sola/runtime'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
+import { api as baseUrl } from '~/config/site.json'
 
 export interface SolaEntityBase {
   id: number
@@ -185,8 +186,6 @@ export interface Results<
   previous: URLString | null
   results: Array<T>
 }
-
-export const baseUrl = 'https://sola.acdh-dev.oeaw.ac.at'
 
 export async function getSolaEvents({
   query,

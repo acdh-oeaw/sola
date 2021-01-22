@@ -1,0 +1,135 @@
+{
+  "next": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/event/?limit=3&offset=3",
+  "previous": null,
+  "count": 47,
+  "limit": 3,
+  "offset": 0,
+  "results": [
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/event/205/",
+      "id": 205,
+      "name": "Beginn der Christenverfolgungen unter Diokletian",
+      "review": false,
+      "start_date": "0303-04-19",
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": true,
+      "end_date": null,
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": null,
+      "primary_date": "0303-04-19",
+      "start_date_written": "18.04.0303",
+      "end_date_written": null,
+      "status": "",
+      "references": "",
+      "notes": "",
+      "published": false,
+      "name_english": "Begin of the persecutions under Diocletian",
+      "source": null,
+      "assigned_user": {
+        "id": 10,
+        "label": "UHeil",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/10/"
+      },
+      "kind": {
+        "id": 156,
+        "label": "politisch",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/eventtype/156/",
+        "parent_id": null
+      },
+      "text": [],
+      "collection": [
+        {
+          "id": 2,
+          "label": "COLADay",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/2/"
+        }
+      ]
+    },
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/event/212/",
+      "id": 212,
+      "name": "Weihe der Stadt Konstantinopel",
+      "review": false,
+      "start_date": "0330-05-12",
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": true,
+      "end_date": null,
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": null,
+      "primary_date": "0330-05-12",
+      "start_date_written": "11.05.0330",
+      "end_date_written": null,
+      "status": "",
+      "references": "",
+      "notes": "",
+      "published": false,
+      "name_english": "Dedication of the city of Constantinople",
+      "source": null,
+      "assigned_user": {
+        "id": 10,
+        "label": "UHeil",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/10/"
+      },
+      "kind": {
+        "id": 156,
+        "label": "politisch",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/eventtype/156/",
+        "parent_id": null
+      },
+      "text": [],
+      "collection": [
+        {
+          "id": 2,
+          "label": "COLADay",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/2/"
+        }
+      ]
+    },
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/event/216/",
+      "id": 216,
+      "name": "Tod von Constantinus I., imperator Romanorum",
+      "review": false,
+      "start_date": "0337-05-23",
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": true,
+      "end_date": null,
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": null,
+      "primary_date": "0337-05-23",
+      "start_date_written": "22.05.0337",
+      "end_date_written": null,
+      "status": "Uta Heil - in Bearbeitung",
+      "references": "",
+      "notes": "",
+      "published": false,
+      "name_english": "Death of emperor Constantine I.",
+      "source": null,
+      "assigned_user": {
+        "id": 10,
+        "label": "UHeil",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/10/"
+      },
+      "kind": {
+        "id": 156,
+        "label": "politisch",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/eventtype/156/",
+        "parent_id": null
+      },
+      "text": [],
+      "collection": [
+        {
+          "id": 2,
+          "label": "COLADay",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/2/"
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,160 @@
+{
+  "next": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/person/?limit=3&offset=5",
+  "previous": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/person/?limit=3",
+  "count": 110,
+  "limit": 3,
+  "offset": 2,
+  "results": [
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/person/100/",
+      "id": 100,
+      "name": "Dioscorus I., patriarcha Alexandrinus",
+      "review": false,
+      "start_date": null,
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": null,
+      "end_date": "0454-09-05",
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": true,
+      "primary_date": "0454-09-05",
+      "start_date_written": null,
+      "end_date_written": "04.09.0454",
+      "status": "distinct",
+      "references": "",
+      "notes": "",
+      "published": false,
+      "gender": "male",
+      "source": null,
+      "assigned_user": {
+        "id": 10,
+        "label": "UHeil",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/10/"
+      },
+      "text": [
+        {
+          "id": 297,
+          "label": "ID: 297 - Patriarch von Alexandria ",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/297/"
+        },
+        {
+          "id": 298,
+          "label": "ID: 298 - Patriarch of Alexandria 4",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/298/"
+        }
+      ],
+      "collection": [
+        {
+          "id": 2,
+          "label": "COLADay",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/2/"
+        },
+        {
+          "id": 3,
+          "label": "COLADay – Sabbat",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/3/"
+        },
+        {
+          "id": 4,
+          "label": "Default import collection",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/4/"
+        }
+      ]
+    },
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/person/102/",
+      "id": 102,
+      "name": "Anastasius archiepiscopus Thessalonicensis",
+      "review": false,
+      "start_date": null,
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": null,
+      "end_date": "0453-01-01",
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": true,
+      "primary_date": "0453-01-01",
+      "start_date_written": null,
+      "end_date_written": "31.12.0452",
+      "status": "Uta Heil - in Bearbeitung",
+      "references": "",
+      "notes": "",
+      "published": false,
+      "gender": "male",
+      "source": null,
+      "assigned_user": {
+        "id": 7,
+        "label": "NPiringer",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/7/"
+      },
+      "text": [
+        {
+          "id": 299,
+          "label": "ID: 299 - Erzbischof von Thessaloni",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/299/"
+        },
+        {
+          "id": 300,
+          "label": "ID: 300 - Archbishop of Thessalonic",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/300/"
+        }
+      ],
+      "collection": [
+        {
+          "id": 2,
+          "label": "COLADay",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/2/"
+        }
+      ]
+    },
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/entities/person/120/",
+      "id": 120,
+      "name": "Martinus episcopus Bracarensis",
+      "review": false,
+      "start_date": "0515-01-03",
+      "start_start_date": null,
+      "start_end_date": null,
+      "start_date_is_exact": true,
+      "end_date": "0579-01-03",
+      "end_start_date": null,
+      "end_end_date": null,
+      "end_date_is_exact": true,
+      "primary_date": "0547-01-03",
+      "start_date_written": "01.01.0515",
+      "end_date_written": "01.01.0579",
+      "status": "",
+      "references": "C. P. Caspari, Martin von Bracara’s Schrift De Correctione Rusticorum, Christiania 1883, 1-21.\r\nClaude W. Barlow, Martini episcopi Bracarensis Opera omnia, New Haven 1950, 1-10.",
+      "notes": "Martin von  Braga wurde wahrscheinlich zwischen 510 und 520 in Pannonien geboren. Um das Jahr 550 kam er nach Gallaecia im spanischen Suebenreich. In Dumio bei Braga gründete er ein Kloster, dem er als Abt vorstand, bevor er 556 zum Bischof von Dumio geweiht wurde. Am ersten Konzil von Braga nimmt er in dieser Funktion teil; das zweite Konzil von Braga im Jahr 572 leitet er selbst als Erzbischof von Braga. Er war maßgeblich beteiligt an der Bekehrung der arianischen Sueben zum katholischen Glauben, weshalb er mitunter als „Apostel der Sueben“ bezeichnet wird. \r\nMartin von Braga übersetzte u.a. eine Sammlung von Kirchengesetzen aus dem griechischen Osten ins Lateinische („Capitula Martini“). Seine „Aegyptiorum patrum sententiae“ sind eine bunte Mischung von Aussprüchen ägyptischer Asketen, die bisweilen mit Szenen aus dem Klosterleben verbunden sind. Aus Martins letztem Lebensjahrzehnt stammen die Schriften „Formula vitae honestae“ an König Miro und „De ira“, beides nach dem Vorbild Senecas, weiters „De correctione rusticorum“ und „De pascha“. Ein Werk „De trina mersione“, das wichtige Information zur hispanischen Taufliturgie bietet, kann nicht datiert werden. \r\nMartin von Braga verstarb um 579; über sein Leben und Wirken informieren u.a. seine Zeitgenossen Gregor von Tours (Mart. 1, 11; Hist. Franc. 5, 37) und Venantius Fortunatus (carm. 5,1; 5,2). \r\n\r\nC. P. Caspari, Martin von Bracara’s Schrift De Correctione Rusticorum, Christiania 1883, 1-21.\r\nClaude W. Barlow, Martini episcopi Bracarensis Opera omnia, New Haven 1950, 1-10.",
+      "published": false,
+      "gender": "male",
+      "source": null,
+      "assigned_user": {
+        "id": 7,
+        "label": "NPiringer",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/users/7/"
+      },
+      "text": [
+        {
+          "id": 301,
+          "label": "ID: 301 - Martin von Braga wurde wa",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/301/"
+        },
+        {
+          "id": 302,
+          "label": "ID: 302 - Martin of Braga was born ",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/text/302/"
+        }
+      ],
+      "collection": [
+        {
+          "id": 4,
+          "label": "Default import collection",
+          "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/metainfo/collection/4/"
+        }
+      ]
+    }
+  ]
+}

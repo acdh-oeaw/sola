@@ -1,0 +1,56 @@
+{
+  "next": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/?limit=3&offset=3",
+  "previous": null,
+  "count": 113,
+  "limit": 3,
+  "offset": 0,
+  "results": [
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/72/",
+      "id": 72,
+      "name": "Gottesdienst und Rituelles",
+      "name_english": null,
+      "description": "",
+      "status": "can",
+      "parent_class": null,
+      "vocab_name": {
+        "id": 17,
+        "label": "VocabNames object (17)",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/vocabnames/17/"
+      }
+    },
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/73/",
+      "id": 73,
+      "name": "Abendmahl",
+      "name_english": null,
+      "description": "",
+      "status": "can",
+      "parent_class": {
+        "id": 72,
+        "label": "Gottesdienst und Rituelles",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/vocabsbaseclass/72/",
+        "parent_id": null
+      },
+      "vocab_name": {
+        "id": 17,
+        "label": "VocabNames object (17)",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/vocabnames/17/"
+      }
+    },
+    {
+      "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/passagetopics/76/",
+      "id": 76,
+      "name": "Feste",
+      "name_english": "feast days",
+      "description": "",
+      "status": "can",
+      "parent_class": null,
+      "vocab_name": {
+        "id": 17,
+        "label": "VocabNames object (17)",
+        "url": "https://sola.acdh-dev.oeaw.ac.at/apis/api/vocabularies/vocabnames/17/"
+      }
+    }
+  ]
+}
