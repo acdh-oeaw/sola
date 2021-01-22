@@ -63,9 +63,11 @@ export function Timelines({
   const [tooltipContent, setTooltipContent] = useState<Node | null>(null)
 
   const data = timelines
+  const { width, height } = dimensions ?? {}
 
   useEffect(() => {
-    if (svgRef.current === null || dimensions === null) return
+    if (svgRef.current === null || width === undefined || height === undefined)
+      return
 
     const svg = select(svgRef.current)
 
@@ -78,10 +80,10 @@ export function Timelines({
     // scales
     const xScale = scaleTime()
       .domain([minDate, maxDate])
-      .range([config.canvasMarginX, dimensions.width - config.canvasMarginX])
+      .range([config.canvasMarginX, width - config.canvasMarginX])
     const yScale = scaleBand()
       .domain(data.map((d) => d.label))
-      .range([dimensions.height - config.canvasMarginY, config.canvasMarginY])
+      .range([height - config.canvasMarginY, config.canvasMarginY])
 
     // rescale
     if (zoomState !== null) {
@@ -110,10 +112,7 @@ export function Timelines({
       .classed('text-gray-400', true)
       .call(xAxisTop)
     select<SVGGElement, unknown>('g.x-axis-bottom')
-      .attr(
-        'transform',
-        `translate(0,${dimensions.height - config.canvasMarginY})`,
-      )
+      .attr('transform', `translate(0,${height - config.canvasMarginY})`)
       .classed('text-gray-400', true)
       .call(xAxisBottom)
     select<SVGGElement, unknown>('g.y-axis-left')
@@ -127,10 +126,7 @@ export function Timelines({
       .attr('x', 0)
       .attr('y', -15)
     select<SVGGElement, unknown>('g.y-axis-right')
-      .attr(
-        'transform',
-        `translate(${dimensions.width - config.canvasMarginX},0)`,
-      )
+      .attr('transform', `translate(${width - config.canvasMarginX},0)`)
       .classed('text-gray-400', true)
       .call(yAxisRight)
       // rotate axis labels
@@ -145,7 +141,7 @@ export function Timelines({
       .scaleExtent([config.minScale, config.maxScale])
       .translateExtent([
         [0, 0],
-        [dimensions.width, dimensions.height],
+        [width, height],
       ])
       .on('zoom', () => {
         if (svgRef.current !== null) {
@@ -210,7 +206,7 @@ export function Timelines({
     return () => {
       simulation.stop()
     }
-  }, [data, getTimelineForNodeType, svgRef, dimensions, zoomState])
+  }, [data, getTimelineForNodeType, svgRef, width, height, zoomState])
 
   useEffect(() => {
     if (svgRef.current === null) return
@@ -261,7 +257,8 @@ export function Timelines({
       })
   }, [
     svgRef,
-    dimensions,
+    width,
+    height,
     data,
     isNodeSelected,
     isNodeHighlighted,
