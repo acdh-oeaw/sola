@@ -82,8 +82,6 @@ export const labels = {
       'Please select an entity in the timeline above to view details.',
     authors: ['Author', 'Authors'],
     properties: 'Properties',
-    gender: 'Gender',
-    coordinates: 'Coordinates',
     title: 'Title',
     topics: ['Topic', 'Topics'],
     types: ['Type', 'Types'],
@@ -116,8 +114,6 @@ export const labels = {
       'Bitte Punkt in der Visualisierung auswählen, um Details zu sehen.',
     authors: ['AutorIn', 'AutorInnen'],
     properties: 'Eigenschaften',
-    gender: 'Gender',
-    coordinates: 'Koordinaten',
     title: 'Titel',
     topics: ['Thema', 'Themen'],
     types: ['Gattung', 'Gattungen'],
@@ -263,7 +259,7 @@ function FilterPanel({
       className="overflow-y-auto bg-gray-900"
       style={{ gridArea: 'panel' }}
     >
-      <form className="flex flex-col px-4 py-6 space-y-4" onSubmit={onSubmit}>
+      <form className="flex flex-col px-4 py-6 space-y-3" onSubmit={onSubmit}>
         <div className="flex items-center justify-between">
           <h2 className="font-semibold text-gray-300">{t.filterPassages}</h2>
           <ClearButton
@@ -286,6 +282,7 @@ function FilterPanel({
           onChange={setTitle}
           className="transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
         />
+        <hr className="border-gray-500" />
         <Disclosure
           id="authors-filter"
           panelId="authors-filter-panel"
@@ -309,6 +306,7 @@ function FilterPanel({
             {(item) => <Item>{item.name}</Item>}
           </ListBox>
         </Disclosure>
+        <hr className="border-gray-500" />
         <Disclosure
           id="publications-filter"
           panelId="publications-filter-panel"
@@ -332,6 +330,7 @@ function FilterPanel({
             {(item) => <Item>{item.name}</Item>}
           </ListBox>
         </Disclosure>
+        <hr className="border-gray-500" />
         <Disclosure
           id="passage-types-filter"
           panelId="passage-types-filter-panel"
@@ -421,29 +420,32 @@ function PassageTopicListBox({
   const id = `passage-topic-${topic.id}-filter`
 
   return (
-    <Disclosure
-      id={id}
-      panelId={`${id}-panel`}
-      className="text-gray-300 transition hover:text-white"
-      title={createListboxLabel(
-        `${t.topics[0]}: ${topic.name}`,
-        topics.length,
-        selectedCount,
-      )}
-    >
-      <ListBox
-        selectionMode="multiple"
-        aria-labelledby={id}
-        items={topics}
-        selectedKeys={filter ?? []}
-        onSelectionChange={(ids) => {
-          if (ids === 'all') return
-          setFilter({ topics: Array.from(ids) as Array<number> })
-        }}
+    <Fragment>
+      <hr className="border-gray-500" />
+      <Disclosure
+        id={id}
+        panelId={`${id}-panel`}
+        className="text-gray-300 transition hover:text-white"
+        title={createListboxLabel(
+          `${t.topics[0]}: ${topic.name}`,
+          topics.length,
+          selectedCount,
+        )}
       >
-        {(item) => <Item>{item.name}</Item>}
-      </ListBox>
-    </Disclosure>
+        <ListBox
+          selectionMode="multiple"
+          aria-labelledby={id}
+          items={topics}
+          selectedKeys={filter ?? []}
+          onSelectionChange={(ids) => {
+            if (ids === 'all') return
+            setFilter({ topics: Array.from(ids) as Array<number> })
+          }}
+        >
+          {(item) => <Item>{item.name}</Item>}
+        </ListBox>
+      </Disclosure>
+    </Fragment>
   )
 }
 
