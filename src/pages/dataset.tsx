@@ -666,7 +666,7 @@ function ActiveFilterList({
               <dt className="sr-only">{t.title}:</dt>
               <dd>
                 <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                  <span>{name}</span>
+                  <span className="font-medium">{name}</span>
                   <ClearButton
                     className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                     onClick={() => {
@@ -688,7 +688,9 @@ function ActiveFilterList({
                     return (
                       <li className="mb-1" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                          <span>{options.authors.data?.[id]?.name}</span>
+                          <span className="font-medium">
+                            {options.authors.data?.[id]?.name}
+                          </span>
                           <ClearButton
                             className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                             onClick={() => {
@@ -722,7 +724,9 @@ function ActiveFilterList({
                     return (
                       <li className="mb-1" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                          <span>{options.publications.data?.[id]?.name}</span>
+                          <span className="font-medium">
+                            {options.publications.data?.[id]?.name}
+                          </span>
                           <ClearButton
                             className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                             onClick={() => {
@@ -756,7 +760,9 @@ function ActiveFilterList({
                     return (
                       <li className="mb-1" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                          <span>{options.passageTopics.data?.[id]?.name}</span>
+                          <span className="font-medium">
+                            {options.passageTopics.data?.[id]?.name}
+                          </span>
                           <ClearButton
                             className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                             onClick={() => {
@@ -790,7 +796,9 @@ function ActiveFilterList({
                     return (
                       <li className="mb-1" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                          <span>{options.passageTypes.data?.[id]?.name}</span>
+                          <span className="font-medium">
+                            {options.passageTypes.data?.[id]?.name}
+                          </span>
                           <ClearButton
                             className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                             onClick={() => {
