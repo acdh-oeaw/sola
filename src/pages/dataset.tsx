@@ -2,7 +2,7 @@ import cx from 'clsx'
 import type { GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import { useRouter } from 'next/router'
 import type { FormEvent } from 'react'
-import { Fragment, useEffect, useMemo, useState } from 'react'
+import { Fragment, useEffect, useMemo, useRef, useState } from 'react'
 import type { QueryObserverResult } from 'react-query'
 
 import type {
@@ -40,6 +40,7 @@ import {
 } from '@/lib/sola/hooks'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
 import { count } from '@/lib/util/count'
+import { Document as DocumentIcon } from '@/modules/icons/Document'
 import { Link as LinkIcon } from '@/modules/icons/Link'
 import { Metadata } from '@/modules/metadata/Metadata'
 import { useCanonicalUrl } from '@/modules/metadata/useCanonicalUrl'
@@ -85,6 +86,7 @@ export const labels = {
     topics: ['Topic', 'Topics'],
     types: ['Type', 'Types'],
     relations: 'Relations',
+    relationsTo: 'Relations to',
     biblePassages: 'Bible passages',
     primaryText: 'Primary text',
     additionalTexts: 'Additional texts',
@@ -117,6 +119,7 @@ export const labels = {
     topics: ['Thema', 'Themen'],
     types: ['Gattung', 'Gattungen'],
     relations: 'Beziehungen',
+    relationsTo: 'Beziehungen mit',
     biblePassages: 'Bibel-Passagen',
     primaryText: 'Primärtext',
     additionalTexts: 'Zusätzliche Texte',
@@ -654,7 +657,7 @@ function ActiveFilterList({
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-end text-sm text-gray-500">
+    <div className="flex flex-wrap items-center justify-end text-xs text-gray-500">
       <h2 className="sr-only">{t.filteredBy}:</h2>
       <ul className="flex flex-wrap items-center justify-end space-x-1">
         {hasNameFilter ? (
@@ -879,6 +882,16 @@ function DetailsPanel({
               <EntityType type={selectedSolaEntity.data.type} />
               <div className="space-x-2">
                 <CopyLinkButton />
+                <PrintButton
+                  entity={selectedSolaEntity.data}
+                  authors={authors.data}
+                  relations={selectedSolaEntityRelations}
+                  biblePassages={biblePassages.data}
+                  primary={primaryText}
+                  texts={texts}
+                  bibliography={solaEntityBibliography.data}
+                  editor={selectedSolaEntity.data.assigned_user}
+                />
               </div>
             </div>
             <h2 className="text-xl font-semibold leading-6 text-gray-700">
@@ -934,6 +947,132 @@ function CopyLinkButton() {
   )
 }
 
+function PrintButton({
+  entity,
+  authors,
+  relations,
+  biblePassages,
+  primary,
+  texts,
+  bibliography,
+  editor,
+}: {
+  entity?: SolaEntityDetails
+  authors?: Array<SolaPerson>
+  relations: Record<SolaEntityType, Array<SolaEntityRelation>>
+  biblePassages?: Record<string, string>
+  primary?: SolaTextDetails
+  texts: Array<SolaTextDetails>
+  bibliography?: Array<SolaBibsonomyReference>
+  editor?: { label: string } | null
+}) {
+  const containerRef = useRef<HTMLDivElement>(null)
+  const t = useLabels() as typeof labels[SiteLocale]
+
+  if (entity == null) return null
+
+  function print() {
+    if (containerRef.current == null) return
+
+    const iframe = document.createElement('iframe')
+    iframe.srcdoc = containerRef.current.innerHTML
+    iframe.style.display = 'none'
+    document.body.append(iframe)
+    if (iframe.contentWindow?.onafterprint) {
+      iframe.contentWindow.onafterprint = () => {
+        iframe.remove()
+      }
+    }
+    iframe.contentWindow?.print()
+  }
+
+  return (
+    <Fragment>
+      <div className="hidden" ref={containerRef}>
+        <h1>{entity.name}</h1>
+        <dl>
+          {authors && authors.length ? (
+            <Fragment>
+              <dt>{t.authors[authors.length === 1 ? 0 : 1]}:</dt>
+              <dd>{authors.map((author) => author.name).join(', ')}</dd>
+            </Fragment>
+          ) : null}
+          {entity.type === 'Passage' ? (
+            <Fragment>
+              {entity.kind.length ? (
+                <Fragment>
+                  <dt>{t.types[1]}</dt>
+                  <dd>{entity.kind.map((type) => type.label).join(', ')}</dd>
+                </Fragment>
+              ) : null}
+              {entity.topic.length ? (
+                <Fragment>
+                  <dt>{t.topics[1]}</dt>
+                  <dd>{entity.topic.map((topic) => topic.label).join(', ')}</dd>
+                </Fragment>
+              ) : null}
+            </Fragment>
+          ) : null}
+          {Object.entries(relations).map(([type, relations]) => {
+            if (relations.length === 0) return null
+            return (
+              <Fragment key={type}>
+                <dt>
+                  {t.relationsTo} {t.entityType[type as SolaEntityType][1]}:
+                </dt>
+                <dd>
+                  {relations.map((relation) => relation.label).join(', ')}
+                </dd>
+              </Fragment>
+            )
+          })}
+          {biblePassages && Object.keys(biblePassages).length ? (
+            <Fragment>
+              <dt>{t.biblePassages}</dt>
+              <dd>{Object.keys(biblePassages).join(', ')}</dd>
+            </Fragment>
+          ) : null}
+        </dl>
+        {primary ? (
+          <Fragment>
+            <h2>{primary.kind.label}</h2>
+            <div dangerouslySetInnerHTML={{ __html: primary.text }} />
+          </Fragment>
+        ) : null}
+        {texts.map((text) => {
+          return (
+            <Fragment key={text.id}>
+              <h2>{text.kind.label}</h2>
+              <div dangerouslySetInnerHTML={{ __html: text.text }} />
+            </Fragment>
+          )
+        })}
+        {bibliography && bibliography.length > 0 ? (
+          <Fragment>
+            <h2>{t.bibliography}</h2>
+            {bibliography.map((reference) => {
+              return (
+                <BibliographicReference
+                  key={reference.pk}
+                  reference={reference}
+                />
+              )
+            })}
+          </Fragment>
+        ) : null}
+        {editor ? <small>Edited by {editor.label}</small> : null}
+      </div>
+      <button
+        className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+        onClick={print}
+      >
+        <DocumentIcon />
+        <span>Print document</span>
+      </button>
+    </Fragment>
+  )
+}
+
 function EntityType({ type }: { type?: SolaEntityType }) {
   if (type === undefined) return null
 
@@ -963,11 +1102,11 @@ function Authors({
   if (authors.data === undefined || authors.data.length === 0) return null
 
   return (
-    <dl className="pt-1 text-sm text-gray-700">
+    <dl className="pt-1 text-xs text-gray-700">
       <dt className="sr-only">
         {t.authors[authors.data.length === 1 ? 0 : 1]}
       </dt>
-      <dd>
+      <dd className="flex items-center space-x-1">
         {authors.data.map((author) => {
           return (
             <Badge
@@ -975,7 +1114,7 @@ function Authors({
               className={cx('transition', colors.bg.Person)}
             >
               <button
-                className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+                className="font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
                 onClick={() => {
                   setSelectedSolaEntity({
                     id: author.id,
@@ -1054,18 +1193,18 @@ function PassageProperties({
         {t.properties}
       </h3>
 
-      <dl className="space-y-1 text-sm text-gray-700">
+      <dl className="space-y-1 text-xs text-gray-700">
         {hasPassageTopics ? (
           <div>
             <dt className="sr-only">{t.topics[1]}</dt>
             <dd>
-              <ul className="flex flex-wrap space-y-1 overflow-x-hidden">
+              <ul className="flex flex-wrap items-center overflow-x-hidden">
                 {entity.topic.map((topic) => {
                   return (
-                    <li className="min-w-0" key={topic.id}>
+                    <li className="min-w-0 mb-1 mr-1" key={topic.id}>
                       <Badge className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200">
                         <button
-                          className="inline-block truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                          className="inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                           onClick={() =>
                             setFilter({
                               topics: [topic.id],
@@ -1086,13 +1225,13 @@ function PassageProperties({
           <div>
             <dt className="sr-only">{t.types[1]}</dt>
             <dd>
-              <ul className="flex flex-wrap space-y-1 overflow-x-hidden">
+              <ul className="flex flex-wrap items-center overflow-x-hidden">
                 {entity.kind.map((kind) => {
                   return (
-                    <li className="min-w-0" key={kind.id}>
-                      <Badge className="text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200">
+                    <li className="min-w-0 mb-1 mr-1" key={kind.id}>
+                      <Badge className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200">
                         <button
-                          className="inline-block truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                          className="inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                           onClick={() =>
                             setFilter({
                               types: [kind.id],
@@ -1139,7 +1278,7 @@ function Relations({
       <h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
         {t.relations}
       </h3>
-      <dl className="space-y-1 text-sm text-gray-700">
+      <dl className="space-y-1 text-xs text-gray-700">
         {Object.entries(relations).map(([type, relations]) => {
           if (relations.length === 0) return null
 
@@ -1149,10 +1288,10 @@ function Relations({
                 {t.entityType[type as SolaEntityType][1]}
               </dt>
               <dd>
-                <ul className="flex flex-wrap space-y-1 overflow-x-hidden">
+                <ul className="flex flex-wrap items-center overflow-x-hidden">
                   {relations.map((relation) => {
                     return (
-                      <li className="min-w-0" key={relation.id}>
+                      <li className="min-w-0 mb-1 mr-1" key={relation.id}>
                         <Badge
                           className={cx(
                             'inline-block max-w-full transition',
@@ -1160,7 +1299,7 @@ function Relations({
                           )}
                         >
                           <button
-                            className="cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+                            className="inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
                             onClick={() => {
                               setSelectedSolaEntity({
                                 id: relation.related_entity.id,
