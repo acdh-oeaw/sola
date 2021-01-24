@@ -993,8 +993,15 @@ function PrintButton({
   function print() {
     if (containerRef.current == null) return
     const style = `
-      body { font-family: serif; }
-      mark { background: black; padding: 3px; border-radius: 3px; box-decoration-break: clone; }
+      mark {
+        background: #eee;
+        padding: 3px;
+        border-radius: 3px;
+        box-decoration-break: clone;
+        -webkit-box-decoration-break: clone;
+        color-adjust: exact;
+        -webkit-print-color-adjust: exact;
+      }
     `
     const html = `<!doctype html><html><head><title>${document.title}</title><style>${style}</style></head><body>${containerRef.current.innerHTML}</body></html>`
     printHtml(html)
