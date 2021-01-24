@@ -24,7 +24,10 @@ function createTree<T>(
 
   if (map === undefined) return roots
 
-  Object.values(map).forEach((item) => {
+  /** Clone items, because they will be mutated. */
+  const items = Object.values(map).map((item) => ({ ...item }))
+
+  items.forEach((item) => {
     const parentId = getParentId(item)
     if (parentId == null) {
       roots.push(item)

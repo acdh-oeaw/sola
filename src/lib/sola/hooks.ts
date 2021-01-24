@@ -298,12 +298,6 @@ export function useSolaPassagesFilterOptionsTree(
   const _passageTypes = useHierarchicalData(passageTypes, getParentId)
 
   /**
-   * TODO: Instead of the Array<=>Set actobatics below, we should probably just
-   * make `useHierarchicalData` immutable (i.e. clone the input map,
-   * and make children regular arrays). Compare perf to current approach!
-   */
-
-  /**
    * Add a "Other" entry for every top-level passage topic,
    * since topics which have child topics can themselves have
    * passages associated with them.
