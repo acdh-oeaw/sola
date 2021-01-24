@@ -413,7 +413,11 @@ function PassageTopicListBox({
 
     /** Sort alphabetically, sort "Other" to end. */
     return Array.from(topic.children).sort((a, b) =>
-      a.id === topic.id ? 1 : a.name.localeCompare(b.name),
+      a.id === topic.id
+        ? 1
+        : b.id === topic.id
+        ? -1
+        : a.name.localeCompare(b.name),
     )
   }, [topic])
 
