@@ -29,6 +29,7 @@ export interface TimelinesProps {
     data: Array<Node>
   }>
   getTimelineForNodeType: (type: string) => string
+  getLabelForNodeType: (type: string) => string
   isNodeSelected?: (node: Node) => boolean
   isNodeHighlighted?: (node: Node) => boolean
   onNodeClick?: (node: Node) => void
@@ -36,6 +37,7 @@ export interface TimelinesProps {
 
 export function Timelines({
   timelines,
+  getLabelForNodeType,
   getTimelineForNodeType,
   isNodeSelected,
   isNodeHighlighted,
@@ -266,16 +268,6 @@ export function Timelines({
     zoomState,
   ])
 
-  // function getFormattedDate(node: Node) {
-  //   const entities = {}
-  //   const allOfEntityType = entities[node.type] ?? {}
-  //   const entity = allOfEntityType[node.id]
-  //   if (entity === undefined) return ''
-  //   const startDate = entity !== undefined ? entity.startDateWritten : ''
-  //   const endDate = entity !== undefined ? entity.endDateWritten : ''
-  //   return [startDate, endDate].join(' – ')
-  // }
-
   return (
     <div ref={wrapperRef} className="absolute inset-0">
       <svg ref={svgRef} className="w-full h-full overflow-vísible">
@@ -311,10 +303,9 @@ export function Timelines({
         {tooltipContent !== null ? (
           <div className="flex flex-col space-y-1">
             <div className="font-medium tracking-wider text-gray-500 uppercase">
-              {tooltipContent.type}
+              {getLabelForNodeType(tooltipContent.type)}
             </div>
             <div>{tooltipContent.label}</div>
-            {/* <div>{getFormattedDate(tooltipContent)}</div> */}
           </div>
         ) : null}
       </Tooltip>

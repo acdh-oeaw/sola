@@ -47,6 +47,7 @@ export interface VisualizationProps {
   selectedSolaEntity: QueryObserverResult<SolaEntityDetails, unknown>
   setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void
   selectedSolaEntityRelations: Record<SolaEntityType, Array<SolaEntityRelation>>
+  entityTypeLabels: Record<SolaEntityType, readonly [string, string]>
 }
 
 export function Visualization({
@@ -55,6 +56,7 @@ export function Visualization({
   selectedSolaEntity,
   setSelectedSolaEntity,
   selectedSolaEntityRelations,
+  entityTypeLabels,
 }: VisualizationProps): JSX.Element {
   const locale = useCurrentLocale()
 
@@ -85,6 +87,13 @@ export function Visualization({
       },
     ]
   }, [events, institutions, passages, persons, places, publications, locale])
+
+  const getLabelForNodeType = useCallback(
+    function getLabelForNodeType(type: string) {
+      return entityTypeLabels[type as SolaEntityType][0]
+    },
+    [entityTypeLabels],
+  )
 
   const getTimelineForNodeType = useCallback(
     function getTimelineForNodeType(type: string) {
@@ -183,6 +192,7 @@ export function Visualization({
       isNodeSelected={isNodeSelected}
       isNodeHighlighted={isNodeHighlighted}
       onNodeClick={onNodeClick}
+      getLabelForNodeType={getLabelForNodeType}
     />
   )
 }

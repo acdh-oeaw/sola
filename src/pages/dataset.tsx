@@ -620,6 +620,7 @@ function VisualizationPanel({
           selectedSolaEntity={selectedSolaEntity}
           setSelectedSolaEntity={setSelectedSolaEntity}
           selectedSolaEntityRelations={selectedSolaEntityRelations}
+          entityTypeLabels={t.entityType}
         />
       </div>
     </section>
