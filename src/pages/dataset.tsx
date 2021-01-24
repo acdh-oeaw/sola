@@ -40,6 +40,7 @@ import {
 } from '@/lib/sola/hooks'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
 import { count } from '@/lib/util/count'
+import { printHtml } from '@/lib/util/printHtml'
 import { Document as DocumentIcon } from '@/modules/icons/Document'
 import { Link as LinkIcon } from '@/modules/icons/Link'
 import { Metadata } from '@/modules/metadata/Metadata'
@@ -653,7 +654,7 @@ function ActiveFilterList({
     !hasPassageTopicsFilter &&
     !hasPassageTypesFilter
   ) {
-    return <div className="pb-2 text-sm">&nbsp;</div>
+    return <div className="pb-2 text-xs">&nbsp;</div>
   }
 
   return (
@@ -885,7 +886,7 @@ function DetailsPanel({
         }}
       >
         <div className="space-y-4">
-          <div className="space-y-1.5">
+          <div className="space-y-2">
             <div className="flex items-center justify-between">
               <EntityType type={selectedSolaEntity.data.type} />
               <div className="space-x-2">
@@ -981,17 +982,12 @@ function PrintButton({
 
   function print() {
     if (containerRef.current == null) return
-
-    const iframe = document.createElement('iframe')
-    iframe.srcdoc = containerRef.current.innerHTML
-    iframe.style.display = 'none'
-    document.body.append(iframe)
-    if (iframe.contentWindow?.onafterprint) {
-      iframe.contentWindow.onafterprint = () => {
-        iframe.remove()
-      }
-    }
-    iframe.contentWindow?.print()
+    const style = `
+      body { font-family: serif; }
+      mark { background: black; padding: 3px; border-radius: 3px; box-decoration-break: clone; }
+    `
+    const html = `<!doctype html><html><head><title>${document.title}</title><style>${style}</style></head><body>${containerRef.current.innerHTML}</body></html>`
+    printHtml(html)
   }
 
   return (
@@ -1044,14 +1040,20 @@ function PrintButton({
         {primary ? (
           <Fragment>
             <h2>{primary.kind.label}</h2>
-            <div dangerouslySetInnerHTML={{ __html: primary.text }} />
+            <div
+              style={{ whiteSpace: 'pre-wrap' }}
+              dangerouslySetInnerHTML={{ __html: primary.text }}
+            />
           </Fragment>
         ) : null}
         {texts.map((text) => {
           return (
             <Fragment key={text.id}>
               <h2>{text.kind.label}</h2>
-              <div dangerouslySetInnerHTML={{ __html: text.text }} />
+              <div
+                style={{ whiteSpace: 'pre-wrap' }}
+                dangerouslySetInnerHTML={{ __html: text.text }}
+              />
             </Fragment>
           )
         })}
@@ -1068,7 +1070,11 @@ function PrintButton({
             })}
           </Fragment>
         ) : null}
-        {editor ? <small>Edited by {editor.label}</small> : null}
+        {editor ? (
+          <p>
+            <small>Edited by {editor.label}</small>
+          </p>
+        ) : null}
       </div>
       <button
         className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
@@ -1085,7 +1091,7 @@ function EntityType({ type }: { type?: SolaEntityType }) {
   if (type === undefined) return null
 
   const classNames = cx(
-    'text-xs font-medium tracking-wider uppercase pointer-events-none py-1 px-2 rounded inline-block mb-1',
+    'text-xs font-medium tracking-wider uppercase pointer-events-none py-1 px-2 rounded inline-block',
     colors.bg[type],
   )
 
