@@ -93,6 +93,8 @@ export const labels = {
     additionalTexts: 'Additional texts',
     bibliography: 'Bibliography',
     editedBy: 'Edited by',
+    copyLink: 'Copy Link',
+    printDocument: 'Print Document',
   },
   de: {
     page: {
@@ -126,6 +128,8 @@ export const labels = {
     additionalTexts: 'Zusätzliche Texte',
     bibliography: 'Bibliographie',
     editedBy: 'Bearbeitet von',
+    copyLink: 'Link kopieren',
+    printDocument: 'Dokument drucken',
   },
 } as const
 
@@ -882,14 +886,14 @@ function DetailsPanel({
       <div
         className="grid min-h-full gap-6 p-6"
         style={{
-          gridTemplateColumns: 'var(--details-sidepanel-width, 320px) 1fr',
+          gridTemplateColumns: 'var(--details-sidepanel-width, 360px) 1fr',
         }}
       >
         <div className="space-y-4">
-          <div className="space-y-2">
+          <div className="space-y-3">
             <div className="flex items-center justify-between">
               <EntityType type={selectedSolaEntity.data.type} />
-              <div className="space-x-2">
+              <div className="space-x-1">
                 <CopyLinkButton />
                 <PrintButton
                   entity={selectedSolaEntity.data}
@@ -942,6 +946,8 @@ function DetailsPanel({
 
 function CopyLinkButton() {
   const router = useRouter()
+  const t = useLabels() as typeof labels[SiteLocale]
+
   return (
     <button
       className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
@@ -951,7 +957,7 @@ function CopyLinkButton() {
       }}
     >
       <LinkIcon />
-      <span>Copy Link</span>
+      <span>{t.copyLink}</span>
     </button>
   )
 }
@@ -1081,7 +1087,7 @@ function PrintButton({
         onClick={print}
       >
         <DocumentIcon />
-        <span>Print document</span>
+        <span>{t.printDocument}</span>
       </button>
     </Fragment>
   )
