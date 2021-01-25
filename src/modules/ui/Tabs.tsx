@@ -71,7 +71,7 @@ function Tab<T>(props: TabProps<T>) {
       {...mergeProps(tabProps, focusProps, hoverProps)}
       ref={ref}
       className={cx(
-        'rounded cursor-pointer py-2 border-b',
+        'rounded cursor-pointer pb-2 border-b',
         'focus:outline-none',
         isSelected ? 'font-semibold border-gray-700' : 'border-transparent',
         isHovered && '',

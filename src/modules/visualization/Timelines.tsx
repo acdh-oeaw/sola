@@ -269,7 +269,7 @@ export function Timelines({
   ])
 
   return (
-    <div ref={wrapperRef} className="absolute inset-0">
+    <div aria-hidden ref={wrapperRef} className="absolute inset-0">
       <svg ref={svgRef} className="w-full h-full overflow-vísible">
         <defs>
           <clipPath id={CLIPPATH_ID}>

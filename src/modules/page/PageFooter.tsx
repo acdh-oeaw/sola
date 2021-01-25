@@ -28,7 +28,7 @@ export function PageFooter(): JSX.Element {
       className="px-6 py-12 space-y-12 bg-white border-t border-gray-200"
       style={{ gridArea: 'footer' }}
     >
-      <ul className="flex items-center justify-center space-x-12 text-xs text-gray-700">
+      <ul className="flex flex-col space-y-6 items-center justify-center md:flex-row md:space-y-0 md:space-x-12 text-xs text-gray-700">
         <li>
           <a
             className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"

@@ -116,9 +116,9 @@ function TeamMember({
       <h2 className="my-4 text-2xl font-bold text-gray-700">
         {[teamMember.firstName, teamMember.lastName].join(' ')}
       </h2>
-      <p className="my-3 leading-7 text-gray-700">{teamMember.biography}</p>
+      <p className="my-4 leading-7 text-gray-700">{teamMember.biography}</p>
       {hasInfo ? (
-        <dl className="flex my-3 space-x-6 text-gray-500">
+        <dl className="flex flex-col space-y-2 md:space-y-0 md:flex-row my-3 md:space-x-6 text-gray-500">
           {hasWebsite ? (
             <div>
               <dt className="sr-only">{t.website}</dt>

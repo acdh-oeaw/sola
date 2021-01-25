@@ -175,16 +175,7 @@ function Dashboard(): JSX.Element {
   const { solaPassagesFilter, setSolaPassagesFilter } = useSolaPassagesFilter()
 
   return (
-    <main
-      className="grid bg-gray-50"
-      style={{
-        gridArea: 'main',
-        gridTemplateColumns: 'var(--sidepanel-width, 240px) 1fr',
-        gridTemplateRows: 'var(--visualization-height, 400px) 1fr',
-        gridTemplateAreas: '"panel visualization" "panel details"',
-        maxHeight: 'calc(100vh - var(--header-height, 60px))',
-      }}
-    >
+    <main className="grid main-panel bg-gray-50" style={{ gridArea: 'main' }}>
       <FilterPanel
         filter={solaPassagesFilter}
         setFilter={setSolaPassagesFilter}
@@ -558,7 +549,7 @@ function VisualizationPanel({
       className="flex flex-col pb-4 border-b border-gray-200"
       style={{ gridArea: 'visualization' }}
     >
-      <div className="flex justify-between px-6 pt-6 pb-4 space-x-4">
+      <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row justify-between px-6 pt-6 pb-4 md:space-x-4">
         <div className="flex items-center space-x-2">
           <h1 className="text-2xl font-bold">{t.h1}</h1>
           {filteredSolaPassages.status === 'loading' ? (
@@ -567,15 +558,15 @@ function VisualizationPanel({
             <div className="w-6 h-6" />
           )}
         </div>
-        <div className="flex flex-col items-end space-y-1">
-          <ul className="flex flex-wrap justify-end space-x-2 text-xs text-gray-500">
-            <li className="flex items-center space-x-1">
+        <div className="flex flex-col space-y-1">
+          <ul className="flex flex-wrap md:justify-end md:space-x-2 text-xs text-gray-500">
+            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
               <div className={cx('w-3 h-3 transition', colors.bg['Event'])} />
               <span>
                 {countedSolaEvents} {t.entityType['Event'][1]}
               </span>
             </li>
-            <li className="flex items-center space-x-1">
+            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
               <div
                 className={cx('w-3 h-3 transition', colors.bg['Institution'])}
               />
@@ -583,25 +574,25 @@ function VisualizationPanel({
                 {countedSolaInstitutions} {t.entityType['Institution'][1]}
               </span>
             </li>
-            <li className="flex items-center space-x-1">
+            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
               <div className={cx('w-3 h-3 transition', colors.bg['Passage'])} />
               <span>
                 {countedSolaPassages} {t.entityType['Passage'][1]}
               </span>
             </li>
-            <li className="flex items-center space-x-1">
+            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
               <div className={cx('w-3 h-3 transition', colors.bg['Person'])} />
               <span>
                 {countedSolaPersons} {t.entityType['Person'][1]}
               </span>
             </li>
-            <li className="flex items-center space-x-1">
+            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
               <div className={cx('w-3 h-3 transition', colors.bg['Place'])} />
               <span>
                 {countedSolaPlaces} {t.entityType['Place'][1]}
               </span>
             </li>
-            <li className="flex items-center space-x-1">
+            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
               <div
                 className={cx('w-3 h-3 transition', colors.bg['Publication'])}
               />
@@ -667,12 +658,12 @@ function ActiveFilterList({
   }
 
   return (
-    <div className="flex flex-wrap items-center justify-end text-xs text-gray-500">
+    <div className="flex flex-wrap items-center md:justify-end text-xs text-gray-500">
       <h2 className="sr-only">{t.filteredBy}:</h2>
-      <ul className="flex flex-wrap items-center justify-end space-x-1">
+      <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
         {hasNameFilter ? (
-          <li className="mb-1">
-            <dl className="flex items-center space-x-2">
+          <li className="mb-1 mr-1 md:mr-0">
+            <dl className="flex items-center">
               <dt className="sr-only">{t.title}:</dt>
               <dd>
                 <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
@@ -689,14 +680,14 @@ function ActiveFilterList({
           </li>
         ) : null}
         {hasAuthorsFilter ? (
-          <li>
-            <dl className="flex items-center space-x-2">
+          <li className="mr-1 md:mr-0">
+            <dl className="flex items-center">
               <dt className="sr-only">{t.authors[1]}:</dt>
               <dd>
-                <ul className="flex flex-wrap items-center justify-end space-x-1">
+                <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
                   {authors?.map((id) => {
                     return (
-                      <li className="mb-1" key={id}>
+                      <li className="mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                           <span className="font-medium">
                             {options.authors.data?.[id]?.name}
@@ -725,14 +716,14 @@ function ActiveFilterList({
           </li>
         ) : null}
         {hasPublicationFilter ? (
-          <li>
-            <dl className="flex items-center space-x-2">
+          <li className="mr-1 md:mr-0">
+            <dl className="flex items-center">
               <dt className="sr-only">{t.entityType.Publication[1]}:</dt>
               <dd>
-                <ul className="flex flex-wrap items-center justify-end space-x-1">
+                <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
                   {publications?.map((id) => {
                     return (
-                      <li className="mb-1" key={id}>
+                      <li className="mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                           <span className="font-medium">
                             {options.publications.data?.[id]?.name}
@@ -761,14 +752,14 @@ function ActiveFilterList({
           </li>
         ) : null}
         {hasPassageTopicsFilter ? (
-          <li>
-            <dl className="flex items-center space-x-2">
+          <li className="mr-1 md:mr-0">
+            <dl className="flex items-center">
               <dt className="sr-only">{t.topics[1]}:</dt>
               <dd>
-                <ul className="flex flex-wrap items-center justify-end space-x-1">
+                <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
                   {topics?.map((id) => {
                     return (
-                      <li className="mb-1" key={id}>
+                      <li className="mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                           <span className="font-medium">
                             {options.passageTopics.data?.[id]?.name}
@@ -797,14 +788,14 @@ function ActiveFilterList({
           </li>
         ) : null}
         {hasPassageTypesFilter ? (
-          <li>
-            <dl className="flex items-center space-x-2">
+          <li className="mr-1 md:mr-0">
+            <dl className="flex items-center">
               <dt className="sr-only">{t.types[1]}:</dt>
               <dd>
-                <ul className="flex flex-wrap items-center justify-end space-x-1">
+                <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
                   {types?.map((id) => {
                     return (
-                      <li className="mb-1" key={id}>
+                      <li className="mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                           <span className="font-medium">
                             {options.passageTypes.data?.[id]?.name}
@@ -881,19 +872,14 @@ function DetailsPanel({
   if (selectedSolaEntity.data === undefined) {
     return (
       <div className="flex flex-col items-center justify-center text-gray-500">
-        <p>{t.selectEntityForDetails}</p>
+        <p className="p-6 text-center">{t.selectEntityForDetails}</p>
       </div>
     )
   }
 
   return (
     <section className="overflow-y-auto" style={{ gridArea: 'details' }}>
-      <div
-        className="grid min-h-full gap-6 p-6"
-        style={{
-          gridTemplateColumns: 'var(--details-sidepanel-width, 360px) 1fr',
-        }}
-      >
+      <div className="grid details-panel min-h-full gap-6 p-6">
         <div className="space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -1450,7 +1436,7 @@ function Texts({
       {hasPrimaryText ? (
         <div className="space-y-4">
           <div className="flex border-b border-gray-200">
-            <div className="py-2 font-semibold">{primary?.kind.label}</div>
+            <div className="pb-2 font-semibold">{primary?.kind.label}</div>
           </div>
           <div
             className="leading-6 whitespace-pre-wrap"

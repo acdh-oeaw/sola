@@ -53,6 +53,7 @@ interface OptionProps<T> {
   state: ListState<T>
 }
 
+/** @private */
 function Option<T>({ item, state }: OptionProps<T>) {
   const ref = useRef<HTMLLIElement>(null)
   const isDisabled = state.disabledKeys.has(item.key)

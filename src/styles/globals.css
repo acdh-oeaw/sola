@@ -53,3 +53,20 @@ input[type='search']::-webkit-search-decoration {
 mark {
   @apply rounded bg-gray-300 p-1 inline break-words box-decoration-clone;
 }
+
+.main-panel {
+  grid-template-columns: var(--sidepanel-width, 256px) 1fr;
+  grid-template-rows: var(--visualization-height, 400px) 1fr;
+  grid-template-areas: 'panel visualization' 'panel details';
+  max-height: calc(100vh - var(--header-height, 60px));
+}
+
+.details-panel {
+  grid-template-columns: 1fr;
+}
+
+@screen xl {
+  .details-panel {
+    grid-template-columns: var(--details-sidepanel-width, 360px) 1fr;
+  }
+}

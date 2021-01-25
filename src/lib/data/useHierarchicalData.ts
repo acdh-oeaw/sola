@@ -1,13 +1,11 @@
 import { useMemo } from 'react'
 
 export type Node<T> = T & {
-  children?: Set<Node<T>>
+  children: Set<Node<T>>
 }
 
 /**
  * Transforms map into tree.
- *
- * Beware that this mutates the input map!
  */
 export function useHierarchicalData<T>(
   map: Record<string, T> | undefined,
@@ -25,18 +23,24 @@ function createTree<T>(
   if (map === undefined) return roots
 
   /** Clone items, because they will be mutated. */
-  const items = Object.values(map).map((item) => ({ ...item }))
+  const items = Object.entries(map).reduce<Record<string, Node<T>>>(
+    (acc, [id, item]) => {
+      acc[id] = {
+        ...item,
+        children: new Set<Node<T>>(),
+      }
+      return acc
+    },
+    {},
+  )
 
-  items.forEach((item) => {
+  Object.values(items).forEach((item) => {
     const parentId = getParentId(item)
     if (parentId == null) {
       roots.push(item)
     } else {
-      const parent = map[parentId] as Node<T> | undefined
+      const parent = items[parentId]
       if (parent !== undefined) {
-        if (parent.children === undefined) {
-          parent.children = new Set()
-        }
         parent.children.add(item)
       }
     }

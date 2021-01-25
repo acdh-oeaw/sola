@@ -304,7 +304,7 @@ export function useSolaPassagesFilterOptionsTree(
    */
   const passageTopicsTree = useMemo(() => {
     return _passageTopics.map((parent) => {
-      if (parent.children === undefined) return parent
+      if (parent.children.size === 0) return parent
 
       const childTopics = Array.from(parent.children)
       if (!childTopics.find((topic) => topic.id === parent.id)) {
@@ -312,6 +312,7 @@ export function useSolaPassagesFilterOptionsTree(
           id: parent.id,
           name: translation,
           parent_class: null,
+          children: new Set(),
         })
       }
 
@@ -337,10 +338,7 @@ export function useSolaPassagesFilterOptionsTree(
     _passageTypes.forEach((parent) => {
       if (parent.id === -1) return
 
-      if (parent.children === undefined) {
-        if (otherSection.children === undefined) {
-          otherSection.children = new Set()
-        }
+      if (parent.children.size === 0) {
         otherSection.children.add(parent)
         return
       }
@@ -351,6 +349,7 @@ export function useSolaPassagesFilterOptionsTree(
           id: parent.id,
           name: translation,
           parent_class: null,
+          children: new Set(),
         })
       }
       result.unshift(parent)
@@ -607,13 +606,17 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
           }
         })
 
+        /** Use localised label and cut off trailing "(DE)" and "(EN)". */
         const textsWithLocalisedLabel = textsForCurrentLocale.map((text) => {
           return {
             ...text,
             kind: {
               ...text.kind,
               /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-              label: textTypes.data![text.kind.id]!.name,
+              label: textTypes.data![text.kind.id]!.name.replace(
+                /\s\((DE|EN)\)$/,
+                '',
+              ),
             },
           }
         })
