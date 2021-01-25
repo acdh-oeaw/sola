@@ -22,7 +22,10 @@ export function Tabs<T extends object>(props: TabsProps<T>): JSX.Element {
   return (
     <div className="space-y-4">
       <TabList {...tabListProps} tablistRef={tablistRef} state={state} />
-      <div className="focus:outline-none" {...tabPanelProps}>
+      <div
+        className="focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+        {...tabPanelProps}
+      >
         {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
         {state.selectedItem != null ? state.selectedItem.props.children : null}
       </div>

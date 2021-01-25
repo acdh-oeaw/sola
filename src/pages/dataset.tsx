@@ -255,7 +255,7 @@ function FilterPanel({
 
   return (
     <aside
-      className="overflow-y-auto bg-gray-900"
+      className="overflow-y-auto bg-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
       style={{ gridArea: 'panel' }}
     >
       <form className="flex flex-col px-4 py-6 space-y-3" onSubmit={onSubmit}>
@@ -879,7 +879,10 @@ function DetailsPanel({
   }
 
   return (
-    <section className="overflow-y-auto" style={{ gridArea: 'details' }}>
+    <section
+      className="overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
+      style={{ gridArea: 'details' }}
+    >
       <div className="grid min-h-full gap-6 p-6 details-panel">
         <div className="space-y-4">
           <div className="space-y-3">
