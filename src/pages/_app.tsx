@@ -1,6 +1,6 @@
-import 'focus-visible'
 import '@/styles/custom-properties.css'
 import '@/styles/globals.css'
+import 'focus-visible'
 import 'tailwindcss/tailwind.css'
 
 import ErrorBoundary from '@stefanprobst/next-error-boundary'
@@ -9,6 +9,7 @@ import Head from 'next/head'
 import { Fragment } from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
+import { useSolaEntities, useSolaFilterOptions } from '@/lib/sola/hooks'
 import { ClientError } from '@/modules/error/ClientError'
 import { DefaultPageLayout } from '@/modules/layouts/DefaultPageLayout'
 import { Providers } from '@/modules/providers/Providers'
@@ -31,11 +32,21 @@ export default function App({
           <DefaultPageLayout {...pageProps}>
             <Component {...pageProps} />
           </DefaultPageLayout>
+          <Prefetch />
           <ReactQueryDevtools initialIsOpen={false} />
         </Providers>
       </ErrorBoundary>
     </Fragment>
   )
+}
+
+/**
+ * Start fetching SOLA entities early to reduce wait on `/dataset` page.
+ */
+function Prefetch() {
+  useSolaEntities()
+  useSolaFilterOptions()
+  return null
 }
 
 /**
