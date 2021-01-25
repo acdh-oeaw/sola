@@ -63,6 +63,7 @@ mark {
 
 .details-panel {
   grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr;
 }
 
 @screen xl {
