@@ -11,9 +11,11 @@ import navigation from '~/config/navigation.json'
 const labels = {
   en: {
     menu: 'Menu',
+    navigationMenu: 'Navigation menu',
   },
   de: {
     menu: 'Menü',
+    navigationMenu: 'Navigationsmenü',
   },
 }
 
@@ -81,6 +83,7 @@ function MobileNav({
   return (
     <div className="lg:hidden">
       <MenuButton
+        menuLabel={t.navigationMenu}
         label={
           <Fragment>
             <MenuIcon />
@@ -114,7 +117,7 @@ function LanguageToggle() {
 
   return (
     <Link href={router.asPath} locale={otherLocale}>
-      <a className="p-2 text-sm transition bg-yellow-400 rounded hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500">
+      <a className="p-2 text-sm font-medium transition bg-yellow-400 rounded hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500">
         {otherLocale.toUpperCase()}
       </a>
     </Link>

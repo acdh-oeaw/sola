@@ -26,6 +26,7 @@ import { useSortedData } from '@/lib/data/useSortedData'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 import { getCurrentLocale } from '@/lib/i18n/getCurrentLocale'
 import { LabelsProvider, useLabels } from '@/lib/i18n/LabelsContext'
+import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import {
   useSolaEntities,
   useSolaEntityBibliography,
@@ -549,7 +550,7 @@ function VisualizationPanel({
       className="flex flex-col pb-4 border-b border-gray-200"
       style={{ gridArea: 'visualization' }}
     >
-      <div className="flex flex-col space-y-4 md:space-y-0 md:flex-row justify-between px-6 pt-6 pb-4 md:space-x-4">
+      <div className="flex flex-col justify-between px-6 pt-6 pb-4 space-y-4 md:space-y-0 md:flex-row md:space-x-4">
         <div className="flex items-center space-x-2">
           <h1 className="text-2xl font-bold">{t.h1}</h1>
           {filteredSolaPassages.status === 'loading' ? (
@@ -559,14 +560,14 @@ function VisualizationPanel({
           )}
         </div>
         <div className="flex flex-col space-y-1">
-          <ul className="flex flex-wrap md:justify-end md:space-x-2 text-xs text-gray-500">
-            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
+          <ul className="flex flex-wrap text-xs text-gray-500 md:justify-end md:space-x-2">
+            <li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
               <div className={cx('w-3 h-3 transition', colors.bg['Event'])} />
               <span>
                 {countedSolaEvents} {t.entityType['Event'][1]}
               </span>
             </li>
-            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
+            <li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
               <div
                 className={cx('w-3 h-3 transition', colors.bg['Institution'])}
               />
@@ -574,25 +575,25 @@ function VisualizationPanel({
                 {countedSolaInstitutions} {t.entityType['Institution'][1]}
               </span>
             </li>
-            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
+            <li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
               <div className={cx('w-3 h-3 transition', colors.bg['Passage'])} />
               <span>
                 {countedSolaPassages} {t.entityType['Passage'][1]}
               </span>
             </li>
-            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
+            <li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
               <div className={cx('w-3 h-3 transition', colors.bg['Person'])} />
               <span>
                 {countedSolaPersons} {t.entityType['Person'][1]}
               </span>
             </li>
-            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
+            <li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
               <div className={cx('w-3 h-3 transition', colors.bg['Place'])} />
               <span>
                 {countedSolaPlaces} {t.entityType['Place'][1]}
               </span>
             </li>
-            <li className="mb-1 flex items-center space-x-1 mr-2 md:mr-0">
+            <li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
               <div
                 className={cx('w-3 h-3 transition', colors.bg['Publication'])}
               />
@@ -658,7 +659,7 @@ function ActiveFilterList({
   }
 
   return (
-    <div className="flex flex-wrap items-center md:justify-end text-xs text-gray-500">
+    <div className="flex flex-wrap items-center text-xs text-gray-500 md:justify-end">
       <h2 className="sr-only">{t.filteredBy}:</h2>
       <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
         {hasNameFilter ? (
@@ -879,7 +880,7 @@ function DetailsPanel({
 
   return (
     <section className="overflow-y-auto" style={{ gridArea: 'details' }}>
-      <div className="grid details-panel min-h-full gap-6 p-6">
+      <div className="grid min-h-full gap-6 p-6 details-panel">
         <div className="space-y-4">
           <div className="space-y-3">
             <div className="flex items-center justify-between">
@@ -974,6 +975,7 @@ function PrintButton({
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const t = useLabels() as typeof labels[SiteLocale]
+  const locale = useCurrentLocale()
 
   if (entity == null) return null
 
@@ -992,6 +994,14 @@ function PrintButton({
     `
     const html = `<!doctype html><html><head><title>${document.title}</title><style>${style}</style></head><body>${containerRef.current.innerHTML}</body></html>`
     printHtml(html)
+  }
+
+  function createUrl() {
+    if (entity == null) return ''
+    const url = new URL([locale, 'dataset'].join('/'), baseUrl)
+    url.searchParams.set('id', String(entity.id))
+    url.searchParams.set('type', entity.type)
+    return String(url)
   }
 
   return (
@@ -1079,6 +1089,9 @@ function PrintButton({
             <small>Edited by {editor.label}</small>
           </p>
         ) : null}
+        <p>
+          <small>{createUrl()}</small>
+        </p>
       </div>
       <button
         className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
