@@ -83,6 +83,9 @@ function MobileNav({
   return (
     <div className="lg:hidden">
       <MenuButton
+        onAction={(key) => {
+          router.push(String(key))
+        }}
         menuLabel={t.navigationMenu}
         label={
           <Fragment>

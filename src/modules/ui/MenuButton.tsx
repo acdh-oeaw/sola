@@ -10,9 +10,8 @@ import type { AriaMenuProps, MenuTriggerProps } from '@react-types/menu'
 import type { CollectionChildren, Node } from '@react-types/shared'
 import cx from 'clsx'
 import Link from 'next/link'
-import { useRouter } from 'next/router'
 import type { HTMLAttributes, Key, ReactNode, RefObject } from 'react'
-import { useEffect, useRef } from 'react'
+import { useRef } from 'react'
 
 export { Item } from '@react-stately/collections'
 
@@ -32,13 +31,13 @@ export function MenuButton<T extends object>(
   const { menuTriggerProps, menuProps } = useMenuTrigger({}, state, ref)
   const { buttonProps } = useButton(menuTriggerProps, ref)
 
-  const router = useRouter()
-  useEffect(() => {
-    router.events.on('routeChangeStart', state.close)
-    return () => {
-      router.events.off('routeChangeStart', state.close)
-    }
-  }, [router, state.close])
+  // const router = useRouter()
+  // useEffect(() => {
+  //   router.events.on('routeChangeStart', state.close)
+  //   return () => {
+  //     router.events.off('routeChangeStart', state.close)
+  //   }
+  // }, [router, state.close])
 
   return (
     <div className="relative inline-block">
@@ -148,10 +147,14 @@ function MenuItem<T>({ item, state, onAction, onClose }: MenuItemProps<T>) {
       onAction,
       onClose,
       /**
-       * With `closeOnSelect: true` navigation does not work.
-       * Instead, we listen to `routeChangeStart` router event above.
+       * With `closeOnSelect: true` navigation does not work ootb.
+       * Instead, we listen to `routeChangeStart` router event above and close manually.
+       * Alternatively, just programmatically transition with `router.push` in `onAction`.
+       *
+       * The reason seems to be that `state.isOpen: false` (which is set in a `pointerup` event)
+       * removes the menu before the `next/link` `onClick` handler can fire.
        */
-      closeOnSelect: false,
+      // closeOnSelect: false,
     },
     state,
     ref,
