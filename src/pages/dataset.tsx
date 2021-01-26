@@ -1460,17 +1460,7 @@ function Texts({
     tabs.push({
       id: 0,
       title: t.bibliography,
-      children: (
-        <ul className="space-y-2">
-          {bibliography.map((reference) => {
-            return (
-              <li key={reference.pk} className="leading-6">
-                <BibliographicReference reference={reference} />
-              </li>
-            )
-          })}
-        </ul>
-      ),
+      children: <Bibliography bibliography={bibliography} />,
     })
   }
 
@@ -1496,6 +1486,29 @@ function Texts({
   )
 }
 
+function Bibliography({
+  bibliography,
+}: {
+  bibliography: Array<SolaBibsonomyReference>
+}) {
+  const sorted = useMemo(
+    () => bibliography.sort((a, b) => a.author.localeCompare(b.author)),
+    [bibliography],
+  )
+
+  return (
+    <ul className="space-y-2">
+      {sorted.map((reference) => {
+        return (
+          <li key={reference.pk} className="leading-6">
+            <BibliographicReference reference={reference} />
+          </li>
+        )
+      })}
+    </ul>
+  )
+}
+
 function BibliographicReference({
   reference,
 }: {
@@ -1508,7 +1521,17 @@ function BibliographicReference({
     if (reference.title) text.push(reference.title + '.')
     if (reference.address) text.push(reference.address + ':')
     if (reference.publisher) text.push(reference.publisher)
-    if (reference.year) text.push(reference.year)
+    if (reference.year) {
+      if (reference.pages_start) {
+        text.push(reference.year + ',')
+        const pages = []
+        if (reference.pages_start) pages.push(reference.pages_start)
+        if (reference.pages_end) pages.push(reference.pages_end)
+        text.push(pages.join('-'))
+      } else {
+        text.push(reference.year)
+      }
+    }
 
     return text.join(' ') + '.'
   }, [reference])
