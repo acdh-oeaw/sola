@@ -19,7 +19,7 @@ export function useCanonicalUrl(query?: NextRouter['query']): string {
 
   const canonicalUrl = useMemo(() => {
     const { pathname } = createUrlFromPath(router.asPath)
-    const url = createUrlFromPath(pathname, siteUrl)
+    const url = createUrlFromPath([router.locale, pathname].join(''), siteUrl)
 
     if (query !== undefined) {
       addQueryParams(url, query)

@@ -11,6 +11,7 @@ import { getCmsPostById, getCmsPostIds } from '@/api/cms'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 import { getCurrentLocale } from '@/lib/i18n/getCurrentLocale'
 import { Metadata } from '@/modules/metadata/Metadata'
+import { useAlternateUrls } from '@/modules/metadata/useAlternateUrls'
 import { useCanonicalUrl } from '@/modules/metadata/useCanonicalUrl'
 import { Container } from '@/modules/ui/Container'
 
@@ -96,10 +97,15 @@ export async function getStaticProps(
  */
 export default function PostPage(props: PostPageProps): JSX.Element {
   const canonicalUrl = useCanonicalUrl()
+  const alternateUrls = useAlternateUrls()
 
   return (
     <Fragment>
-      <Metadata title={props.post.metadata.title} canonicalUrl={canonicalUrl} />
+      <Metadata
+        title={props.post.metadata.title}
+        canonicalUrl={canonicalUrl}
+        languageAlternates={alternateUrls}
+      />
       <Container className="prose" as="main">
         <h1>{props.post.metadata.title}</h1>
         <div dangerouslySetInnerHTML={{ __html: props.post.html }} />

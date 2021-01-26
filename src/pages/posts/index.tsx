@@ -9,6 +9,7 @@ import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 import { getCurrentLocale } from '@/lib/i18n/getCurrentLocale'
 import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import { Metadata } from '@/modules/metadata/Metadata'
+import { useAlternateUrls } from '@/modules/metadata/useAlternateUrls'
 import { useCanonicalUrl } from '@/modules/metadata/useCanonicalUrl'
 import { Container } from '@/modules/ui/Container'
 
@@ -73,10 +74,15 @@ export async function getStaticProps(
  */
 export default function PostsPage(props: PostsPageProps): JSX.Element {
   const canonicalUrl = useCanonicalUrl()
+  const alternateUrls = useAlternateUrls()
 
   return (
     <Fragment>
-      <Metadata title={props.labels.page.title} canonicalUrl={canonicalUrl} />
+      <Metadata
+        title={props.labels.page.title}
+        canonicalUrl={canonicalUrl}
+        languageAlternates={alternateUrls}
+      />
       <Container as="main">
         <div className="prose">
           <h1>{props.page.metadata.title}</h1>

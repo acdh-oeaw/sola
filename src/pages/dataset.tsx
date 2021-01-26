@@ -1,3 +1,4 @@
+import { createJsonLd, JsonLd } from '@stefanprobst/next-page-metadata'
 import cx from 'clsx'
 import type { GetStaticPropsContext, GetStaticPropsResult } from 'next'
 import { useRouter } from 'next/router'
@@ -40,11 +41,13 @@ import {
   useSolaTexts,
 } from '@/lib/sola/hooks'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
+import { useQueryParam } from '@/lib/url/useQueryParam'
 import { count } from '@/lib/util/count'
 import { printHtml } from '@/lib/util/printHtml'
 import { Document as DocumentIcon } from '@/modules/icons/Document'
 import { Link as LinkIcon } from '@/modules/icons/Link'
 import { Metadata } from '@/modules/metadata/Metadata'
+import { useAlternateUrls } from '@/modules/metadata/useAlternateUrls'
 import { useCanonicalUrl } from '@/modules/metadata/useCanonicalUrl'
 import { Badge } from '@/modules/ui/Badge'
 import { ClearButton } from '@/modules/ui/ClearButton'
@@ -158,11 +161,26 @@ export function getStaticProps(
  * Dataset page.
  */
 export default function DatasetPage(props: DatasetPageProps): JSX.Element {
-  const canonicalUrl = useCanonicalUrl()
+  const router = useRouter()
+  /**
+   * No need for additional sanity checks for `id` and `type` here,
+   * since these are checked in `useSolaSelectedEntity`.
+   * If a user enters bogus values these should still not be indexed, since
+   * they will not be included in the sitemap.
+   */
+  const { id, type } = router.query
+  const query =
+    id !== undefined && type !== undefined ? { id, type } : undefined
+  const canonicalUrl = useCanonicalUrl(query)
+  const alternateUrls = useAlternateUrls(query)
 
   return (
     <Fragment>
-      <Metadata title={props.labels.page.title} canonicalUrl={canonicalUrl} />
+      <Metadata
+        title={props.labels.page.title}
+        canonicalUrl={canonicalUrl}
+        languageAlternates={alternateUrls}
+      />
       <LabelsProvider labels={props.labels}>
         <Dashboard />
       </LabelsProvider>
@@ -905,64 +923,95 @@ function DetailsPanel({
     )
   }
 
+  /** Updating metadata on the client is not optimal for SEO, but better than nothing. */
+  let metadata = null
+
+  const entity = selectedSolaEntity.data
+  switch (entity.type) {
+    case 'Event':
+      metadata = createJsonLd({ '@type': 'Event', name: entity.name })
+      break
+    case 'Institution':
+      metadata = createJsonLd({ '@type': 'Organization', name: entity.name })
+      break
+    case 'Passage':
+      metadata = createJsonLd({ '@type': 'CreativeWork', name: entity.name })
+      break
+    case 'Person':
+      metadata = createJsonLd({ '@type': 'Person', name: entity.name })
+      break
+    case 'Place':
+      metadata = createJsonLd({ '@type': 'Place', name: entity.name })
+      break
+    case 'Publication':
+      metadata = createJsonLd({ '@type': 'CreativeWork', name: entity.name })
+      break
+  }
+
   return (
-    <section
-      className="overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
-      style={{ gridArea: 'details' }}
-    >
-      <div className="grid min-h-full gap-6 p-6 details-panel">
-        <div className="space-y-4">
-          <div className="space-y-3">
-            <div className="flex items-center justify-between">
-              <EntityType type={selectedSolaEntity.data.type} />
-              <div className="space-x-1">
-                <CopyLinkButton />
-                <PrintButton
-                  entity={selectedSolaEntity.data}
-                  authors={authors.data}
-                  relations={selectedSolaEntityRelations}
-                  biblePassages={biblePassages.data}
-                  primary={primaryText}
-                  texts={texts}
-                  bibliography={solaEntityBibliography.data}
-                  editor={selectedSolaEntity.data.assigned_user}
-                />
+    <Fragment>
+      <JsonLd schema={metadata} />
+      <section
+        className="overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
+        style={{ gridArea: 'details' }}
+      >
+        <div className="grid min-h-full gap-6 p-6 details-panel">
+          <div className="space-y-4">
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <EntityType type={selectedSolaEntity.data.type} />
+                <div className="space-x-1">
+                  <CopyLinkButton />
+                  <PrintButton
+                    entity={selectedSolaEntity.data}
+                    authors={authors.data}
+                    relations={selectedSolaEntityRelations}
+                    biblePassages={biblePassages.data}
+                    primary={primaryText}
+                    texts={texts}
+                    bibliography={solaEntityBibliography.data}
+                    editor={selectedSolaEntity.data.assigned_user}
+                  />
+                </div>
               </div>
+              <h2 className="text-xl font-semibold leading-6 text-gray-700">
+                {selectedSolaEntity.data.name}
+              </h2>
+              <Authors
+                authors={authors}
+                setSelectedSolaEntity={setSelectedSolaEntity}
+              />
             </div>
-            <h2 className="text-xl font-semibold leading-6 text-gray-700">
-              {selectedSolaEntity.data.name}
-            </h2>
-            <Authors
-              authors={authors}
+            <Duration
+              from={selectedSolaEntity.data.start_date_written}
+              fromIso={selectedSolaEntity.data.start_date}
+              to={selectedSolaEntity.data.end_date_written}
+              toIso={selectedSolaEntity.data.end_date}
+            />
+            {selectedSolaEntity.data.primary_date != null ? (
+              <div className="relative flex h-8">
+                <DurationTimeline entity={selectedSolaEntity.data} />
+              </div>
+            ) : null}
+            <Properties
+              entity={selectedSolaEntity.data}
+              setFilter={setFilter}
+            />
+            <Relations
+              relations={selectedSolaEntityRelations}
               setSelectedSolaEntity={setSelectedSolaEntity}
             />
+            <BiblePassages passages={biblePassages} />
+            <EditedBy editor={selectedSolaEntity.data.assigned_user} />
           </div>
-          <Duration
-            from={selectedSolaEntity.data.start_date_written}
-            fromIso={selectedSolaEntity.data.start_date}
-            to={selectedSolaEntity.data.end_date_written}
-            toIso={selectedSolaEntity.data.end_date}
+          <Texts
+            primary={primaryText}
+            texts={texts}
+            bibliography={solaEntityBibliography.data}
           />
-          {selectedSolaEntity.data.primary_date != null ? (
-            <div className="relative flex h-8">
-              <DurationTimeline entity={selectedSolaEntity.data} />
-            </div>
-          ) : null}
-          <Properties entity={selectedSolaEntity.data} setFilter={setFilter} />
-          <Relations
-            relations={selectedSolaEntityRelations}
-            setSelectedSolaEntity={setSelectedSolaEntity}
-          />
-          <BiblePassages passages={biblePassages} />
-          <EditedBy editor={selectedSolaEntity.data.assigned_user} />
         </div>
-        <Texts
-          primary={primaryText}
-          texts={texts}
-          bibliography={solaEntityBibliography.data}
-        />
-      </div>
-    </section>
+      </section>
+    </Fragment>
   )
 }
 

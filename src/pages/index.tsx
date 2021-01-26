@@ -7,6 +7,7 @@ import { getCmsPage } from '@/api/cms'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 import { getCurrentLocale } from '@/lib/i18n/getCurrentLocale'
 import { Metadata } from '@/modules/metadata/Metadata'
+import { useAlternateUrls } from '@/modules/metadata/useAlternateUrls'
 import { useCanonicalUrl } from '@/modules/metadata/useCanonicalUrl'
 
 /**
@@ -63,14 +64,19 @@ export async function getStaticProps(
  */
 export default function IndexPage(props: IndexPageProps): JSX.Element {
   const canonicalUrl = useCanonicalUrl()
+  const alternateUrls = useAlternateUrls()
 
   return (
     <Fragment>
-      <Metadata title={props.labels.page.title} canonicalUrl={canonicalUrl} />
+      <Metadata
+        title={props.labels.page.title}
+        canonicalUrl={canonicalUrl}
+        languageAlternates={alternateUrls}
+      />
       <main className="flex bg-gray-900">
-        <div className="flex items-center flex-1 px-6 sm:px-12 py-24 sm:py-12">
+        <div className="flex items-center flex-1 px-6 py-24 sm:px-12 sm:py-12">
           <div className="space-y-6 text-gray-100 max-w-65ch">
-            <h1 className="text-4xl xs:text-5xl font-black lg:text-6xl xl:text-7xl">
+            <h1 className="text-4xl font-black xs:text-5xl lg:text-6xl xl:text-7xl">
               {props.page.metadata.title}
             </h1>
             <div
@@ -84,13 +90,15 @@ export default function IndexPage(props: IndexPageProps): JSX.Element {
             </Link>
           </div>
         </div>
-        <div className="relative hidden sm:flex flex-1">
+        <div className="relative flex-1 hidden sm:flex">
           <div className="absolute inset-0">
             <img
               src="/assets/images/hero.jpg"
               alt={props.labels.heroImage}
               className="object-cover object-left-top w-full h-full"
               decoding="async"
+              width="485"
+              height="718"
             />
           </div>
         </div>

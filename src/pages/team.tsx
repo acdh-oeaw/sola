@@ -9,6 +9,7 @@ import { Email } from '@/modules/icons/Email'
 import { Globe } from '@/modules/icons/Globe'
 import { Phone } from '@/modules/icons/Phone'
 import { Metadata } from '@/modules/metadata/Metadata'
+import { useAlternateUrls } from '@/modules/metadata/useAlternateUrls'
 import { useCanonicalUrl } from '@/modules/metadata/useCanonicalUrl'
 import { Container } from '@/modules/ui/Container'
 
@@ -75,10 +76,15 @@ export async function getStaticProps(
  */
 export default function TeamPage(props: TeamPageProps): JSX.Element {
   const canonicalUrl = useCanonicalUrl()
+  const alternateUrls = useAlternateUrls()
 
   return (
     <Fragment>
-      <Metadata title={props.labels.page.title} canonicalUrl={canonicalUrl} />
+      <Metadata
+        title={props.labels.page.title}
+        canonicalUrl={canonicalUrl}
+        languageAlternates={alternateUrls}
+      />
       <Container as="main">
         <div className="prose">
           <h1>{props.page.metadata.title}</h1>
@@ -118,7 +124,7 @@ function TeamMember({
       </h2>
       <p className="my-4 leading-7 text-gray-700">{teamMember.biography}</p>
       {hasInfo ? (
-        <dl className="flex flex-col space-y-2 md:space-y-0 md:flex-row my-3 md:space-x-6 text-gray-500">
+        <dl className="flex flex-col my-3 space-y-2 text-gray-500 md:space-y-0 md:flex-row md:space-x-6">
           {hasWebsite ? (
             <div>
               <dt className="sr-only">{t.website}</dt>
