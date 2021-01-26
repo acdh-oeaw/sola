@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react'
+import { Fragment, useCallback, useMemo } from 'react'
 import type { QueryObserverResult } from 'react-query'
 
 import type {
@@ -186,14 +186,20 @@ export function Visualization({
   )
 
   return (
-    <Timelines
-      timelines={timelines}
-      getTimelineForNodeType={getTimelineForNodeType}
-      isNodeSelected={isNodeSelected}
-      isNodeHighlighted={isNodeHighlighted}
-      onNodeClick={onNodeClick}
-      getLabelForNodeType={getLabelForNodeType}
-    />
+    <Fragment>
+      <Timelines
+        timelines={timelines}
+        getTimelineForNodeType={getTimelineForNodeType}
+        isNodeSelected={isNodeSelected}
+        isNodeHighlighted={isNodeHighlighted}
+        onNodeClick={onNodeClick}
+        getLabelForNodeType={getLabelForNodeType}
+      />
+      <Alternate
+        filteredSolaPassages={filteredSolaPassages.data}
+        setSelectedSolaEntity={setSelectedSolaEntity}
+      />
+    </Fragment>
   )
 }
 
@@ -213,4 +219,40 @@ function hasPrimaryDate(entity: SolaEntity) {
     console.log('Entity without primary date', entity)
   }
   return hasDate
+}
+
+/**
+ * Visually hidden alternative to the timeline visualization.
+ */
+function Alternate({
+  filteredSolaPassages,
+  setSelectedSolaEntity,
+}: {
+  filteredSolaPassages?: Record<number, SolaPassage>
+  setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void
+}) {
+  if (filteredSolaPassages === undefined) return null
+
+  return (
+    <div className="sr-only">
+      <h2>Passages matching active filters</h2>
+      <ul>
+        {Object.values(filteredSolaPassages).map((passage) => {
+          return (
+            <li key={passage.id}>
+              <button
+                onClick={() => {
+                  setSelectedSolaEntity({ id: passage.id, type: passage.type })
+                }}
+                // FIXME: Should these be included in the tab order or not?
+                tabIndex={-1}
+              >
+                {passage.name}
+              </button>
+            </li>
+          )
+        })}
+      </ul>
+    </div>
+  )
 }
