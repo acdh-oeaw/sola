@@ -53,6 +53,7 @@ import { Item, ListBox, Section } from '@/modules/ui/ListBox'
 import { Spinner } from '@/modules/ui/Spinner'
 import { Item as TabItem, Tabs } from '@/modules/ui/Tabs'
 import { TextField } from '@/modules/ui/TextField'
+import { TooltipTrigger } from '@/modules/ui/TooltipTrigger'
 import { DurationTimeline } from '@/modules/visualization/DurationTimeline'
 import { Visualization } from '@/modules/visualization/Visualization'
 import { url as baseUrl } from '~/config/site.json'
@@ -401,7 +402,7 @@ function PassageTopicListBox({
   t: typeof labels[SiteLocale]
 }) {
   const topics = useMemo(() => {
-    if (topic.children === undefined) return []
+    if (topic.children.size === 0) return []
 
     /** Sort alphabetically, sort "Other" to end. */
     return Array.from(topic.children).sort((a, b) =>
@@ -418,7 +419,7 @@ function PassageTopicListBox({
     return filter?.filter((topicId) => childIds.has(topicId)).length
   }, [topics, filter])
 
-  if (topic.children === undefined) return null
+  if (topic.children.size === 0) return null
 
   const id = `passage-topic-${topic.id}-filter`
 
@@ -668,7 +669,13 @@ function ActiveFilterList({
               <dt className="sr-only">{t.title}:</dt>
               <dd>
                 <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                  <span className="font-medium">{name}</span>
+                  <TooltipTrigger
+                    tooltip={`${t.filteredBy} ${t.title}: ${name}`}
+                  >
+                    <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                      {name}
+                    </button>
+                  </TooltipTrigger>
                   <ClearButton
                     className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                     onClick={() => {
@@ -687,12 +694,17 @@ function ActiveFilterList({
               <dd>
                 <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
                   {authors?.map((id) => {
+                    const name = options.authors.data?.[id]?.name
                     return (
                       <li className="mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                          <span className="font-medium">
-                            {options.authors.data?.[id]?.name}
-                          </span>
+                          <TooltipTrigger
+                            tooltip={`${t.filteredBy} ${t.authors[0]}: ${name}`}
+                          >
+                            <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                              {name}
+                            </button>
+                          </TooltipTrigger>
                           <ClearButton
                             className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                             onClick={() => {
@@ -723,12 +735,17 @@ function ActiveFilterList({
               <dd>
                 <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
                   {publications?.map((id) => {
+                    const name = options.publications.data?.[id]?.name
                     return (
                       <li className="mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                          <span className="font-medium">
-                            {options.publications.data?.[id]?.name}
-                          </span>
+                          <TooltipTrigger
+                            tooltip={`${t.filteredBy} ${t.entityType.Publication[0]}: ${name}`}
+                          >
+                            <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                              {name}
+                            </button>
+                          </TooltipTrigger>
                           <ClearButton
                             className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                             onClick={() => {
@@ -759,12 +776,17 @@ function ActiveFilterList({
               <dd>
                 <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
                   {topics?.map((id) => {
+                    const name = options.passageTopics.data?.[id]?.name
                     return (
                       <li className="mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                          <span className="font-medium">
-                            {options.passageTopics.data?.[id]?.name}
-                          </span>
+                          <TooltipTrigger
+                            tooltip={`${t.filteredBy} ${t.topics[0]}: ${name}`}
+                          >
+                            <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                              {name}
+                            </button>
+                          </TooltipTrigger>
                           <ClearButton
                             className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                             onClick={() => {
@@ -795,12 +817,17 @@ function ActiveFilterList({
               <dd>
                 <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
                   {types?.map((id) => {
+                    const name = options.passageTypes.data?.[id]?.name
                     return (
                       <li className="mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-                          <span className="font-medium">
-                            {options.passageTypes.data?.[id]?.name}
-                          </span>
+                          <TooltipTrigger
+                            tooltip={`${t.filteredBy} ${t.types[0]}: ${name}`}
+                          >
+                            <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                              {name}
+                            </button>
+                          </TooltipTrigger>
                           <ClearButton
                             className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                             onClick={() => {
