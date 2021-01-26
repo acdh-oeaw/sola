@@ -1,9 +1,8 @@
 ---
-title:
-  Vom Sonnentag zum Tag des Herrn. The career of a special day in Late Antiquity
-  and the Early Middle Ages
+title: Vom Sonnentag zum Tag des Herrn. The career of a special day in Late
+  Antiquity and the Early Middle Ages
 shortTitle: "Internationale Konferenz: Vom Sonnentag zum Tag des Herrn"
-date: 2019-10-10T22:00:00.000Z
+date: 2019-10-11T22:00:00.000Z
 attachments:
   - label: Programm
     file: /assets/posts/from-sun-day-to-the-day-of-the-lord.pdf

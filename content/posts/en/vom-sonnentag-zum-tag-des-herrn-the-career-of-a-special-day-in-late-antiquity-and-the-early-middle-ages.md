@@ -1,9 +1,8 @@
 ---
-title:
-  From Sun-Day to the Day of the Lord. The career of a special day in Late
+title: From Sun-Day to the Day of the Lord. The career of a special day in Late
   Antiquity and the Early Middle Ages
 shortTitle: "International Conference: From Sun-Day to the Day of the Lord"
-date: 2019-10-10T22:00:00.000Z
+date: 2019-10-11T22:00:00.000Z
 attachments:
   - label: Program
     file: /assets/posts/from-sun-day-to-the-day-of-the-lord.pdf

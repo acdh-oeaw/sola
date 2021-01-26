@@ -1,8 +1,7 @@
 ---
-title:
-  Sessions held at the XVIII. International Conference on Patristic Studies
+title: Sessions held at the XVIII. International Conference on Patristic Studies
   Oxford
-date: 2019-08-19T22:00:00.000Z
+date: 2019-08-23T22:00:00.000Z
 ---
 
 **Date:** 19.–24. August 2019
