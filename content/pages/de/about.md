@@ -1,7 +1,6 @@
 ---
 title: Über das Projekt
 ---
-
 ## Der Sonntag in der Spätantike und im frühen Mittelalter
 
 Forschungsprojekt, finanziert von dem Österreichischen Wissenschaftsfonds (FWF),
@@ -12,55 +11,15 @@ Umgesetzt in Zusammenarbeit mit dem Austrian Center for Digital Humanities
 
 Januar 2019 – Dezember 2022.
 
-### Inhalt
 
-Der christliche Sonntag als Ruhetag und Tag des Gottesdienstes wird bis heute
-als ein zentrales Element christlicher Identität und einer vom Christentum
-geprägten Gesellschaft wahrgenommen. Dennoch gibt es heute vielfältige Debatten
-über die Relevanz des Sonntags, da andere Religionen, nicht-christliche
-Lebenskontexte und wirtschaftliche Interessen den Ruhetag infrage stellen. Daher
-ist es wichtig, die Geschichte der Entstehung der Sonntagsverehrung in der
-Spätantike und im frühen Mittelalter wissenschaftlich zu analysieren. Allerdings
-dauerte die Entwicklung einer christlichen Sonntagskultur mehrere Jahrhunderte
-bis ins frühe Mittelalter, obwohl bereits im Jahr 321 n. Chr. Kaiser Konstantin
-ein Gesetz zur "Ruhe am heiligen Tag der Sonne" verordnet hatte.
 
-### Methode
+#### Allgemeines:
 
-Das Projekt zielt darauf, folgende Fragen mit Hilfe der neuen Methode der
-"Intersektionalität" zu beantworten: Was war der Grund und die Wirkung des
-Konstantinischen Gesetzes? Was bedeutete das für den Römischen Kalender im
-Allgemeinen? Hat der Sonntag die Rolle der römischen Markttage übernommen? Was
-war der Grund für die zögerliche Rezeption des Gesetzes von Konstantin? Was
-haben welche Christen (Männer/Frauen, Sklaven, Kaiser, Mönche/Nonnen,
-Handwerker) in verschiedenen Regionen vom Sonntag gedacht und an ihm getan? Wie
-sah der Einfluss des Judentums (Sabbat) aus? Wie wirkt sich das Zusammentreffen
-von Sonntag und Heiligenfesten aus? Was provoziert das Auftreten von mehr
-Sonntagsgesetzen und einer erhöhten Verehrung des Sonntags seit dem sechsten
-Jahrhundert? Warum haben wir apokryphe und pseudepigraphe Schriften zu diesem
-Thema?
+Das vierjährige Projekt erforscht die Bedeutung des Sonntags bzw. Herrentags zwischen etwa 300 und 630 n.Chr., also besonders die Zeit nach dem Gesetz Konstantins zur Sonntagsruhe (überliefert für 321 n.Chr.) bis zum Ausklang der Spätantike. Als Basis werden Quellentexte des griechischen und lateinischen Sprachraums dieser Zeit herangezogen. Gesucht werden Passagen, die den Sonntag als Ruhe- und Feiertag behandeln: Wie wird die Arbeitsruhe interpretiert? Was heiligt diesen Tag? Welches Verhalten ist angemessen? Mit welchen theologischen Argumenten wird die Bedeutung des Tages hervorgehoben? Inwiefern strukturiert die siebentägige Woche das Leben der Menschen? der Mönche? des Klerus? der Sklaven? der Wirtschaft? des sonstigen gesellschaftlichen Lebens? Usw.
+Die Bedeutung des christlichen Sonntags wuchs als ein Aspekt der Christianisierung und Sakralisierung der christlichen Gesellschaft in der Spätantike und führt zu einer Uniformierung von Festkulturen, die früher in verschiedenen sozialen und religiösen Gruppen je für sich gepflegt wurden. Das Forschungsprojekt ist Teil eines erkennbaren sich verbreitenden Forschungsinteresses an Phänomenen des „Structuring of Time“, eine sinnvolle Ergänzung zu vorausgehenden Suche nach „Spaciality“. Das Funktionieren einer Gesellschaft beruht wesentlich darauf, sich auf eine Strukturierung der gemeinsamen Zeit (z.B. Zeit zum Arbeiten, zum Feiern und Opfern, zum Lernen/Schule, zum Ein- und Verkaufen, zum Versammeln, zum Prozessieren vor Gericht, zum Schulden oder Steuern bezahlen, zum Reisen) zu einigen, um überindividuelle Aktivitäten zu koordinieren und zu synchronisieren. Strukturierte Zeit ist daher als soziale Zeit ein die Gesellschaft verbindendes temporales Ordnungsmuster. Die strukturierte Zeit einer Gesellschaft stiftet daher auch Identität: Alle folgen einem gemeinsamen Rhythmus, erleben Opferrituale, Prozessionen, Spiele, Theateraufführungen, Wochenmärkte, selbst wenn nicht alle an allen Aktivitäten tatsächlich teilnehmen. 
+Das Forschungsprojekt kann natürlich nicht allen diesen Fragen nachgehen – wir konzentrieren uns auf einen Tag, den Sonntag und damit verbundene Phänomene.
 
-### Hypothese und Textbasis
+#### Datenbank:
 
-Die Bedeutung des christlichen Sonntags entstand als ein Aspekt der
-Christianisierung und Sakralisierung der christlichen Gesellschaft in der
-Spätantike und führt zu einer Uniformierung von Festkulturen, die früher in
-verschiedenen sozialen und religiösen Gruppen gefeiert wurden. Besonders das
-sechste Jahrhundert schien eine wichtige "Wasserscheide" zu sein, als neue
-apokryphe Literatur und Pseudepigraphie zu diesem Thema produziert wurde. Eine
-intensive Recherche mit Hilfe von Datenbanken, auch bezogen auf die Rezeption
-von zentralen biblischen Texten wie den "Zehn Geboten", sowie mit Hilfe von
-Handschriftenrecherchen soll die Textbasis erweitern, um eine Geschichte der
-Sonntagsverehrung erzählen zu können. Zusätzlich werden relevante Papyri und
-Inschriften herangezogen.
-
-### Innovation
-
-- Eine neue Datenbank wird als Hilfsmittel und zur Visualisierung der
-  Zeitrechnungen inklusive der Sonntage entwickelt.
-- Eine neue Methodik (Intersektionalität) sowie neuere Einsichten in den Prozess
-  der Christianisierung des Römerreiches und die Jahrhunderte der sogenannten
-  "Völkerwanderung" müssen als Grundlage für das Verständnis der Entstehung des
-  christlichen Sonntags herangezogen werden, um die überholten
-  Deutungskategorien der Dekadenz (zunehmende Gesetzlichkeit, Judaisierung,
-  Germanisierung) zu überwinden.
+Relevante Quellentexte werden in eine Datenbank eingetragen. Dort nehmen wir Passagen auf, ordnen sie einem Datum, einem Verfasser, einer Sprache, einer Gattung zu, verbinden sie gegebenenfalls mit weiteren Textpassagen, kennzeichnen die Bezeichnung des Sonntags, zitierte Bibelstellen und versehen sie mit Schlagworten über Personengruppen, Tätigkeiten (von reisen, essen bis hin zu sterben) sowie sogenannte Sonntagsbenediktionen (Schöpfung, Auferstehung, Mannaspendung; Pfingsten etc. – also alles, was aus der biblischen Heilsgeschichte am Sonntag geschehen sein soll). 
+Präsentiert wird die Datenbank im Frontend mit Hilfe von drei Bereichen, a) mit einer Suchmaske, b) mit Punkten auf mehreren Timelines, die z.B. auf Textpassagen zu einem Zeitpunkt verweisen, und c) mit einer Detailansicht, wo die Textpassage in originalsprachlicher Version, in einer dt. oder einer engl. Übersetzung sowie mit einer Auswertung sowie relevante Literatur angeschaut werden kann. Von hier aus kann man auch direkt interaktiv weitersuchen losgetrennt von der Suchmaske.
