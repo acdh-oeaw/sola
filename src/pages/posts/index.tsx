@@ -64,7 +64,7 @@ export async function getStaticProps(
     props: {
       labels: labels[locale],
       page,
-      data: { posts },
+      data: { posts: posts.slice(0, MAX_POSTS) },
     },
   }
 }
@@ -89,7 +89,7 @@ export default function PostsPage(props: PostsPageProps): JSX.Element {
           <div dangerouslySetInnerHTML={{ __html: props.page.html }} />
         </div>
         <ul className="my-8 space-y-10">
-          {props.data.posts.slice(0, MAX_POSTS).map((post) => {
+          {props.data.posts.map((post) => {
             return (
               <li key={post.id}>
                 <Post post={post} t={props.labels.data} />
@@ -120,7 +120,7 @@ function Post({
           </h2>
         </a>
       </Link>
-      <time className="text-gray-500" dateTime={post.metadata.date}>
+      <time className="text-sm text-gray-500" dateTime={post.metadata.date}>
         {formatDate(post.metadata.date, locale)}
       </time>
       <p className="my-3 leading-7 text-gray-700">{post.metadata.abstract}</p>

@@ -103,6 +103,8 @@ export async function getCmsTeamMembers(
     }),
   )
 
+  data.sort((a, b) => a.lastName.localeCompare(b.lastName))
+
   return data
 }
 
@@ -146,6 +148,8 @@ export async function getCmsPostsOverview(
       return { id: file.slice(0, -postExtension.length), metadata }
     }),
   )
+
+  data.sort((a, b) => (a.metadata.date > b.metadata.date ? -1 : 1))
 
   return data
 }
