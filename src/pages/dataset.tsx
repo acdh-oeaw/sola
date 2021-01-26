@@ -1434,7 +1434,7 @@ function Texts({
       id: 0,
       title: t.bibliography,
       children: (
-        <ul>
+        <ul className="space-y-2">
           {bibliography.map((reference) => {
             return (
               <li key={reference.pk} className="leading-6">
@@ -1474,10 +1474,17 @@ function BibliographicReference({
 }: {
   reference: SolaBibsonomyReference
 }) {
-  return (
-    <div>
-      {reference.author}: {reference.title}. {reference.address}:{' '}
-      {reference.publisher} {reference.year}.
-    </div>
-  )
+  const entry = useMemo(() => {
+    const text = []
+
+    if (reference.author) text.push(reference.author + ':')
+    if (reference.title) text.push(reference.title + '.')
+    if (reference.address) text.push(reference.address + ':')
+    if (reference.publisher) text.push(reference.publisher)
+    if (reference.year) text.push(reference.year)
+
+    return text.join(' ') + '.'
+  }, [reference])
+
+  return <div>{entry}</div>
 }
