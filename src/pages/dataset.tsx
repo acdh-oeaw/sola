@@ -41,7 +41,6 @@ import {
   useSolaTexts,
 } from '@/lib/sola/hooks'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
-import { useQueryParam } from '@/lib/url/useQueryParam'
 import { count } from '@/lib/util/count'
 import { printHtml } from '@/lib/util/printHtml'
 import { Document as DocumentIcon } from '@/modules/icons/Document'
