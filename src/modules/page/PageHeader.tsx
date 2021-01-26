@@ -1,3 +1,4 @@
+import { useInteractionModality } from '@react-aria/interactions'
 import Link from 'next/link'
 import { useRouter } from 'next/router'
 import { Fragment } from 'react'
@@ -79,6 +80,10 @@ function MobileNav({
   t: typeof labels[SiteLocale]
 }) {
   const router = useRouter()
+
+  // FIXME: required to set uo global focus handlers once
+  // @see https://github.com/adobe/react-spectrum/issues/1378
+  useInteractionModality()
 
   return (
     <div className="lg:hidden">
