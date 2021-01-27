@@ -6,7 +6,7 @@ import 'tailwindcss/tailwind.css'
 import ErrorBoundary from '@stefanprobst/next-error-boundary'
 import type { AppProps, NextWebVitalsMetric } from 'next/app'
 import Head from 'next/head'
-import { Fragment } from 'react'
+import { Fragment, useEffect } from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
 
 import { useSolaEntities, useSolaFilterOptions } from '@/lib/sola/hooks'
@@ -22,6 +22,16 @@ export default function App({
   pageProps,
   router,
 }: AppProps): JSX.Element {
+  const { locale, defaultLocale } = router
+
+  useEffect(() => {
+    const webmanifestPrefix = locale === defaultLocale ? '' : `/${locale}`
+    const link = document.querySelector('link[rel="manifest"]')
+    if (link != null) {
+      link.setAttribute('href', `${webmanifestPrefix}/site.webmanifest`)
+    }
+  }, [locale, defaultLocale])
+
   return (
     <Fragment>
       <Head>
