@@ -654,7 +654,7 @@ function ActiveFilterList({
     options.passageTypes.data === undefined ||
     options.publications.data === undefined
   ) {
-    return null
+    return <div className="pb-2 text-xs">&nbsp;</div>
   }
 
   const { name, authors, publications, topics, types } = filter
