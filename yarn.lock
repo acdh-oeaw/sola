@@ -2302,10 +2302,10 @@
     "@mdx-js/loader" "^1.6.19"
     gray-matter "^4.0.2"
 
-"@stefanprobst/next-page-metadata@^1.0.8":
-  version "1.0.8"
-  resolved "https://registry.npmjs.org/@stefanprobst/next-page-metadata/-/next-page-metadata-1.0.8.tgz#55f99bae6af1825afc0c2fac6f7d05c522df6feb"
-  integrity sha512-UBWUBjGQ96NkNIMt+Z48bNfR3NQoB8AmxRA6ljV/3nN4S2aOA5A9yKjPCrEb2oMnrL4iwLCQGuN7gryi5H6Ijg==
+"@stefanprobst/next-page-metadata@^1.0.9":
+  version "1.0.9"
+  resolved "https://registry.npmjs.org/@stefanprobst/next-page-metadata/-/next-page-metadata-1.0.9.tgz#832801264091a1454fbb9cc0cd52b533179e79c6"
+  integrity sha512-ohOBawtQBhveTfMPuZ57Y1Q2K6sKDK2MQxuHRx8xDOzx9g50v7bDE0wE9jqCSX+FDgFBrm266kNnmyhXT5qu4Q==
   dependencies:
     react-schemaorg "^1.3.1"
     schema-dts "^0.8.2"

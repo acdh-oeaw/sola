@@ -55,7 +55,7 @@
     "@stefanprobst/favicons": "^1.0.6",
     "@stefanprobst/next-error-boundary": "^1.0.7",
     "@stefanprobst/next-mdx": "^1.0.0",
-    "@stefanprobst/next-page-metadata": "^1.0.8",
+    "@stefanprobst/next-page-metadata": "^1.0.9",
     "@stefanprobst/remark-excerpt": "^1.0.2",
     "@stefanprobst/remark-extract-yaml-frontmatter": "^1.0.1",
     "@tailwindcss/typography": "^0.4.0",

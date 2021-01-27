@@ -1,6 +1,7 @@
 import type { PageMetadataProps } from '@stefanprobst/next-page-metadata'
 import PageMetadata from '@stefanprobst/next-page-metadata'
 
+import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import { useSiteMetadata } from '@/modules/metadata/useSiteMetadata'
 
 export type MetadataProps = PageMetadataProps
@@ -13,6 +14,7 @@ export function Metadata({
   twitter,
   ...props
 }: MetadataProps): JSX.Element {
+  const locale = useCurrentLocale()
   const {
     title: siteTitle,
     image: siteImage,
@@ -23,16 +25,23 @@ export function Metadata({
     return [title, siteTitle].filter(Boolean).join(' | ')
   }
 
-  const description = props.description ?? siteDescription
-  const image = siteImage
-
   return (
     <PageMetadata
-      {...props}
+      language={locale}
       titleTemplate={defaultTitleTemplate}
-      description={description}
-      openGraph={{ siteName: siteTitle, images: [image], ...openGraph }}
-      twitter={{ cardType: 'summary', site: siteTitle, image, ...twitter }}
+      description={siteDescription}
+      openGraph={{
+        type: 'website',
+        siteName: siteTitle,
+        images: [siteImage],
+        ...openGraph,
+      }}
+      twitter={{
+        cardType: 'summary',
+        site: siteTitle,
+        ...twitter,
+      }}
+      {...props}
     />
   )
 }

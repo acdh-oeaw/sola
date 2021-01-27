@@ -8,7 +8,7 @@
       "src": "public/assets/images/logo.svg"
     },
     "image": {
-      "src": "/assets/images/logo.svg",
+      "src": "/android-chrome-512x512.png",
       "alt": ""
     },
     "twitter": {
@@ -24,7 +24,7 @@
       "src": "public/assets/images/logo.svg"
     },
     "image": {
-      "src": "/assets/images/logo.svg",
+      "src": "/android-chrome-512x512.png",
       "alt": ""
     },
     "twitter": {
