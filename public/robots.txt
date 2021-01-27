@@ -1,0 +1,2 @@
+User-agent: *
+Sitemap: https://sola-preview.acdh-dev.oeaw.ac.at/sitemap.xml

@@ -17,6 +17,9 @@ const nextConfig = {
   images: {},
   poweredByHeader: false,
   reactStrictMode: true,
+  async rewrites() {
+    return [{ source: '/sitemap.xml', destination: '/api/sitemap' }]
+  },
 }
 
 const plugins = [withBundleAnalyzer]

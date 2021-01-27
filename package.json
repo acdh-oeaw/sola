@@ -68,6 +68,7 @@
     "d3-selection": "^2.0.0",
     "d3-zoom": "^2.0.0",
     "focus-visible": "^5.2.0",
+    "globby": "^11.0.2",
     "next": "^10.0.5",
     "postcss": "^8.2.2",
     "postcss-focus-visible": "^5.0.0",
@@ -83,7 +84,10 @@
     "strip-markdown": "^4.0.0",
     "tailwindcss": "^2.0.2",
     "unified": "^9.2.0",
+    "unist-builder": "^2.0.3",
     "use-composed-ref": "^1.1.0",
+    "xast-util-to-xml": "^2.0.1",
+    "xastscript": "^2.1.1",
     "yaml": "^1.10.0"
   },
   "devDependencies": {
