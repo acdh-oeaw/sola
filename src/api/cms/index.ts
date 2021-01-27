@@ -160,7 +160,7 @@ export type CmsPostMetadata = {
   date: string
   abstract?: string
   attachments?: Array<{ label: string; file: string }>
-  gallery?: Array<{ alt?: string; file: string }>
+  gallery?: Array<{ alt?: string; image: string }>
 }
 
 export interface CmsPost {

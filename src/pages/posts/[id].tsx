@@ -4,6 +4,7 @@ import type {
   GetStaticPropsContext,
   GetStaticPropsResult,
 } from 'next'
+import Image from 'next/image'
 import { Fragment } from 'react'
 
 import type { CmsPost } from '@/api/cms'
@@ -106,13 +107,15 @@ export default function PostPage(props: PostPageProps): JSX.Element {
         canonicalUrl={canonicalUrl}
         languageAlternates={alternateUrls}
       />
-      <Container className="prose" as="main">
-        <h1>{props.post.metadata.title}</h1>
-        <div dangerouslySetInnerHTML={{ __html: props.post.html }} />
-        <Attachments
-          attachments={props.post.metadata.attachments}
-          t={props.labels.data}
-        />
+      <Container as="main">
+        <div className="prose">
+          <h1>{props.post.metadata.title}</h1>
+          <div dangerouslySetInnerHTML={{ __html: props.post.html }} />
+          <Attachments
+            attachments={props.post.metadata.attachments}
+            t={props.labels.data}
+          />
+        </div>
         <ImageGallery
           images={props.post.metadata.gallery}
           t={props.labels.data}
@@ -163,17 +166,24 @@ function ImageGallery({
 
   return (
     <div>
-      <h2>{t.images}</h2>
-      <ul>
+      <h2 className="mt-12 mb-6 text-2xl font-bold text-gray-700">
+        {t.images}
+      </h2>
+      <ul
+        className="grid grid-cols-2 gap-4"
+        style={{ gridAutoRows: 'minmax(auto, 200px)' }}
+      >
         {images.map((image, index) => {
           return (
-            <li key={index}>
-              <a href={image.file} target="_blank" rel="noopener noreferrer">
-                <img
-                  src={image.file}
+            <li key={index} className="relative">
+              <a href={image.image} target="_blank" rel="noopener noreferrer">
+                <Image
+                  src={image.image}
                   alt={image.alt ?? ''}
                   loading="lazy"
                   decoding="async"
+                  layout="fill"
+                  objectFit="cover"
                 />
               </a>
             </li>
