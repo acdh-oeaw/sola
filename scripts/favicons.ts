@@ -5,9 +5,9 @@ import metadata from '~/config/metadata.json'
 
 Promise.all(
   Object.entries(metadata).map(
-    ([locale, { image, shortTitle, title }], index) =>
+    ([locale, { favicon, shortTitle, title }], index) =>
       generate({
-        inputFilePath: image.src,
+        inputFilePath: favicon.src,
         outputFolder: index === 0 ? 'public' : `public/${locale}`,
         name: title,
         shortName: shortTitle,

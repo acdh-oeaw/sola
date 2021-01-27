@@ -13,18 +13,26 @@ export function Metadata({
   twitter,
   ...props
 }: MetadataProps): JSX.Element {
-  const { title: siteTitle } = useSiteMetadata()
+  const {
+    title: siteTitle,
+    image: siteImage,
+    description: siteDescription,
+  } = useSiteMetadata()
 
   function defaultTitleTemplate(title?: string) {
     return [title, siteTitle].filter(Boolean).join(' | ')
   }
 
+  const description = props.description ?? siteDescription
+  const image = siteImage
+
   return (
     <PageMetadata
       {...props}
       titleTemplate={defaultTitleTemplate}
-      openGraph={{ siteName: siteTitle, ...openGraph }}
-      twitter={{ cardType: 'summary', site: siteTitle, ...twitter }}
+      description={description}
+      openGraph={{ siteName: siteTitle, images: [image], ...openGraph }}
+      twitter={{ cardType: 'summary', site: siteTitle, image, ...twitter }}
     />
   )
 }

@@ -4,8 +4,12 @@
     "title": "Sunday Observance in Late Antiquity",
     "shortTitle": "SOLA",
     "description": "Passages from Greek and Latin literature on the cultural history of Sunday from the time of Emperor Constantine to the end of Late Antiquity.",
-    "image": {
+    "favicon": {
       "src": "public/assets/images/logo.svg"
+    },
+    "image": {
+      "src": "/assets/images/logo.svg",
+      "alt": ""
     },
     "twitter": {
       "handle": ""
@@ -16,8 +20,12 @@
     "title": "Der Sonntag in der Spätantike",
     "shortTitle": "SOLA",
     "description": "Passagen aus der griechischen und lateinischen Literatur zur Kulturgeschichte des Sonntags seit der Zeit des Kaisers Konstantin bis zum Ausklang der Spätantike.",
-    "image": {
+    "favicon": {
       "src": "public/assets/images/logo.svg"
+    },
+    "image": {
+      "src": "/assets/images/logo.svg",
+      "alt": ""
     },
     "twitter": {
       "handle": ""
