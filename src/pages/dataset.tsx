@@ -565,7 +565,7 @@ function VisualizationPanel({
 
   return (
     <section
-      className="flex flex-col pb-4 border-b border-gray-200"
+      className="flex flex-col min-w-0 pb-4 border-b border-gray-200"
       style={{ gridArea: 'visualization' }}
     >
       <div className="flex flex-col justify-between px-6 pt-6 pb-4 space-y-4 md:space-y-0 md:flex-row md:space-x-4">
@@ -679,17 +679,17 @@ function ActiveFilterList({
   return (
     <div className="flex flex-wrap items-center text-xs text-gray-500 md:justify-end">
       <h2 className="sr-only">{t.filteredBy}:</h2>
-      <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
+      <ul className="flex flex-wrap items-center min-w-0 md:justify-end md:space-x-1">
         {hasNameFilter ? (
-          <li className="mb-1 mr-1 md:mr-0">
-            <dl className="flex items-center">
+          <li className="flex min-w-0 mb-1 mr-1 md:mr-0">
+            <dl className="flex items-center min-w-0">
               <dt className="sr-only">{t.title}:</dt>
-              <dd>
-                <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+              <dd className="flex min-w-0">
+                <Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                   <TooltipTrigger
                     tooltip={`${t.filteredBy} ${t.title}: ${name}`}
                   >
-                    <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                    <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
                       {name}
                     </button>
                   </TooltipTrigger>
@@ -705,20 +705,20 @@ function ActiveFilterList({
           </li>
         ) : null}
         {hasAuthorsFilter ? (
-          <li className="mr-1 md:mr-0">
-            <dl className="flex items-center">
+          <li className="flex min-w-0 mr-1 md:mr-0">
+            <dl className="flex items-center min-w-0">
               <dt className="sr-only">{t.authors[1]}:</dt>
-              <dd>
-                <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
+              <dd className="flex min-w-0">
+                <ul className="flex flex-wrap items-center min-w-0 md:justify-end md:space-x-1">
                   {authors?.map((id) => {
                     const name = options.authors.data?.[id]?.name
                     return (
-                      <li className="mb-1 mr-1 md:mr-0" key={id}>
-                        <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                      <li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
+                        <Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                           <TooltipTrigger
                             tooltip={`${t.filteredBy} ${t.authors[0]}: ${name}`}
                           >
-                            <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                            <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
                               {name}
                             </button>
                           </TooltipTrigger>
@@ -746,20 +746,20 @@ function ActiveFilterList({
           </li>
         ) : null}
         {hasPublicationFilter ? (
-          <li className="mr-1 md:mr-0">
-            <dl className="flex items-center">
+          <li className="flex min-w-0 mr-1 md:mr-0">
+            <dl className="flex items-center min-w-0">
               <dt className="sr-only">{t.entityType.Publication[1]}:</dt>
-              <dd>
-                <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
+              <dd className="flex min-w-0">
+                <ul className="flex flex-wrap items-center min-w-0 md:justify-end md:space-x-1">
                   {publications?.map((id) => {
                     const name = options.publications.data?.[id]?.name
                     return (
-                      <li className="mb-1 mr-1 md:mr-0" key={id}>
-                        <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                      <li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
+                        <Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                           <TooltipTrigger
                             tooltip={`${t.filteredBy} ${t.entityType.Publication[0]}: ${name}`}
                           >
-                            <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                            <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
                               {name}
                             </button>
                           </TooltipTrigger>
@@ -787,20 +787,20 @@ function ActiveFilterList({
           </li>
         ) : null}
         {hasPassageTopicsFilter ? (
-          <li className="mr-1 md:mr-0">
-            <dl className="flex items-center">
+          <li className="flex min-w-0 mr-1 md:mr-0">
+            <dl className="flex items-center min-w-0">
               <dt className="sr-only">{t.topics[1]}:</dt>
-              <dd>
-                <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
+              <dd className="flex min-w-0">
+                <ul className="flex flex-wrap items-center min-w-0 md:justify-end md:space-x-1">
                   {topics?.map((id) => {
                     const name = options.passageTopics.data?.[id]?.name
                     return (
-                      <li className="mb-1 mr-1 md:mr-0" key={id}>
-                        <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                      <li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
+                        <Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                           <TooltipTrigger
                             tooltip={`${t.filteredBy} ${t.topics[0]}: ${name}`}
                           >
-                            <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                            <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
                               {name}
                             </button>
                           </TooltipTrigger>
@@ -828,20 +828,20 @@ function ActiveFilterList({
           </li>
         ) : null}
         {hasPassageTypesFilter ? (
-          <li className="mr-1 md:mr-0">
-            <dl className="flex items-center">
+          <li className="flex min-w-0 mr-1 md:mr-0">
+            <dl className="flex items-center min-w-0">
               <dt className="sr-only">{t.types[1]}:</dt>
-              <dd>
-                <ul className="flex flex-wrap items-center md:justify-end md:space-x-1">
+              <dd className="flex min-w-0">
+                <ul className="flex flex-wrap items-center min-w-0 md:justify-end md:space-x-1">
                   {types?.map((id) => {
                     const name = options.passageTypes.data?.[id]?.name
                     return (
-                      <li className="mb-1 mr-1 md:mr-0" key={id}>
-                        <Badge className="space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
+                      <li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
+                        <Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
                           <TooltipTrigger
                             tooltip={`${t.filteredBy} ${t.types[0]}: ${name}`}
                           >
-                            <button className="font-medium rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                            <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
                               {name}
                             </button>
                           </TooltipTrigger>

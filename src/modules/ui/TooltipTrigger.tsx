@@ -29,7 +29,7 @@ export function TooltipTrigger(props: TooltipTriggerProps): JSX.Element {
   }
 
   return (
-    <span className="relative">
+    <span className="relative inline-flex min-w-0">
       {cloneElement(props.children, { ref, ...triggerProps })}
 
       {state.isOpen ? (
