@@ -180,10 +180,9 @@ function ImageGallery({
                 <Image
                   src={image.image}
                   alt={image.alt ?? ''}
-                  loading="lazy"
-                  decoding="async"
                   layout="fill"
                   objectFit="cover"
+                  sizes={'(max-width: 640px) 600px, 300px'}
                 />
               </a>
             </li>
