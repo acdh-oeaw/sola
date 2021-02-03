@@ -1447,12 +1447,19 @@ function BiblePassages({
       <h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
         {t.biblePassages}
       </h3>
-      <ul className="space-y-1 text-sm text-gray-700">
+      <ul className="flex flex-wrap items-center overflow-x-hidden text-xs">
         {Object.entries(passages.data).map(([reference, url]) => {
           return (
-            <li key={reference}>
-              <Badge className="bg-pink-300">
-                <a href={url}>{reference}</a>
+            <li className="min-w-0 mb-1 mr-1" key={reference}>
+              <Badge className="inline-block max-w-full font-medium transition bg-pink-300">
+                <a
+                  className="inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+                  href={url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                >
+                  {reference}
+                </a>
               </Badge>
             </li>
           )
