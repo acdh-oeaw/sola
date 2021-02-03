@@ -1307,13 +1307,16 @@ function PassageProperties({
           <div>
             <dt className="sr-only">{t.topics[1]}</dt>
             <dd>
-              <ul className="flex flex-wrap items-center overflow-x-hidden">
+              <ul className="flex flex-wrap items-center">
                 {entity.topic.map((topic) => {
                   return (
                     <li className="min-w-0 mb-1 mr-1" key={topic.id}>
-                      <Badge className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200">
+                      <Badge
+                        variant="tight"
+                        className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200"
+                      >
                         <button
-                          className="inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                          className="rounded px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                           onClick={() =>
                             setFilter({
                               topics: [topic.id],
@@ -1334,13 +1337,16 @@ function PassageProperties({
           <div>
             <dt className="sr-only">{t.types[1]}</dt>
             <dd>
-              <ul className="flex flex-wrap items-center overflow-x-hidden">
+              <ul className="flex flex-wrap items-center">
                 {entity.kind.map((kind) => {
                   return (
                     <li className="min-w-0 mb-1 mr-1" key={kind.id}>
-                      <Badge className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200">
+                      <Badge
+                        variant="tight"
+                        className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200"
+                      >
                         <button
-                          className="inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                          className="rounded px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
                           onClick={() =>
                             setFilter({
                               types: [kind.id],
@@ -1404,7 +1410,7 @@ function Relations({
                 {t.entityType[type as SolaEntityType][1]}
               </dt>
               <dd>
-                <ul className="flex flex-wrap items-center overflow-x-hidden">
+                <ul className="flex flex-wrap items-center">
                   {relations.map((relation) => {
                     /** Only show unique related entities. */
                     if (seenIds.has(relation.related_entity.id)) return null
@@ -1413,13 +1419,14 @@ function Relations({
                     return (
                       <li className="min-w-0 mb-1 mr-1" key={relation.id}>
                         <Badge
+                          variant="tight"
                           className={cx(
                             'inline-block max-w-full transition',
                             colors.bg[type as SolaEntityType],
                           )}
                         >
                           <button
-                            className="inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+                            className="px-2 py-0.5 rounded inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
                             onClick={() => {
                               setSelectedSolaEntity({
                                 id: relation.related_entity.id,
@@ -1458,13 +1465,16 @@ function BiblePassages({
       <h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
         {t.biblePassages}
       </h3>
-      <ul className="flex flex-wrap items-center overflow-x-hidden text-xs">
+      <ul className="flex flex-wrap items-center text-xs">
         {Object.entries(passages.data).map(([reference, url]) => {
           return (
             <li className="min-w-0 mb-1 mr-1" key={reference}>
-              <Badge className="inline-block max-w-full font-medium transition bg-pink-300">
+              <Badge
+                variant="tight"
+                className="inline-block max-w-full font-medium transition bg-pink-300"
+              >
                 <a
-                  className="inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+                  className="rounded px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
                   href={url}
                   target="_blank"
                   rel="noopener noreferrer"
