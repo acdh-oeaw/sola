@@ -1391,6 +1391,13 @@ function Relations({
         {Object.entries(relations).map(([type, relations]) => {
           if (relations.length === 0) return null
 
+          /**
+           * Only show unique related entities.
+           *
+           * TODO: should be memoized.
+           */
+          const seenIds = new Set()
+
           return (
             <div key={type}>
               <dt className="sr-only">
@@ -1399,6 +1406,10 @@ function Relations({
               <dd>
                 <ul className="flex flex-wrap items-center overflow-x-hidden">
                   {relations.map((relation) => {
+                    /** Only show unique related entities. */
+                    if (seenIds.has(relation.related_entity.id)) return null
+                    seenIds.add(relation.related_entity.id)
+
                     return (
                       <li className="min-w-0 mb-1 mr-1" key={relation.id}>
                         <Badge
