@@ -15,6 +15,7 @@ import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 import { createLink } from '@/lib/sitemap/createLink'
 import { createSitemap } from '@/lib/sitemap/createSitemap'
 import { getStaticPages } from '@/lib/sitemap/getStaticPages'
+import { log } from '@/lib/util/log'
 
 const query = { limit: 1000 }
 
@@ -89,7 +90,8 @@ export default async function handler(
 
     response.setHeader('Content-Type', 'application/xml')
     response.send(sitemap)
-  } catch {
+  } catch (error) {
+    log.error(error)
     response.status(500)
     response.end()
   }
