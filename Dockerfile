@@ -35,9 +35,12 @@ FROM base AS serve
 
 ENV NODE_ENV=production
 
-COPY --from=build /app/next.config.js ./
-COPY --from=build /app/public ./public
-COPY --from=build /app/.next ./.next
+COPY --from=build --chown=node:node /app/next.config.js ./
+COPY --from=build --chown=node:node /app/public ./public
+COPY --from=build --chown=node:node /app/.next ./.next
+
+# Ensures folder is owned by node:node when mounted as volume.
+RUN mkdir -p /app/.next/cache/images
 
 EXPOSE 3000
 
