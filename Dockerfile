@@ -38,6 +38,8 @@ ENV NODE_ENV=production
 COPY --from=build --chown=node:node /app/next.config.js ./
 COPY --from=build --chown=node:node /app/public ./public
 COPY --from=build --chown=node:node /app/.next ./.next
+# The content folder is needed for dynamic sitemap generation.
+COPY --from=build --chown=node:node /app/content ./content
 
 # Ensures folder is owned by node:node when mounted as volume.
 RUN mkdir -p /app/.next/cache/images
