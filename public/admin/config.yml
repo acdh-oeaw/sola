@@ -3,7 +3,7 @@ load_config_file: true
 local_backend: true
 backend:
   name: gitlab
-  repo: acdh-oeaw/sola
+  repo: acdh-oeaw/sola/sola-preview
   branch: main
   auth_type: implicit
   app_id: 84710241877757360c75a3099c7f09bf65c1fa29ebe6f4663672ff17694d875d
