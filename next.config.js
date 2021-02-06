@@ -20,6 +20,19 @@ const nextConfig = {
   async rewrites() {
     return [{ source: '/sitemap.xml', destination: '/api/sitemap' }]
   },
+  async headers() {
+    return [
+      {
+        source: '/assets/fonts/inter-var-latin.woff2',
+        headers: [
+          {
+            key: 'Cache-Control',
+            value: 'public, max-age=31536000, immutable',
+          },
+        ],
+      },
+    ]
+  },
 }
 
 const plugins = [withBundleAnalyzer]
