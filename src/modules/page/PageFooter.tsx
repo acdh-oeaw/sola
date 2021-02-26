@@ -25,10 +25,10 @@ export function PageFooter(): JSX.Element {
 
   return (
     <footer
-      className="px-6 py-12 space-y-12 bg-white border-t border-gray-200"
+      className="px-6 py-6 space-y-4 bg-white border-t border-gray-200 2xl:space-y-12 2xl:py-12"
       style={{ gridArea: 'footer' }}
     >
-      <ul className="flex flex-col space-y-6 items-center justify-center md:flex-row md:space-y-0 md:space-x-12 text-xs text-gray-700">
+      <ul className="flex flex-col items-center justify-center space-y-4 text-xs text-gray-700 sm:flex-row sm:space-y-0 sm:space-x-12">
         <li>
           <a
             className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
@@ -37,7 +37,7 @@ export function PageFooter(): JSX.Element {
             target="_blank"
           >
             <img
-              className="h-10"
+              className="h-8 2xl:h-10"
               src="/assets/images/uni-vienna-logo.svg"
               alt={labels[locale].univie}
               loading="lazy"
@@ -52,7 +52,7 @@ export function PageFooter(): JSX.Element {
             target="_blank"
           >
             <img
-              className="h-10"
+              className="h-8 2xl:h-10"
               src="/assets/images/fwf-logo.svg"
               alt={labels[locale].fwf}
               loading="lazy"
@@ -67,7 +67,7 @@ export function PageFooter(): JSX.Element {
             target="_blank"
           >
             <img
-              className="h-10"
+              className="h-8 2xl:h-10"
               src="/assets/images/acdh-logo.svg"
               alt={labels[locale].acdh}
               loading="lazy"
