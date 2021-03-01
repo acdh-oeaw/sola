@@ -76,6 +76,8 @@ export interface CmsTeamMember {
   id: string
   firstName: string
   lastName: string
+  boss?: boolean
+  group: 'current' | 'former' | 'acdh'
   title?: string
   affiliation?: string
   image?: string

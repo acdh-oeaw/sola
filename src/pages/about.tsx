@@ -17,11 +17,17 @@ export const labels = {
   en: {
     page: {
       title: 'About the project',
+      currentTeamMembers: 'Researchers',
+      formerTeamMembers: 'Former team members',
+      acdhTeamMembers: 'IT-Team',
     },
   },
   de: {
     page: {
       title: 'Über das Projekt',
+      currentTeamMembers: 'Wissenschaftliche Mitarbeiter*innen',
+      formerTeamMembers: 'Ehemalige Mitarbeiterinnen',
+      acdhTeamMembers: 'IT-Team',
     },
   },
 } as const

@@ -1,7 +1,9 @@
 firstName: Nadine
 lastName: Pirringer
+group: former
 email: nadine.pirringer@univie.ac.at
-biography: 'Dissertationsprojekt: "Die Predigtsammlung des Pseudo-Fulgentius"
+biography:
+  'Dissertationsprojekt: "Die Predigtsammlung des Pseudo-Fulgentius"
   (Arbeitstitel): Basierend auf der eingehenden Analyse der einzelnen Predigten
   (hinsichtlich u. a. des verwendeten Bibeltextes, exegetischer Methoden,
   sprachlicher und metrischer Besonderheiten) soll Information über die Sammlung

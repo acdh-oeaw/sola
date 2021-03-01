@@ -1,5 +1,5 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from 'next'
-import { Fragment } from 'react'
+import { Fragment, useMemo } from 'react'
 
 import type { CmsPage, CmsTeamMember } from '@/api/cms'
 import { getCmsPage, getCmsTeamMembers } from '@/api/cms'
@@ -26,6 +26,11 @@ export const labels = {
       email: 'Email',
       website: 'Website',
     },
+    group: {
+      current: 'Researchers',
+      former: 'Former team members',
+      acdh: 'IT-Team',
+    },
   },
   de: {
     page: {
@@ -35,6 +40,11 @@ export const labels = {
       phone: 'Telefon',
       email: 'Email',
       website: 'Website',
+    },
+    group: {
+      current: 'Wissenschaftliche Mitarbeiter*innen',
+      former: 'Ehemalige Mitarbeiterinnen',
+      acdh: 'IT-Team',
     },
   },
 } as const
@@ -78,6 +88,19 @@ export default function TeamPage(props: TeamPageProps): JSX.Element {
   const canonicalUrl = useCanonicalUrl()
   const alternateUrls = useAlternateUrls()
 
+  const groupedTeamMembers = useMemo(() => {
+    const map: Record<string, Array<CmsTeamMember>> = {}
+
+    props.data.team.forEach((member) => {
+      if (map[member.group] === undefined) {
+        map[member.group] = []
+      }
+      map[member.group]?.push(member)
+    })
+
+    return map
+  }, [props.data.team])
+
   return (
     <Fragment>
       <Metadata
@@ -90,15 +113,30 @@ export default function TeamPage(props: TeamPageProps): JSX.Element {
           <h1>{props.page.metadata.title}</h1>
           <div dangerouslySetInnerHTML={{ __html: props.page.html }} />
         </div>
-        <ul className="my-8 space-y-10">
-          {props.data.team.map((teamMember) => {
+        <div className="space-y-16">
+          {Object.entries(groupedTeamMembers).map(([group, teamMembers]) => {
+            const sorted = teamMembers.sort((t) => (t.boss === true ? -1 : 1))
             return (
-              <li key={teamMember.id}>
-                <TeamMember teamMember={teamMember} t={props.labels.data} />
-              </li>
+              <div key={group}>
+                <h2 className="my-4 text-2xl font-bold text-gray-700">
+                  {props.labels.group[group as 'current' | 'former' | 'acdh']}
+                </h2>
+                <ul className="my-8 space-y-10">
+                  {sorted.map((teamMember) => {
+                    return (
+                      <li key={teamMember.id}>
+                        <TeamMember
+                          teamMember={teamMember}
+                          t={props.labels.data}
+                        />
+                      </li>
+                    )
+                  })}
+                </ul>
+              </div>
             )
           })}
-        </ul>
+        </div>
       </Container>
     </Fragment>
   )
@@ -119,9 +157,9 @@ function TeamMember({
 
   return (
     <Fragment>
-      <h2 className="my-4 text-2xl font-bold text-gray-700">
+      <h3 className="my-4 text-xl font-bold text-gray-700">
         {[teamMember.firstName, teamMember.lastName].join(' ')}
-      </h2>
+      </h3>
       <p className="my-4 leading-7 text-gray-700">{teamMember.biography}</p>
       {hasInfo ? (
         <dl className="flex flex-col my-3 space-y-2 text-gray-500 md:space-y-0 md:flex-row md:space-x-6">

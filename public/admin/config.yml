@@ -136,6 +136,20 @@ collections:
         label: Title
         required: false
         i18n: duplicate
+      - name: boss
+        label: Boss
+        i18n: duplicate
+        widget: hidden
+      - name: group
+        label: Group
+        i18n: duplicate
+        widget: select
+        options:
+          - value: current
+            label: Current member
+          - value: former
+            label: Former member
+        default: current
       - name: affiliation
         label: Affiliation
         required: false

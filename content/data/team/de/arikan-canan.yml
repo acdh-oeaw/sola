@@ -1,9 +1,11 @@
 firstName: Canan
 lastName: Arıkan
+group: current
 email: canan.arikan@univie.ac.at
 phone: +43-1-4277-32609
 website: https://etfkg.univie.ac.at/ueber-uns/team/canan-arikan/
-biography: Canan Arıkan, Projektassistentin, ist Doktorandin am Institut für
+biography:
+  Canan Arıkan, Projektassistentin, ist Doktorandin am Institut für
   Byzantinistik und Neogräzistik. Im Projekt "Der Sonntag in der Spätantike und
   im frühen Mittelalter" arbeitet Arıkan insbesondere an den spätantiken
   literarischen Quellen in griechischer Sprache.
