@@ -116,7 +116,11 @@ export default function TeamPage(props: TeamPageProps): JSX.Element {
         <div className="space-y-16">
           {Object.entries(groupedTeamMembers).map(([group, teamMembers]) => {
             const sorted = teamMembers.sort((a, b) =>
-              a.boss === true ? -1 : a.lastName.localeCompare(b.lastName),
+              a.boss === true
+                ? -1
+                : b.boss === true
+                ? 1
+                : a.lastName.localeCompare(b.lastName),
             )
             return (
               <div key={group}>

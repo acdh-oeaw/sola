@@ -4,7 +4,7 @@ import 'focus-visible'
 import 'tailwindcss/tailwind.css'
 
 import ErrorBoundary from '@stefanprobst/next-error-boundary'
-import type { AppProps, NextWebVitalsMetric } from 'next/app'
+import type { AppProps } from 'next/app'
 import Head from 'next/head'
 import { Fragment, useEffect } from 'react'
 import { ReactQueryDevtools } from 'react-query/devtools'
@@ -62,9 +62,9 @@ function Prefetch() {
 /**
  * Report web vitals.
  */
-export function reportWebVitals(metric: NextWebVitalsMetric): void {
+export function reportWebVitals(/* metric: NextWebVitalsMetric */): void {
   /** should be dispatched to an analytics service */
-  console.info(metric)
+  // console.info(metric)
 }
 
 /**
