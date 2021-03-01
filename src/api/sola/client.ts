@@ -12,9 +12,13 @@ export interface SolaEntityBase {
   end_date: string | null
   end_date_is_exact: boolean | null
   end_date_written: string | null
+  end_start_date: string | null
+  end_end_date: string | null
   start_date: string | null
   start_date_is_exact: boolean | null
   start_date_written: string | null
+  start_start_date: string | null
+  start_end_date: string | null
 
   kind: Array<{ id: number; label: string }>
   text: Array<{ id: number; label: string }>

@@ -4,68 +4,41 @@ import { select } from 'd3-selection'
 import { useEffect, useRef } from 'react'
 
 import type { SolaEntityDetails } from '@/api/sola/client'
-import { useDimensions } from '@/lib/useDimensions'
+import { useDimensions } from '@/lib/visualization/useDimensions'
+import { useDuration } from '@/lib/visualization/useDuration'
 import { config } from '@/modules/visualization/config'
 
 export function DurationTimeline({
   entity,
 }: {
-  entity?: SolaEntityDetails
+  entity: SolaEntityDetails
 }): JSX.Element | null {
-  const wrapperRef = useRef(null)
-  const svgRef = useRef(null)
+  const wrapperRef = useRef<HTMLDivElement>(null)
+  const svgRef = useRef<SVGSVGElement>(null)
   const dimensions = useDimensions(wrapperRef)
+  const {
+    beginAxis,
+    endAxis,
+    minDate,
+    maxDate,
+    getStartDate,
+    getEndDate,
+  } = useDuration(entity)
+  const startDate = getStartDate()
+  const endDate = getEndDate()
 
   useEffect(() => {
     if (
       svgRef.current === null ||
       dimensions === null ||
-      entity === undefined ||
       entity.primary_date == null
     ) {
       return
     }
 
-    const {
-      start_date: startDate,
-      end_date: endDate,
-      primary_date: primaryDate,
-    } = entity
-
-    // offset for scale
-    const offset = 1000 * 60 * 60 * 24 * 365 * 10 // 10 years
-
-    const minDate = new Date(startDate ?? primaryDate!).getTime() - offset
-    const maxDate = new Date(endDate ?? primaryDate!).getTime() + offset
-
-    // offset for unknown dates, should be *less* than offset for scale
-    const blur = 1000 * 60 * 60 * 24 * 365 * 5 // 5 years
-
-    function getStartDate(d: SolaEntityDetails) {
-      if (d.start_date == null) {
-        return new Date(d.primary_date!).getTime() - blur
-      }
-      if (d.start_date_is_exact !== true) {
-        return new Date(d.start_date).getTime() - blur
-      }
-      return new Date(d.start_date).getTime()
-    }
-    function getEndDate(d: SolaEntityDetails) {
-      if (d.end_date == null) {
-        return new Date(d.primary_date!).getTime() + blur
-      }
-      if (d.end_date_is_exact !== true) {
-        return new Date(d.end_date).getTime() + blur
-      }
-      return new Date(d.end_date).getTime()
-    }
-
     const xScale = scaleTime()
-      .domain([minDate, maxDate])
+      .domain([beginAxis, endAxis])
       .range([config.canvasMarginX, dimensions.width - config.canvasMarginX])
-    // const yScale = scaleBand()
-    //   .domain(['selected'])
-    //   .range([dimensions.height - config.canvasMarginY, config.canvasMarginY])
 
     const xAxisBottom = axisTop<Date>(xScale).tickFormat((d) => {
       // multi-scale time format: show full year for january, and month for the rest
@@ -85,32 +58,39 @@ export function DurationTimeline({
       .data([entity])
       .join('rect')
       .attr('rx', config.nodeRadius)
-      .attr('x', (d) => {
-        return xScale(getStartDate(d))
+      .attr('x', () => {
+        return xScale(startDate.date)
       })
       .attr('y', 15 /* yScale.bandwidth() + yScale('selected')! */)
-      .attr('width', (d) => {
-        // in case of discrete point, i.e. width = 0, ensure 10px
-        return xScale(getEndDate(d)) - xScale(getStartDate(d)) || 10
+      .attr('width', () => {
+        return (
+          Math.abs(xScale(endDate.date) - xScale(startDate.date)) ||
+          // in case of discrete point, i.e. width = 0, ensure 10px
+          10
+        )
       })
       .attr('height', config.nodeRadius * 2)
-      .attr('fill', (d) => {
-        if (d.end_date_is_exact !== true && d.start_date_is_exact !== true) {
+      .attr('fill', () => {
+        if (startDate.blur !== 0 && endDate.blur !== 0) {
           return 'url(#fade-to-both)'
         }
-        if (d.end_date_is_exact !== true) {
+        if (endDate.blur !== 0) {
           return 'url(#fade-to-right)'
         }
-        if (d.start_date_is_exact !== true) {
+        if (startDate.blur !== 0) {
           return 'url(#fade-to-left)'
         }
         return 'hsl(0, 0%, 56%)'
       })
-  }, [entity, dimensions])
+  }, [entity, dimensions, beginAxis, endAxis, startDate, endDate])
 
-  if (entity === undefined || entity.primary_date == null) {
+  if (entity.primary_date == null) {
     return null
   }
+
+  const range = maxDate - minDate
+  const paddingLeft = Math.min(startDate.blur / range, 0.5)
+  const paddingRight = 1 - Math.min(endDate.blur / range, 0.5)
 
   return (
     <div ref={wrapperRef} className="absolute inset-0">
@@ -118,15 +98,19 @@ export function DurationTimeline({
         <defs>
           <linearGradient id="fade-to-right" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="hsl(0, 0%, 56%)" />
+            <stop offset={paddingRight} stopColor="hsl(0, 0%, 56%)" />
             <stop offset="1" stopColor="hsl(0, 0%, 100%)" />
           </linearGradient>
           <linearGradient id="fade-to-left" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="hsl(0, 0%, 100%)" />
+            <stop offset={paddingLeft} stopColor="hsl(0, 0%, 56%)" />
             <stop offset="1" stopColor="hsl(0, 0%, 56%)" />
           </linearGradient>
           <linearGradient id="fade-to-both" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="hsl(0, 0%, 100%)" />
-            <stop offset="0.5" stopColor="hsl(0, 0%, 56%)" />
+            <stop offset={paddingLeft} stopColor="hsl(0, 0%, 56%)" />
+            {/* <stop offset="0.5" stopColor="hsl(0, 0%, 56%)" /> */}
+            <stop offset={paddingRight} stopColor="hsl(0, 0%, 56%)" />
             <stop offset="1" stopColor="hsl(0, 0%, 100%)" />
           </linearGradient>
         </defs>

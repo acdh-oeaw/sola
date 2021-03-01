@@ -216,7 +216,7 @@ function useNodes<T extends SolaEntity>(map?: Record<number, T>) {
 function hasPrimaryDate(entity: SolaEntity) {
   const hasDate = entity.primary_date != null && entity.primary_date.length > 0
   if (!hasDate && entity.type !== 'Place') {
-    console.log('Entity without primary date', entity)
+    // console.log('Entity without primary date', entity)
   }
   return hasDate
 }

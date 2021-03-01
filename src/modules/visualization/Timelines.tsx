@@ -15,7 +15,7 @@ import type {
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { usePopper } from 'react-popper'
 
-import { useDimensions } from '@/lib/useDimensions'
+import { useDimensions } from '@/lib/visualization/useDimensions'
 import { config } from '@/modules/visualization/config'
 import type { Node } from '@/modules/visualization/createNode'
 
