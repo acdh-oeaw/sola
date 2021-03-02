@@ -10,6 +10,7 @@ import type {
   SolaEntityType,
   SolaPassageDetails,
   SolaTextDetails,
+  SolaUser,
   SolaVocabulary,
 } from '@/api/sola/client'
 import {
@@ -31,6 +32,7 @@ import {
   getSolaPublications,
   getSolaTextById,
   getSolaTextTypes,
+  getSolaUsers,
 } from '@/api/sola/client'
 import { useHierarchicalData } from '@/lib/data/useHierarchicalData'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
@@ -627,6 +629,27 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
   )
 
   return texts
+}
+
+/**
+ * Provides full user info, grouped by username.
+ */
+export function useSolaUsers() {
+  const locale = useCurrentLocale()
+
+  const users = useQuery(['users'], () => getSolaUsers({ locale }), {
+    select(data) {
+      const map: Record<string, SolaUser> = {}
+
+      data.results.forEach((user) => {
+        map[user.username] = user
+      })
+
+      return map
+    },
+  })
+
+  return users
 }
 
 /**

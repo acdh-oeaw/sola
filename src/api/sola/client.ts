@@ -157,6 +157,13 @@ export interface SolaBibsonomyReference {
   href: string
 }
 
+export interface SolaUser {
+  email: string
+  first_name: string
+  last_name: string
+  username: string
+}
+
 type URLString = string
 
 interface RequestConfig {
@@ -181,7 +188,7 @@ interface GetByIdRequestConfig<
 }
 
 export interface Results<
-  T extends SolaEntity | SolaRelation | SolaText | SolaVocabulary
+  T extends SolaEntity | SolaRelation | SolaText | SolaVocabulary | SolaUser
 > {
   limit: number
   offset: number
@@ -543,6 +550,20 @@ export async function getSolaEntityBibliographyById({
     path: '/bibsonomy/save_get/',
     baseUrl,
     query: { object_pk: id, ...query },
+    options,
+  })
+  return data
+}
+
+export async function getSolaUsers({
+  query,
+  // locale,
+  options,
+}: GetAllRequestConfig): Promise<Results<SolaUser>> {
+  const data = await request<Results<SolaUser>>({
+    path: '/apis/api/users/',
+    baseUrl,
+    query,
     options,
   })
   return data

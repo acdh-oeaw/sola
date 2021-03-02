@@ -39,6 +39,7 @@ import {
   useSolaPassagesFilterOptionsTree,
   useSolaSelectedEntity,
   useSolaTexts,
+  useSolaUsers,
 } from '@/lib/sola/hooks'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
 import { count } from '@/lib/util/count'
@@ -969,7 +970,7 @@ function DetailsPanel({
                     primary={primaryText}
                     texts={texts}
                     bibliography={solaEntityBibliography.data}
-                    editor={selectedSolaEntity.data.assigned_user}
+                    editorId={selectedSolaEntity.data.assigned_user}
                   />
                 </div>
               </div>
@@ -1001,7 +1002,7 @@ function DetailsPanel({
               setSelectedSolaEntity={setSelectedSolaEntity}
             />
             <BiblePassages passages={biblePassages} />
-            <EditedBy editor={selectedSolaEntity.data.assigned_user} />
+            <EditedBy editorId={selectedSolaEntity.data.assigned_user} />
           </div>
           <Texts
             primary={primaryText}
@@ -1040,7 +1041,7 @@ function PrintButton({
   primary,
   texts,
   bibliography,
-  editor,
+  editorId,
 }: {
   entity?: SolaEntityDetails
   authors?: Array<SolaPerson>
@@ -1049,11 +1050,15 @@ function PrintButton({
   primary?: SolaTextDetails
   texts: Array<SolaTextDetails>
   bibliography?: Array<SolaBibsonomyReference>
-  editor?: { label: string } | null
+  editorId?: { label: string } | null
 }) {
   const containerRef = useRef<HTMLDivElement>(null)
   const t = useLabels() as typeof labels[SiteLocale]
   const locale = useCurrentLocale()
+
+  const users = useSolaUsers()
+  const userId = editorId?.label
+  const editor = userId !== undefined ? users.data?.[userId] : undefined
 
   if (entity == null) return null
 
@@ -1162,9 +1167,11 @@ function PrintButton({
             })}
           </Fragment>
         ) : null}
-        {editor ? (
+        {editor !== undefined ? (
           <p>
-            <small>Edited by {editor.label}</small>
+            <small>
+              {t.editedBy} {[editor.first_name, editor.last_name].join(' ')}
+            </small>
           </p>
         ) : null}
         <p>
@@ -1499,8 +1506,16 @@ function BiblePassages({
   )
 }
 
-function EditedBy({ editor }: { editor?: SolaEntityDetails['assigned_user'] }) {
+function EditedBy({
+  editorId,
+}: {
+  editorId?: SolaEntityDetails['assigned_user']
+}) {
   const t = useLabels() as typeof labels[SiteLocale]
+
+  const users = useSolaUsers()
+  const userId = editorId?.label
+  const editor = userId !== undefined ? users.data?.[userId] : undefined
 
   if (editor == null) return null
 
@@ -1509,7 +1524,9 @@ function EditedBy({ editor }: { editor?: SolaEntityDetails['assigned_user'] }) {
       <h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
         {t.editedBy}
       </h3>
-      <div className="text-sm text-gray-700">{editor.label}</div>
+      <div className="text-sm text-gray-700">
+        {[editor.first_name, editor.last_name].join(' ')}
+      </div>
     </div>
   )
 }
