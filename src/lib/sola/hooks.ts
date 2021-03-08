@@ -1,5 +1,5 @@
 import { useRouter } from 'next/router'
-import { useCallback, useEffect, useMemo, useState } from 'react'
+import { useCallback, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
 
 import type {
@@ -183,8 +183,6 @@ export function useSolaSelectedEntity() {
   const router = useRouter()
   const locale = useCurrentLocale()
 
-  const [selected, setSelected] = useState<SolaSelectedEntity | null>(null)
-
   const setSelectedSolaEntity = useCallback(
     function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
       if (entity !== null) {
@@ -193,28 +191,28 @@ export function useSolaSelectedEntity() {
           shallow: true,
         })
       } else {
-        const { id: _, type: __, ...query } = router.query
-        router.push({ query }, undefined, { shallow: true })
+        const { id, type, ...query } = router.query
+        if (id !== undefined || type !== undefined) {
+          router.push({ query }, undefined, { shallow: true })
+        }
       }
     },
     [router],
   )
 
-  useEffect(() => {
+  const selected: SolaSelectedEntity | null = useMemo(() => {
     if (router.isReady) {
       const { query } = router
       const id = getQueryParam(query.id, false, Number)
       if (id !== undefined && id > 0) {
         const type = getQueryParam(query.type, false, capitalize)
         if (type !== undefined && isSolaEntityType(type)) {
-          setSelected({ id, type })
-        } else {
-          setSelected(null)
+          return { id, type }
         }
-      } else {
-        setSelected(null)
       }
     }
+
+    return null
   }, [router])
 
   const selectedSolaEntity = useQuery<SolaEntityDetails>(

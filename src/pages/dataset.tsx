@@ -488,6 +488,12 @@ function ContentPanel({
     selectedSolaEntity.data,
   )
 
+  /** Reset detail view when filter set changes. */
+  useEffect(() => {
+    setSelectedSolaEntity(null)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [filter])
+
   const isLoadingInitialData =
     solaEntities.events.status === 'loading' ||
     solaEntities.institutions.status === 'loading' ||
