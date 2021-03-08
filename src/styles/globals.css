@@ -58,7 +58,12 @@ mark {
   grid-template-columns: var(--sidepanel-width, 256px) 1fr;
   grid-template-rows: var(--visualization-height, 400px) 1fr;
   grid-template-areas: 'panel visualization' 'panel details';
-  max-height: calc(100vh - var(--header-height, 60px));
+}
+
+@screen lg {
+  .main-panel {
+    max-height: calc(100vh - var(--header-height, 60px));
+  }
 }
 
 .details-panel {
