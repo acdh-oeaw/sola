@@ -187,10 +187,15 @@ export function useSolaSelectedEntity() {
 
   const setSelectedSolaEntity = useCallback(
     function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
-      const { id, type } = entity ?? {}
-      router.push({ query: { ...router.query, id, type } }, undefined, {
-        shallow: true,
-      })
+      if (entity !== null) {
+        const { id, type } = entity
+        router.push({ query: { ...router.query, id, type } }, undefined, {
+          shallow: true,
+        })
+      } else {
+        const { id: _, type: __, ...query } = router.query
+        router.push({ query }, undefined, { shallow: true })
+      }
     },
     [router],
   )
@@ -203,7 +208,11 @@ export function useSolaSelectedEntity() {
         const type = getQueryParam(query.type, false, capitalize)
         if (type !== undefined && isSolaEntityType(type)) {
           setSelected({ id, type })
+        } else {
+          setSelected(null)
         }
+      } else {
+        setSelected(null)
       }
     }
   }, [router])
