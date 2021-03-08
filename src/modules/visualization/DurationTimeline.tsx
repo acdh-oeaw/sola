@@ -89,8 +89,8 @@ export function DurationTimeline({
   }
 
   const range = maxDate - minDate
-  const paddingLeft = Math.min(startDate.blur / range, 0.5)
-  const paddingRight = 1 - Math.min(endDate.blur / range, 0.5)
+  const offsetLeft = range <= 0 ? 0 : Math.min(startDate.blur / range, 0.5)
+  const offsetRight = range <= 0 ? 1 : 1 - Math.min(endDate.blur / range, 0.5)
 
   return (
     <div ref={wrapperRef} className="absolute inset-0">
@@ -98,19 +98,19 @@ export function DurationTimeline({
         <defs>
           <linearGradient id="fade-to-right" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="hsl(0, 0%, 56%)" />
-            <stop offset={paddingRight} stopColor="hsl(0, 0%, 56%)" />
+            <stop offset={offsetRight} stopColor="hsl(0, 0%, 56%)" />
             <stop offset="1" stopColor="hsl(0, 0%, 100%)" />
           </linearGradient>
           <linearGradient id="fade-to-left" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="hsl(0, 0%, 100%)" />
-            <stop offset={paddingLeft} stopColor="hsl(0, 0%, 56%)" />
+            <stop offset={offsetLeft} stopColor="hsl(0, 0%, 56%)" />
             <stop offset="1" stopColor="hsl(0, 0%, 56%)" />
           </linearGradient>
           <linearGradient id="fade-to-both" x1="0" y1="0" x2="1" y2="0">
             <stop offset="0" stopColor="hsl(0, 0%, 100%)" />
-            <stop offset={paddingLeft} stopColor="hsl(0, 0%, 56%)" />
+            <stop offset={offsetLeft} stopColor="hsl(0, 0%, 56%)" />
             {/* <stop offset="0.5" stopColor="hsl(0, 0%, 56%)" /> */}
-            <stop offset={paddingRight} stopColor="hsl(0, 0%, 56%)" />
+            <stop offset={offsetRight} stopColor="hsl(0, 0%, 56%)" />
             <stop offset="1" stopColor="hsl(0, 0%, 100%)" />
           </linearGradient>
         </defs>
