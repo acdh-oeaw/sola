@@ -1558,10 +1558,17 @@ function Texts({
     id: text.kind.id,
     title: text.kind.label,
     children: (
-      <div
-        className="leading-6 whitespace-pre-wrap"
-        dangerouslySetInnerHTML={{ __html: text.text }}
-      />
+      <Fragment>
+        <div
+          className="leading-6 whitespace-pre-wrap"
+          dangerouslySetInnerHTML={{ __html: text.text }}
+        />
+        <style jsx global>{`
+          mark[data-entity-class='PassagePublication'] {
+            background-color: #f9a8d4; /* bg-pink-300 */
+          }
+        `}</style>
+      </Fragment>
     ),
   }))
   if (bibliography !== undefined && bibliography.length > 0) {
