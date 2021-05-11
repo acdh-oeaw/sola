@@ -1565,10 +1565,10 @@ function Texts({
         />
         <style jsx global>{`
           mark {
-            background-color: #dbeafe; /* bg-blue-100 */
+            background-color: #fce7f3; /* bg-pink-100 */
           }
           mark[data-entity-class='PassagePublication'] {
-            background-color: #fce7f3; /* bg-pink-100 */
+            background-color: #dbeafe; /* bg-blue-100 */
           }
         `}</style>
       </Fragment>
