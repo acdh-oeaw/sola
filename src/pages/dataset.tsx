@@ -1564,8 +1564,11 @@ function Texts({
           dangerouslySetInnerHTML={{ __html: text.text }}
         />
         <style jsx global>{`
+          mark {
+            background-color: #dbeafe; /* bg-blue-100 */
+          }
           mark[data-entity-class='PassagePublication'] {
-            background-color: #f9a8d4; /* bg-pink-300 */
+            background-color: #fce7f3; /* bg-pink-100 */
           }
         `}</style>
       </Fragment>
