@@ -40,6 +40,7 @@ import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
 import { getQueryParam } from '@/lib/url/getQueryParam'
 import { capitalize } from '@/lib/util/capitalize'
+import bibleBooks from '~/config/bible.json'
 
 /** No entitiy type has more than 1000 entries. */
 const defaultQuery = { limit: 1000 }
@@ -477,6 +478,21 @@ export function useSolaPassageMetadata(
           ) {
             return
           }
+          const label = [
+            /**
+             * The backend lowercases bible book ref, but we want to display correctly capitalized
+             * bible book names. Instead of a string lookup on the frontend, the backend just should
+             * not touch capitalization at all!
+             */
+            // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+            (bibleBooks as Record<string, string>)[result.bible_book_ref!] ??
+              result.bible_book_ref,
+            [result.bible_chapter_ref, result.bible_verse_ref]
+              .filter(Boolean)
+              .join(':'),
+          ]
+            .filter(Boolean)
+            .join(' ')
           const reference = [
             result.bible_book_ref,
             [result.bible_chapter_ref, result.bible_verse_ref]
@@ -487,7 +503,7 @@ export function useSolaPassageMetadata(
             .join('.')
           const url = new URL('https://stepbible.org')
           url.searchParams.set('q', `reference=${reference}`)
-          map[reference] = String(url)
+          map[label] = String(url)
         })
         return map
       },
