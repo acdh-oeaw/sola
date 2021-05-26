@@ -1493,7 +1493,7 @@ function BiblePassages({
             <li className="min-w-0 mb-1 mr-1" key={reference}>
               <Badge
                 variant="tight"
-                className="inline-block max-w-full font-medium transition bg-pink-300"
+                className="inline-block max-w-full font-medium transition bg-blue-300"
               >
                 <a
                   className="rounded px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
