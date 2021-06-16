@@ -1558,20 +1558,10 @@ function Texts({
     id: text.kind.id,
     title: text.kind.label,
     children: (
-      <Fragment>
-        <div
-          className="leading-6 whitespace-pre-wrap"
-          dangerouslySetInnerHTML={{ __html: text.text }}
-        />
-        <style jsx global>{`
-          mark {
-            background-color: #fce7f3; /* bg-pink-100 */
-          }
-          mark[data-entity-class='PassagePublication'] {
-            background-color: #dbeafe; /* bg-blue-100 */
-          }
-        `}</style>
-      </Fragment>
+      <div
+        className="leading-6 whitespace-pre-wrap"
+        dangerouslySetInnerHTML={{ __html: text.text }}
+      />
     ),
   }))
   if (bibliography !== undefined && bibliography.length > 0) {
@@ -1600,6 +1590,14 @@ function Texts({
           {(item) => <TabItem title={item.title}>{item.children}</TabItem>}
         </Tabs>
       ) : null}
+      <style jsx global>{`
+        mark {
+          background-color: #fce7f3; /* bg-pink-100 */
+        }
+        mark[data-entity-class='PassagePublication'] {
+          background-color: #dbeafe; /* bg-blue-100 */
+        }
+      `}</style>
     </div>
   )
 }
