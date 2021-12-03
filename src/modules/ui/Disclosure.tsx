@@ -39,6 +39,7 @@ export function Disclosure({
           className,
         )}
         onClick={toggleOpen}
+        type="button"
       >
         <Label as="span" className={className}>
           {title}

@@ -746,7 +746,10 @@ function ActiveFilterList({
                   <TooltipTrigger
                     tooltip={`${t.filteredBy} ${t.title}: ${name}`}
                   >
-                    <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                    <button
+                      type="button"
+                      className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                    >
                       {name}
                     </button>
                   </TooltipTrigger>
@@ -775,7 +778,10 @@ function ActiveFilterList({
                           <TooltipTrigger
                             tooltip={`${t.filteredBy} ${t.authors[0]}: ${name}`}
                           >
-                            <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                            <button
+                              type="button"
+                              className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                            >
                               {name}
                             </button>
                           </TooltipTrigger>
@@ -816,7 +822,10 @@ function ActiveFilterList({
                           <TooltipTrigger
                             tooltip={`${t.filteredBy} ${t.entityType.Publication[0]}: ${name}`}
                           >
-                            <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                            <button
+                              type="button"
+                              className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                            >
                               {name}
                             </button>
                           </TooltipTrigger>
@@ -857,7 +866,10 @@ function ActiveFilterList({
                           <TooltipTrigger
                             tooltip={`${t.filteredBy} ${t.topics[0]}: ${name}`}
                           >
-                            <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                            <button
+                              type="button"
+                              className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                            >
                               {name}
                             </button>
                           </TooltipTrigger>
@@ -898,7 +910,10 @@ function ActiveFilterList({
                           <TooltipTrigger
                             tooltip={`${t.filteredBy} ${t.types[0]}: ${name}`}
                           >
-                            <button className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400">
+                            <button
+                              type="button"
+                              className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                            >
                               {name}
                             </button>
                           </TooltipTrigger>
@@ -1082,6 +1097,7 @@ function CopyLinkButton() {
         const url = new URL(router.asPath, baseUrl)
         navigator.clipboard.writeText(String(url))
       }}
+      type="button"
     >
       <LinkIcon />
       <span>{t.copyLink}</span>
@@ -1237,6 +1253,7 @@ function PrintButton({
       <button
         className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
         onClick={print}
+        type="button"
       >
         <DocumentIcon />
         <span>{t.printDocument}</span>
@@ -1293,6 +1310,7 @@ function Authors({
                     type: 'Person',
                   })
                 }}
+                type="button"
               >
                 {author.name}
               </button>
@@ -1394,6 +1412,7 @@ function PassageProperties({
                               topics: [topic.id],
                             })
                           }
+                          type="button"
                         >
                           {topic.label}
                         </button>
@@ -1424,6 +1443,7 @@ function PassageProperties({
                               types: [kind.id],
                             })
                           }
+                          type="button"
                         >
                           {kind.label}
                         </button>
@@ -1505,6 +1525,7 @@ function Relations({
                                 type: relation.related_entity.type,
                               })
                             }}
+                            type="button"
                           >
                             {relation.related_entity.label}
                           </button>

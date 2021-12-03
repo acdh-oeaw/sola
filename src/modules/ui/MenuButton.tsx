@@ -48,6 +48,7 @@ export function MenuButton<T extends object>(
           'flex items-center justify-between px-4 py-2 space-x-1 transition rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-gray-100',
           state.isOpen && 'bg-gray-100',
         )}
+        type="button"
       >
         {props.label}
       </button>
