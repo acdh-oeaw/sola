@@ -37,6 +37,7 @@ import {
   useSolaPassageMetadata,
   useSolaPassagesFilter,
   useSolaPassagesFilterOptionsTree,
+  useSolaPassagesSearchTerm,
   useSolaSelectedEntity,
   useSolaTexts,
   useSolaUsers,
@@ -88,6 +89,7 @@ export const labels = {
       'Please select an entity in the timeline above to view details.',
     authors: ['Author', 'Authors'],
     properties: 'Properties',
+    search: 'Search',
     title: 'Title',
     topics: ['Topic', 'Topics'],
     types: ['Type', 'Types'],
@@ -123,6 +125,7 @@ export const labels = {
       'Bitte Punkt in der Visualisierung auswählen, um Details zu sehen.',
     authors: ['AutorIn', 'AutorInnen'],
     properties: 'Eigenschaften',
+    search: 'Suchen',
     title: 'Titel',
     topics: ['Thema', 'Themen'],
     types: ['Gattung', 'Gattungen'],
@@ -192,6 +195,7 @@ export default function DatasetPage(props: DatasetPageProps): JSX.Element {
  * Page container with shared page-level data requirements.
  */
 function Dashboard(): JSX.Element {
+  const { searchTerm, setSearchTerm } = useSolaPassagesSearchTerm()
   const { solaPassagesFilter, setSolaPassagesFilter } = useSolaPassagesFilter()
 
   return (
@@ -199,10 +203,14 @@ function Dashboard(): JSX.Element {
       <FilterPanel
         filter={solaPassagesFilter}
         setFilter={setSolaPassagesFilter}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
       />
       <ContentPanel
         filter={solaPassagesFilter}
         setFilter={setSolaPassagesFilter}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
       />
     </main>
   )
@@ -214,9 +222,13 @@ function Dashboard(): JSX.Element {
 function FilterPanel({
   filter,
   setFilter,
+  searchTerm,
+  setSearchTerm,
 }: {
   filter: SolaPassagesFilter
   setFilter: (filter: SolaPassagesFilter) => void
+  searchTerm: string | undefined
+  setSearchTerm: (searchTerm: string | undefined) => void
 }) {
   const t = useLabels() as typeof labels[SiteLocale]
 
@@ -244,6 +256,20 @@ function FilterPanel({
       setTitle('')
     }
   }, [filter.name])
+
+  const [searchTermInput, setSearchTermInput] = useState(searchTerm ?? '')
+  const debouncedSearchTermInput = useDebouncedData(searchTermInput.trim(), 150)
+
+  useEffect(() => {
+    setSearchTerm(debouncedSearchTermInput)
+  }, [debouncedSearchTermInput, setSearchTerm])
+
+  useEffect(() => {
+    /** Clear text input. */
+    if (searchTerm === undefined) {
+      setSearchTermInput('')
+    }
+  }, [searchTerm])
 
   const sortedAuthors = useSortedData(authors.data, 'name')
   const sortedPublications = useSortedData(publications.data, 'name')
@@ -291,13 +317,20 @@ function FilterPanel({
                 topics: undefined,
                 types: undefined,
               })
+              setSearchTerm(undefined)
             }}
           />
         </div>
-        <TextField
+        {/* <TextField
           label={t.title}
           value={title}
           onChange={setTitle}
+          className="transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+        /> */}
+        <TextField
+          label={t.search}
+          value={searchTermInput}
+          onChange={setSearchTermInput}
           className="transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
         />
         <hr className="border-gray-500" />
@@ -477,9 +510,13 @@ function PassageTopicListBox({
 function ContentPanel({
   filter,
   setFilter,
+  searchTerm,
+  setSearchTerm,
 }: {
   filter: SolaPassagesFilter
   setFilter: (filter: SolaPassagesFilter) => void
+  searchTerm: string | undefined
+  setSearchTerm: (searchTerm: string | undefined) => void
 }) {
   const solaEntities = useSolaEntities()
 
@@ -519,6 +556,8 @@ function ContentPanel({
         solaEntities={solaEntities}
         filter={filter}
         setFilter={setFilter}
+        searchTerm={searchTerm}
+        setSearchTerm={setSearchTerm}
         selectedSolaEntity={selectedSolaEntity}
         setSelectedSolaEntity={setSelectedSolaEntity}
         selectedSolaEntityRelations={selectedSolaEntityRelations}
@@ -541,6 +580,8 @@ function VisualizationPanel({
   solaEntities,
   filter,
   setFilter,
+  searchTerm,
+  setSearchTerm,
   selectedSolaEntity,
   setSelectedSolaEntity,
   selectedSolaEntityRelations,
@@ -555,13 +596,15 @@ function VisualizationPanel({
   }
   filter: SolaPassagesFilter
   setFilter: (filter: SolaPassagesFilter) => void
+  searchTerm: string | undefined
+  setSearchTerm: (searchterm: string | undefined) => void
   selectedSolaEntity: QueryObserverResult<SolaEntityDetails, unknown>
   setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void
   selectedSolaEntityRelations: Record<SolaEntityType, Array<SolaEntityRelation>>
 }) {
   const t = useLabels() as typeof labels[SiteLocale]
 
-  const filteredSolaPassages = useSolaFilteredPassages(filter)
+  const filteredSolaPassages = useSolaFilteredPassages(filter, searchTerm)
 
   const countedSolaEvents = count(solaEntities.events.data)
   const countedSolaInstitutions = count(solaEntities.institutions.data)
@@ -578,7 +621,7 @@ function VisualizationPanel({
       <div className="flex flex-col justify-between px-6 pt-6 pb-4 space-y-4 md:space-y-0 md:flex-row md:space-x-4">
         <div className="flex items-center space-x-2">
           <h1 className="text-2xl font-bold">{t.h1}</h1>
-          {filteredSolaPassages.status === 'loading' ? (
+          {filteredSolaPassages.isLoading ? (
             <Spinner className="w-6 h-6" />
           ) : (
             <div className="w-6 h-6" />
@@ -627,7 +670,12 @@ function VisualizationPanel({
               </span>
             </li>
           </ul>
-          <ActiveFilterList filter={filter} setFilter={setFilter} />
+          <ActiveFilterList
+            filter={filter}
+            setFilter={setFilter}
+            searchTerm={searchTerm}
+            setSearchTerm={setSearchTerm}
+          />
         </div>
       </div>
       <div className="relative flex-1 mx-6">
@@ -650,6 +698,8 @@ function ActiveFilterList({
 }: {
   filter: SolaPassagesFilter
   setFilter: (filter: SolaPassagesFilter) => void
+  searchTerm: string | undefined
+  setSearchTerm: (searchTerm: string | undefined) => void
 }) {
   const t = useLabels() as typeof labels[SiteLocale]
 

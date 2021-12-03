@@ -9,6 +9,7 @@ import type {
   SolaEvent,
   SolaInstitution,
   SolaPassage,
+  SolaPassageSearchResult,
   SolaPerson,
   SolaPlace,
   SolaPublication,
@@ -40,10 +41,11 @@ export interface VisualizationProps {
     places: QueryObserverResult<Record<number, SolaPlace>, unknown>
     publications: QueryObserverResult<Record<number, SolaPublication>, unknown>
   }
-  filteredSolaPassages: QueryObserverResult<
-    Record<number, SolaPassage>,
-    unknown
-  >
+  filteredSolaPassages: {
+    error: unknown
+    isLoading: boolean
+    data: Record<number, SolaPassageSearchResult> | undefined
+  }
   selectedSolaEntity: QueryObserverResult<SolaEntityDetails, unknown>
   setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void
   selectedSolaEntityRelations: Record<SolaEntityType, Array<SolaEntityRelation>>
@@ -228,7 +230,7 @@ function Alternate({
   filteredSolaPassages,
   setSelectedSolaEntity,
 }: {
-  filteredSolaPassages?: Record<number, SolaPassage>
+  filteredSolaPassages?: Record<number, SolaPassageSearchResult>
   setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void
 }) {
   if (filteredSolaPassages === undefined) return null

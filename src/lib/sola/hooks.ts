@@ -9,6 +9,7 @@ import type {
   SolaEntityRelation,
   SolaEntityType,
   SolaPassageDetails,
+  SolaPassageSearchResult,
   SolaTextDetails,
   SolaUser,
   SolaVocabulary,
@@ -33,6 +34,7 @@ import {
   getSolaTextById,
   getSolaTextTypes,
   getSolaUsers,
+  searchSolaPassages,
 } from '@/api/sola/client'
 import { useHierarchicalData } from '@/lib/data/useHierarchicalData'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
@@ -105,6 +107,25 @@ export function useSolaEntities() {
 }
 
 /**
+ * Sets SOLA passages search term.
+ */
+export function useSolaPassagesSearchTerm() {
+  const [searchTerm, setSearchTerm] = useState<string | undefined>()
+
+  const setSolaPassagesSearch = useCallback(function setSolaPassagesSearch(
+    searchTerm: string | undefined,
+  ) {
+    setSearchTerm(searchTerm)
+  },
+  [])
+
+  return {
+    searchTerm,
+    setSearchTerm: setSolaPassagesSearch,
+  }
+}
+
+/**
  * Sets SOLA passages filter.
  */
 export function useSolaPassagesFilter() {
@@ -124,9 +145,13 @@ export function useSolaPassagesFilter() {
 }
 
 /**
- * Fetches SOLA passages matching the currently active filter.
+ * Fetches SOLA passages matching the currently active filter,
+ * and merges in search results retuned by the free-form search.
  */
-export function useSolaFilteredPassages(filter: SolaPassagesFilter) {
+export function useSolaFilteredPassages(
+  filter: SolaPassagesFilter,
+  searchTerm: string | undefined = '',
+) {
   const locale = useCurrentLocale()
 
   const { person, passage } = useSolaRelationTypes()
@@ -151,7 +176,7 @@ export function useSolaFilteredPassages(filter: SolaPassagesFilter) {
     })
   }, [filter, person, passage])
 
-  const passages = useQuery(
+  const filteredPassages = useQuery(
     ['getSolaPassages', locale, query],
     () => {
       return getSolaPassages({ query: { ...defaultQuery, ...query }, locale })
@@ -159,7 +184,43 @@ export function useSolaFilteredPassages(filter: SolaPassagesFilter) {
     { select: mapResultsById },
   )
 
-  return passages
+  const passagesSearchResults = useQuery(
+    ['searchSolaPassages', locale, searchTerm],
+    () => {
+      return searchSolaPassages({
+        query: { ...defaultQuery, search: searchTerm },
+        locale,
+      })
+    },
+    { select: mapResultsById },
+  )
+
+  const passagesSearchResultsData = passagesSearchResults.data
+  const filteredPassagesData = filteredPassages.data as typeof passagesSearchResultsData
+
+  const passages = useMemo(() => {
+    if (filteredPassagesData == null) return passagesSearchResultsData
+    if (passagesSearchResultsData == null) return filteredPassagesData
+
+    const merged = {} as typeof passagesSearchResultsData
+
+    Object.entries(filteredPassagesData).forEach(([id, entry]) => {
+      // @ts-expect-error Number as index
+      if (passagesSearchResultsData[id] != null) {
+        // @ts-expect-error Number as index
+        merged[id] = entry
+      }
+    })
+
+    return merged
+  }, [filteredPassagesData, passagesSearchResultsData])
+
+  return {
+    data: passages,
+    isLoading: filteredPassages.isLoading || passagesSearchResults.isLoading,
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
+    error: filteredPassages.error || passagesSearchResults.error,
+  }
 }
 
 /**
@@ -689,9 +750,9 @@ function mapById<T extends { id: number }>(entities: Array<T>) {
 /**
  * Removes pagination info and maps entities by id.
  */
-function mapResultsById<T extends SolaEntity | SolaVocabulary>(
-  data: Results<T>,
-) {
+function mapResultsById<
+  T extends SolaEntity | SolaVocabulary | SolaPassageSearchResult
+>(data: Results<T>) {
   return mapById(data.results)
 }
 

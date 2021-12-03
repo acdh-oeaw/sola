@@ -188,7 +188,13 @@ interface GetByIdRequestConfig<
 }
 
 export interface Results<
-  T extends SolaEntity | SolaRelation | SolaText | SolaVocabulary | SolaUser
+  T extends
+    | SolaEntity
+    | SolaRelation
+    | SolaText
+    | SolaVocabulary
+    | SolaUser
+    | SolaPassageSearchResult
 > {
   limit: number
   offset: number
@@ -196,6 +202,45 @@ export interface Results<
   next: URLString | null
   previous: URLString | null
   results: Array<T>
+}
+
+export type SolaPassageSearchResult = {
+  id: number
+  type: SolaEntityType
+  entity_type: SolaEntityType
+  name: string
+  primary_date: string | null
+  end_date: string | null
+  end_date_written: string | null
+  start_date: string | null
+  start_date_written: string | null
+  publication: {
+    id: number
+    name: string
+  }
+}
+export type SolaPassagesSearchResults = Results<SolaPassageSearchResult>
+export async function searchSolaPassages({
+  query,
+  locale,
+  options,
+}: GetAllRequestConfig): Promise<SolaPassagesSearchResults> {
+  const data = await request<SolaPassagesSearchResults>({
+    path: '/apis/api2/search/',
+    baseUrl,
+    query,
+    options,
+  })
+  return {
+    ...data,
+    results: (data.results.map((result) =>
+      addEntityType(
+        (result as unknown) as SolaEntityBase,
+        result.entity_type,
+        locale,
+      ),
+    ) as unknown) as Array<SolaPassageSearchResult>,
+  }
 }
 
 export async function getSolaEvents({
@@ -233,7 +278,6 @@ export async function getSolaInstitutions({
   }
 }
 type GetSolaPassages = GetAllRequestConfig<{
-  name__icontains?: string
   kind__id__in?: Array<number>
   topic__id__in?: Array<number>
   publication_set__id__in?: Array<number>
@@ -572,10 +616,9 @@ export async function getSolaUsers({
 /**
  * Until the backend implements proper i18n, manually map the `name` field.
  */
-function localise<T extends SolaEntityBase | SolaVocabulary>(
-  entity: T,
-  locale: SiteLocale,
-) {
+function localise<
+  T extends SolaEntityBase | SolaVocabulary | SolaPassageSearchResult
+>(entity: T, locale: SiteLocale) {
   if (locale === 'de') return entity
   const nameEnglish = (entity as { name_english?: string | null }).name_english
   if (nameEnglish != null && nameEnglish.length > 0) {
@@ -587,7 +630,7 @@ function localise<T extends SolaEntityBase | SolaVocabulary>(
 /**
  * Adds entity type and localises entity label.
  */
-function addEntityType<T extends SolaEntityBase>(
+function addEntityType<T extends SolaEntityBase | SolaPassageSearchResult>(
   entity: T,
   type: SolaEntityType,
   locale: SiteLocale,
