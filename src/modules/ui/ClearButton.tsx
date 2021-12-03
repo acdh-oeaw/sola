@@ -21,7 +21,7 @@ export function ClearButton(props: ClearButtonProps): JSX.Element {
   const locale = useCurrentLocale()
 
   return (
-    <button aria-label={labels[locale].clear} {...props}>
+    <button aria-label={labels[locale].clear} type="button" {...props}>
       <Clear />
     </button>
   )
