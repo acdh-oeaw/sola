@@ -6,6 +6,8 @@ import { getCurrentLocale } from '@/lib/i18n/getCurrentLocale'
 
 export function useCurrentLocale(): SiteLocale {
   const router = useRouter()
-  const locale = useMemo(() => getCurrentLocale(router.locale), [router.locale])
+  const locale = useMemo(() => {
+    return getCurrentLocale(router.locale)
+  }, [router.locale])
   return locale
 }

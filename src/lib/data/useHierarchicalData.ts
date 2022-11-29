@@ -11,7 +11,9 @@ export function useHierarchicalData<T>(
   map: Record<string, T> | undefined,
   getParentId: (entity: T) => number | null,
 ): Array<Node<T>> {
-  return useMemo(() => createTree(map, getParentId), [map, getParentId])
+  return useMemo(() => {
+    return createTree(map, getParentId)
+  }, [map, getParentId])
 }
 
 function createTree<T>(
@@ -23,16 +25,13 @@ function createTree<T>(
   if (map === undefined) return roots
 
   /** Clone items, because they will be mutated. */
-  const items = Object.entries(map).reduce<Record<string, Node<T>>>(
-    (acc, [id, item]) => {
-      acc[id] = {
-        ...item,
-        children: new Set<Node<T>>(),
-      }
-      return acc
-    },
-    {},
-  )
+  const items = Object.entries(map).reduce<Record<string, Node<T>>>((acc, [id, item]) => {
+    acc[id] = {
+      ...item,
+      children: new Set<Node<T>>(),
+    }
+    return acc
+  }, {})
 
   Object.values(items).forEach((item) => {
     const parentId = getParentId(item)

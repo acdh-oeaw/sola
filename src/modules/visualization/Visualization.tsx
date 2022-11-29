@@ -79,13 +79,7 @@ export function Visualization({
       {
         label: labels[locale].other,
         type: 'Other',
-        data: [
-          ...events,
-          ...institutions,
-          ...persons,
-          ...places,
-          ...publications,
-        ],
+        data: [...events, ...institutions, ...persons, ...places, ...publications],
       },
     ]
   }, [events, institutions, passages, persons, places, publications, locale])
@@ -117,10 +111,7 @@ export function Visualization({
   const isNodeSelected = useCallback(
     function isNodeSelected(node: Node) {
       if (selectedSolaEntity.data === undefined) return false
-      if (
-        node.id === selectedSolaEntity.data.id &&
-        node.type === selectedSolaEntity.data.type
-      ) {
+      if (node.id === selectedSolaEntity.data.id && node.type === selectedSolaEntity.data.type) {
         return true
       }
       return false
@@ -134,7 +125,9 @@ export function Visualization({
     const map: Record<SolaEntityType, Set<number>> = {}
     Object.entries(selectedSolaEntityRelations).forEach(([type, relations]) => {
       map[type as SolaEntityType] = new Set(
-        relations.map((relation) => relation.related_entity.id),
+        relations.map((relation) => {
+          return relation.related_entity.id
+        }),
       )
     })
     return map
@@ -206,13 +199,13 @@ export function Visualization({
 }
 
 function useNodes<T extends SolaEntity>(map?: Record<number, T>) {
-  return useMemo(
-    () =>
-      Object.values(map ?? {})
-        .filter(hasPrimaryDate)
-        .map((entity) => createNode(entity, colors.text[entity.type])),
-    [map],
-  )
+  return useMemo(() => {
+    return Object.values(map ?? {})
+      .filter(hasPrimaryDate)
+      .map((entity) => {
+        return createNode(entity, colors.text[entity.type])
+      })
+  }, [map])
 }
 
 function hasPrimaryDate(entity: SolaEntity) {

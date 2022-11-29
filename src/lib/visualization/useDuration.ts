@@ -15,9 +15,7 @@ interface DatePoint {
 /**
  * Returns min and max dates, and a blur range if a date is inexact.
  */
-export function useDuration(
-  entity: SolaEntityDetails,
-): {
+export function useDuration(entity: SolaEntityDetails): {
   beginAxis: number
   endAxis: number
   minDate: number
@@ -60,9 +58,7 @@ export function useDuration(
      * add a default padding.
      */
     if (startDates.length >= 2) {
-      const blur =
-        Math.abs(Math.max(...startDates) - Math.min(...startDates)) ||
-        range * padding
+      const blur = Math.abs(Math.max(...startDates) - Math.min(...startDates)) || range * padding
       return { date: minDate, blur }
     }
 
@@ -83,9 +79,7 @@ export function useDuration(
      * add a default padding.
      */
     if (endDates.length >= 2) {
-      const blur =
-        Math.abs(Math.max(...endDates) - Math.min(...endDates)) ||
-        range * padding
+      const blur = Math.abs(Math.max(...endDates) - Math.min(...endDates)) || range * padding
       return { date: maxDate, blur }
     }
 
@@ -112,6 +106,10 @@ function isNonNull<T>(value: T | null | undefined): value is T {
 function parseDates(maybeDates: Array<string | null>) {
   return maybeDates
     .filter(isNonNull)
-    .map((d) => new Date(d).getTime())
-    .filter((d) => !Number.isNaN(d))
+    .map((d) => {
+      return new Date(d).getTime()
+    })
+    .filter((d) => {
+      return !Number.isNaN(d)
+    })
 }

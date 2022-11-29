@@ -1,12 +1,12 @@
-site_url: https://sola-preview.acdh-dev.oeaw.ac.at/
+site_url: https://sola.acdh.oeaw.ac.at
 load_config_file: true
 local_backend: true
 backend:
-  name: gitlab
-  repo: acdh-oeaw/sola/sola-preview
+  name: github
+  repo: acdh-oeaw/sola
   branch: main
-  auth_type: implicit
-  app_id: 84710241877757360c75a3099c7f09bf65c1fa29ebe6f4663672ff17694d875d
+  base_url: https://sola.acdh.oeaw.ac.at
+  auth_endpoint: /api/oauth/authorize
   squash_merges: true
   commit_messages:
     create: "content(create): {{collection}} '{{slug}}'"

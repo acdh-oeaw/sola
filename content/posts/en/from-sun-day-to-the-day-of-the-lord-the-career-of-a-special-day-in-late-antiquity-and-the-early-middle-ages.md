@@ -1,7 +1,7 @@
 ---
 title:
-  From Sun-Day to the Day of the Lord. The career of a special day in Late
-  Antiquity and the Early Middle Ages
+  From Sun-Day to the Day of the Lord. The career of a special day in Late Antiquity and the Early
+  Middle Ages
 shortTitle: "International Conference: From Sun-Day to the Day of the Lord"
 date: 2019-10-11T22:00:00.000Z
 attachments:
@@ -42,9 +42,8 @@ gallery:
 
 **Location:** Sky Lounge, Oskar Morgenstern-Platz 1, 1090 Vienna, 12th floor
 
-Organized by Univ.Prof. Dr. Uta Heil, Evangelisch-Theologische Fakultät,
-together with Nadine Pirringer and Svenja Sasse of the FWF-Project "The
-Apocryphal Sunday" (FWF-P31428).
+Organized by Univ.Prof. Dr. Uta Heil, Evangelisch-Theologische Fakultät, together with Nadine
+Pirringer and Svenja Sasse of the FWF-Project "The Apocryphal Sunday" (FWF-P31428).
 
 With contributions by:
 

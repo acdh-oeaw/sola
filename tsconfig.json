@@ -1,38 +1,18 @@
 {
+  "extends": "@stefanprobst/tsconfig",
   "compilerOptions": {
-    "target": "esnext",
-    "lib": ["dom", "dom.iterable", "esnext"],
-    "allowJs": true,
-    "skipLibCheck": true,
-    "strict": true,
-    "noImplicitReturns": true,
-    "noUncheckedIndexedAccess": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
-    "forceConsistentCasingInFileNames": true,
-    "noEmit": true,
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "isolatedModules": true,
-    "jsx": "preserve",
-    "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
     "baseUrl": ".",
+    "exactOptionalPropertyTypes": false,
     "paths": {
-      "@/*": ["src/*"],
-      "~/*": ["*"]
+      "@/*": ["./src/*"],
+      "~/*": ["./*"]
     }
   },
-  "include": [
-    "next-env.d.ts",
-    "**/*.ts",
-    "**/*.tsx",
-    "*.config.js",
-    "public/mockServiceWorker.js",
-    "stories/main.js",
-    "stories/addons/nextRouter/preset.js"
-  ],
-  "exclude": ["node_modules"]
+  "include": ["./next-env.d.ts", "./**/*.ts", "./**/*.tsx", "./*.config.mjs", "./*.config.cjs"],
+  "exclude": ["node_modules"],
+  "ts-node": {
+    "esm": true,
+    "experimentalSpecifierResolution": "node",
+    "transpileOnly": true
+  }
 }

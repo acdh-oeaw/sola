@@ -20,7 +20,6 @@ export interface ListBoxProps<T> extends AriaListBoxProps<T> {
   label?: ReactNode
 }
 
-/* eslint-disable-next-line @typescript-eslint/ban-types */
 export function ListBox<T extends object>(props: ListBoxProps<T>): JSX.Element {
   const state = useListState<T>(props)
   const ref = useRef<HTMLUListElement>(null)
@@ -28,21 +27,19 @@ export function ListBox<T extends object>(props: ListBoxProps<T>): JSX.Element {
 
   return (
     <div className="space-y-1">
-      {props.label !== undefined ? (
-        <Label {...labelProps}>{props.label}</Label>
-      ) : null}
+      {props.label !== undefined ? <Label {...labelProps}>{props.label}</Label> : null}
       <ul
         {...listBoxProps}
         ref={ref}
         className="py-1 space-y-1 overflow-y-auto text-sm bg-white rounded max-h-32"
       >
-        {[...state.collection].map((item) =>
-          item.type === 'section' ? (
+        {[...state.collection].map((item) => {
+          return item.type === 'section' ? (
             <Section key={item.key} section={item} state={state} />
           ) : (
             <Option key={item.key} item={item} state={state} />
-          ),
-        )}
+          )
+        })}
       </ul>
     </div>
   )
@@ -106,24 +103,18 @@ function Section<T>({ section, state }: SectionProps<T>) {
   return (
     <Fragment>
       {section.key !== state.collection.getFirstKey() && (
-        <li
-          {...separatorProps}
-          className="border-t border-gray-200 mx-0.5 my-1"
-        />
+        <li {...separatorProps} className="border-t border-gray-200 mx-0.5 my-1" />
       )}
       <li {...itemProps}>
         {section.rendered != null && (
-          <span
-            {...headingProps}
-            className="inline-block px-2 py-1 font-medium select-none"
-          >
+          <span {...headingProps} className="inline-block px-2 py-1 font-medium select-none">
             {section.rendered}
           </span>
         )}
         <ul {...groupProps}>
-          {[...section.childNodes].map((node) => (
-            <Option key={node.key} item={node} state={state} />
-          ))}
+          {[...section.childNodes].map((node) => {
+            return <Option key={node.key} item={node} state={state} />
+          })}
         </ul>
       </li>
     </Fragment>

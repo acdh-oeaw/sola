@@ -11,10 +11,7 @@ export interface TextFieldProps extends AriaTextFieldProps {
   className?: string
 }
 
-export function TextField({
-  className,
-  ...props
-}: TextFieldProps): JSX.Element {
+export function TextField({ className, ...props }: TextFieldProps): JSX.Element {
   const { label } = props
   const ref = useRef<HTMLInputElement>(null)
   const { labelProps, inputProps } = useTextField(props, ref)

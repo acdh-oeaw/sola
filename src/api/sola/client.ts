@@ -36,7 +36,7 @@ export interface SolaPassage extends SolaEntityBase {
 }
 export interface SolaPerson extends SolaEntityBase {
   type: 'Person'
-  gender: 'male' | 'female' | null
+  gender: 'female' | 'male' | null
 }
 export interface SolaPlace extends SolaEntityBase {
   type: 'Place'
@@ -60,17 +60,11 @@ export interface SolaEntityDetailsBase {
   relations: Array<SolaEntityRelation>
 }
 export interface SolaEventDetails extends SolaEvent, SolaEntityDetailsBase {}
-export interface SolaInstitutionDetails
-  extends SolaInstitution,
-    SolaEntityDetailsBase {}
-export interface SolaPassageDetails
-  extends SolaPassage,
-    SolaEntityDetailsBase {}
+export interface SolaInstitutionDetails extends SolaInstitution, SolaEntityDetailsBase {}
+export interface SolaPassageDetails extends SolaPassage, SolaEntityDetailsBase {}
 export interface SolaPersonDetails extends SolaPerson, SolaEntityDetailsBase {}
 export interface SolaPlaceDetails extends SolaPlace, SolaEntityDetailsBase {}
-export interface SolaPublicationDetails
-  extends SolaPublication,
-    SolaEntityDetailsBase {}
+export interface SolaPublicationDetails extends SolaPublication, SolaEntityDetailsBase {}
 
 export type SolaEntity =
   | SolaEvent
@@ -171,18 +165,16 @@ interface RequestConfig {
   locale: SiteLocale
 }
 
-interface GetAllRequestConfig<
-  T extends Record<string, unknown> = Record<string, unknown>
-> extends RequestConfig {
+interface GetAllRequestConfig<T extends Record<string, unknown> = Record<string, unknown>>
+  extends RequestConfig {
   query?: T & {
     limit?: number
     offset?: number
   }
 }
 
-interface GetByIdRequestConfig<
-  T extends Record<string, unknown> = Record<string, unknown>
-> extends RequestConfig {
+interface GetByIdRequestConfig<T extends Record<string, unknown> = Record<string, unknown>>
+  extends RequestConfig {
   id: number
   query?: T
 }
@@ -190,11 +182,11 @@ interface GetByIdRequestConfig<
 export interface Results<
   T extends
     | SolaEntity
+    | SolaPassageSearchResult
     | SolaRelation
     | SolaText
-    | SolaVocabulary
     | SolaUser
-    | SolaPassageSearchResult
+    | SolaVocabulary,
 > {
   limit: number
   offset: number
@@ -233,13 +225,9 @@ export async function searchSolaPassages({
   })
   return {
     ...data,
-    results: (data.results.map((result) =>
-      addEntityType(
-        (result as unknown) as SolaEntityBase,
-        result.entity_type,
-        locale,
-      ),
-    ) as unknown) as Array<SolaPassageSearchResult>,
+    results: data.results.map((result) => {
+      return addEntityType(result as unknown as SolaEntityBase, result.entity_type, locale)
+    }) as unknown as Array<SolaPassageSearchResult>,
   }
 }
 
@@ -257,7 +245,9 @@ export async function getSolaEvents({
   })
   return {
     ...data,
-    results: data.results.map((result) => addEntityType(result, type, locale)),
+    results: data.results.map((result) => {
+      return addEntityType(result, type, locale)
+    }),
   }
 }
 export async function getSolaInstitutions({
@@ -274,7 +264,9 @@ export async function getSolaInstitutions({
   })
   return {
     ...data,
-    results: data.results.map((result) => addEntityType(result, type, locale)),
+    results: data.results.map((result) => {
+      return addEntityType(result, type, locale)
+    }),
   }
 }
 type GetSolaPassages = GetAllRequestConfig<{
@@ -296,7 +288,9 @@ export async function getSolaPassages({
   })
   return {
     ...data,
-    results: data.results.map((result) => addEntityType(result, type, locale)),
+    results: data.results.map((result) => {
+      return addEntityType(result, type, locale)
+    }),
   }
 }
 export async function getSolaPersons({
@@ -313,13 +307,15 @@ export async function getSolaPersons({
   })
   return {
     ...data,
-    results: data.results.map((result) => ({
-      ...addEntityType(result, type, locale),
-      /**
-       * Other than all other SOLA entities, persons don't have `kind`.
-       */
-      kind: [],
-    })),
+    results: data.results.map((result) => {
+      return {
+        ...addEntityType(result, type, locale),
+        /**
+         * Other than all other SOLA entities, persons don't have `kind`.
+         */
+        kind: [],
+      }
+    }),
   }
 }
 export async function getSolaPlaces({
@@ -336,7 +332,9 @@ export async function getSolaPlaces({
   })
   return {
     ...data,
-    results: data.results.map((result) => addEntityType(result, type, locale)),
+    results: data.results.map((result) => {
+      return addEntityType(result, type, locale)
+    }),
   }
 }
 export async function getSolaPublications({
@@ -353,7 +351,9 @@ export async function getSolaPublications({
   })
   return {
     ...data,
-    results: data.results.map((result) => addEntityType(result, type, locale)),
+    results: data.results.map((result) => {
+      return addEntityType(result, type, locale)
+    }),
   }
 }
 
@@ -467,7 +467,9 @@ export async function getSolaPassageTopics({
   })
   return {
     ...data,
-    results: data.results.map((result) => localise(result, locale)),
+    results: data.results.map((result) => {
+      return localise(result, locale)
+    }),
   }
 }
 export async function getSolaPassageTypes({
@@ -483,7 +485,9 @@ export async function getSolaPassageTypes({
   })
   return {
     ...data,
-    results: data.results.map((result) => localise(result, locale)),
+    results: data.results.map((result) => {
+      return localise(result, locale)
+    }),
   }
 }
 
@@ -547,7 +551,9 @@ export async function getSolaTextTypes({
   })
   return {
     ...data,
-    results: data.results.map((result) => localise(result, locale)),
+    results: data.results.map((result) => {
+      return localise(result, locale)
+    }),
   }
 }
 
@@ -558,9 +564,7 @@ export async function getSolaPassagePublicationRelations({
   query,
   // locale,
   options,
-}: GetSolaPassagePublicationRelations): Promise<
-  Results<SolaPassagePublicationRelation>
-> {
+}: GetSolaPassagePublicationRelations): Promise<Results<SolaPassagePublicationRelation>> {
   const data = await request<Results<SolaPassagePublicationRelation>>({
     path: '/apis/api/relations/passagepublication/',
     baseUrl,
@@ -581,7 +585,7 @@ type GetSolaEntityBibliographyById = GetByIdRequestConfig<{
    * When `?attribute=[key: string]`, will return all bibsonomy references on
    * this specific attribute.
    */
-  attribute?: 'all' | 'include' | string
+  attribute?: string | 'all' | 'include'
   contenttype: SolaEntityType
 }>
 export async function getSolaEntityBibliographyById({
@@ -616,9 +620,10 @@ export async function getSolaUsers({
 /**
  * Until the backend implements proper i18n, manually map the `name` field.
  */
-function localise<
-  T extends SolaEntityBase | SolaVocabulary | SolaPassageSearchResult
->(entity: T, locale: SiteLocale) {
+function localise<T extends SolaEntityBase | SolaPassageSearchResult | SolaVocabulary>(
+  entity: T,
+  locale: SiteLocale,
+) {
   if (locale === 'de') return entity
   const nameEnglish = (entity as { name_english?: string | null }).name_english
   if (nameEnglish != null && nameEnglish.length > 0) {

@@ -2,18 +2,31 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "type": "pwa-node",
-      "request": "attach",
-      "name": "Next.js: Attach",
-      "skipFiles": ["<node_internals>/**"],
-      "port": 9229
+      "name": "Next.js: debug server-side",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"]
     },
     {
-      "type": "pwa-node",
-      "request": "attach",
-      "name": "Next.js: Attach by Process ID",
-      "skipFiles": ["<node_internals>/**"],
-      "processId": "${command:PickProcess}"
+      "name": "Next.js: debug client-side",
+      "type": "chrome",
+      "request": "launch",
+      "url": "http://localhost:3000"
+    },
+    {
+      "name": "Next.js: debug full stack",
+      "type": "node",
+      "request": "launch",
+      "cwd": "${workspaceFolder}",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "serverReadyAction": {
+        "pattern": "started server on .+, url: (https?://.+)",
+        "uriFormat": "%s",
+        "action": "debugWithChrome"
+      }
     }
   ]
 }

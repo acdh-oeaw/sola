@@ -6,12 +6,7 @@ import { scaleBand, scaleTime } from 'd3-scale'
 import { select } from 'd3-selection'
 import type { ZoomTransform } from 'd3-zoom'
 import { zoom, zoomTransform } from 'd3-zoom'
-import type {
-  ComponentPropsWithoutRef,
-  Dispatch,
-  ReactNode,
-  SetStateAction,
-} from 'react'
+import type { ComponentPropsWithoutRef, Dispatch, ReactNode, SetStateAction } from 'react'
 import { Fragment, useEffect, useRef, useState } from 'react'
 import { usePopper } from 'react-popper'
 
@@ -48,9 +43,7 @@ export function Timelines({
   const dimensions = useDimensions(wrapperRef)
   const [zoomState, setZoomState] = useState<ZoomTransform | null>(null)
 
-  const [tooltipAnchor, setTooltipAnchor] = useState<SVGCircleElement | null>(
-    null,
-  )
+  const [tooltipAnchor, setTooltipAnchor] = useState<SVGCircleElement | null>(null)
   const [tooltip, setTooltip] = useState<HTMLDivElement | null>(null)
   const [tooltipArrow, setTooltipArrow] = useState<HTMLDivElement | null>(null)
   const { styles, attributes } = usePopper(tooltipAnchor, tooltip, {
@@ -68,13 +61,21 @@ export function Timelines({
   const { width, height } = dimensions ?? {}
 
   useEffect(() => {
-    if (svgRef.current === null || width === undefined || height === undefined)
-      return
+    if (svgRef.current === null || width === undefined || height === undefined) return
 
     const svg = select(svgRef.current)
 
     // xscale extent
-    const [min, max] = extent(data.map((d) => d.data.map((d) => d.date)).flat())
+    const [min, max] = extent(
+      data
+        .map((d) => {
+          return d.data.map((d) => {
+            return d.date
+          })
+        })
+        .flat(),
+    ) as [Date, Date]
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     if (min === undefined || max === undefined) return
     const minDate = new Date(min.getFullYear() - config.timelinePadding, 0)
     const maxDate = new Date(max.getFullYear() + config.timelinePadding, 0)
@@ -84,7 +85,11 @@ export function Timelines({
       .domain([minDate, maxDate])
       .range([config.canvasMarginX, width - config.canvasMarginX])
     const yScale = scaleBand()
-      .domain(data.map((d) => d.label))
+      .domain(
+        data.map((d) => {
+          return d.label
+        }),
+      )
       .range([height - config.canvasMarginY, config.canvasMarginY])
 
     // rescale
@@ -153,18 +158,16 @@ export function Timelines({
     svg.call(zoomBehavior)
 
     // simulation data
-    const simulationData = data.flatMap((series) =>
-      series.data.map((d) => {
+    const simulationData = data.flatMap((series) => {
+      return series.data.map((d) => {
         // ensure initial node position for simulation is the actual datapoint, not [0,0]
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
         d.x = d.x ?? xScale(d.date) ?? null
-        d.y =
-          d.y ??
-          /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-          yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2 ??
-          null
+        // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-non-null-assertion
+        d.y = d.y ?? yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2 ?? null
         return d
-      }),
-    )
+      })
+    })
 
     // nodes selection
     const nodes = svg
@@ -179,27 +182,32 @@ export function Timelines({
     const simulation = forceSimulation()
       .force(
         'collide',
-        forceCollide(config.nodeRadius + config.nodePadding).strength(
-          config.collideStrength,
-        ),
+        forceCollide(config.nodeRadius + config.nodePadding).strength(config.collideStrength),
       )
       .force(
         'x',
-        forceX<Node>((d) => xScale(d.date)).strength(config.xStrength),
+        forceX<Node>((d) => {
+          return xScale(d.date)
+        }).strength(config.xStrength),
       )
       .force(
         'y',
-        forceY<Node>(
-          (d) =>
-            /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-            yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2,
-        ).strength(config.yStrength),
+        forceY<Node>((d) => {
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          return yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2
+        }).strength(config.yStrength),
       )
 
     // simulate: on tick adjust node.x and node.y
     simulation
       .on('tick', () => {
-        nodes.attr('cx', (d) => d.x ?? null).attr('cy', (d) => d.y ?? null)
+        nodes
+          .attr('cx', (d) => {
+            return d.x ?? null
+          })
+          .attr('cy', (d) => {
+            return d.y ?? null
+          })
         // fast-forward 5 ticks, to only draw every 6th tick
         simulation.tick(5)
       })
@@ -231,10 +239,7 @@ export function Timelines({
       .attr('fill', 'currentColor')
       /** Dim nodes not matching the current filter set. */
       .attr('opacity', (d) => {
-        if (
-          typeof isNodeHighlighted === 'function' &&
-          typeof isNodeSelected === 'function'
-        ) {
+        if (typeof isNodeHighlighted === 'function' && typeof isNodeSelected === 'function') {
           if (!isNodeHighlighted(d) && !isNodeSelected(d)) {
             return config.nodeHighlightOpacity
           }
@@ -257,16 +262,7 @@ export function Timelines({
         element.removeAttribute('aria-describedby')
         setTooltipAnchor(null)
       })
-  }, [
-    svgRef,
-    width,
-    height,
-    data,
-    isNodeSelected,
-    isNodeHighlighted,
-    onNodeClick,
-    zoomState,
-  ])
+  }, [svgRef, width, height, data, isNodeSelected, isNodeHighlighted, onNodeClick, zoomState])
 
   return (
     <div aria-hidden ref={wrapperRef} className="absolute inset-0">
@@ -291,14 +287,14 @@ export function Timelines({
       </svg>
       <Tooltip
         setTooltip={setTooltip}
-        style={styles.popper}
-        {...attributes.popper}
+        style={styles['popper']}
+        {...attributes['popper']}
         isVisible={tooltipAnchor !== null}
       >
         <TooltipArrow
           setTooltipArrow={setTooltipArrow}
-          style={styles.arrow}
-          {...attributes.arrow}
+          style={styles['arrow']}
+          {...attributes['arrow']}
         />
         {tooltipContent !== null ? (
           <div className="flex flex-col space-y-1">
@@ -313,16 +309,17 @@ export function Timelines({
   )
 }
 
+// eslint-disable-next-line react/function-component-definition
 const Tooltip = function Tooltip({
   children,
   isVisible,
   setTooltip,
   ...props
-}: {
+}: ComponentPropsWithoutRef<'div'> & {
   children: ReactNode
   isVisible: boolean
   setTooltip: Dispatch<SetStateAction<HTMLDivElement | null>>
-} & ComponentPropsWithoutRef<'div'>) {
+}) {
   return (
     <div
       ref={setTooltip}
@@ -342,12 +339,13 @@ const Tooltip = function Tooltip({
 function TooltipArrow({
   setTooltipArrow,
   ...props
-}: {
+}: ComponentPropsWithoutRef<'div'> & {
   setTooltipArrow: Dispatch<SetStateAction<HTMLDivElement | null>>
-} & ComponentPropsWithoutRef<'div'>) {
+}) {
   return (
     <Fragment>
       <div ref={setTooltipArrow} className="tooltip-arrow" {...props} />
+      {/* eslint-disable-next-line react/no-unknown-property */}
       <style global jsx>{`
         .tooltip-arrow,
         .tooltip-arrow::before {

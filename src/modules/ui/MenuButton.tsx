@@ -22,10 +22,7 @@ export interface MenuButtonProps<T> extends MenuTriggerProps {
   onAction?: (key: Key) => void
 }
 
-/* eslint-disable-next-line @typescript-eslint/ban-types */
-export function MenuButton<T extends object>(
-  props: MenuButtonProps<T>,
-): JSX.Element {
+export function MenuButton<T extends object>(props: MenuButtonProps<T>): JSX.Element {
   const state = useMenuTriggerState(props)
   const ref = useRef<HTMLButtonElement>(null)
   const { menuTriggerProps, menuProps } = useMenuTrigger({}, state, ref)
@@ -104,7 +101,7 @@ interface MenuProps<T> extends AriaMenuProps<T> {
 }
 
 /** @private */
-/* eslint-disable-next-line @typescript-eslint/ban-types */
+
 function Menu<T extends object>(props: MenuProps<T>): JSX.Element {
   const state = useTreeState<T>({ ...props, selectionMode: 'none' })
   const ref = useRef<HTMLUListElement>(null)
@@ -116,15 +113,17 @@ function Menu<T extends object>(props: MenuProps<T>): JSX.Element {
       ref={ref}
       className="py-1 bg-white rounded shadow-lg w-max focus:outline-none"
     >
-      {[...state.collection].map((item) => (
-        <MenuItem
-          key={item.key}
-          item={item}
-          state={state}
-          onAction={props.onAction}
-          onClose={props.onClose}
-        />
-      ))}
+      {[...state.collection].map((item) => {
+        return (
+          <MenuItem
+            key={item.key}
+            item={item}
+            state={state}
+            onAction={props.onAction}
+            onClose={props.onClose}
+          />
+        )
+      })}
     </ul>
   )
 }
@@ -138,7 +137,7 @@ interface MenuItemProps<T> {
 
 /** @private */
 function MenuItem<T>({ item, state, onAction, onClose }: MenuItemProps<T>) {
-  const ref = useRef<HTMLLIElement | HTMLAnchorElement>(null)
+  const ref = useRef<HTMLAnchorElement | HTMLLIElement>(null)
   const isDisabled = state.disabledKeys.has(item.key)
   const isFocused = state.selectionManager.focusedKey === item.key
   const { menuItemProps } = useMenuItem(
@@ -164,19 +163,17 @@ function MenuItem<T>({ item, state, onAction, onClose }: MenuItemProps<T>) {
   if (item.props.elementType === 'a') {
     return (
       <li role="none">
-        <Link href={item.props.href}>
-          <a
-            {...menuItemProps}
-            ref={ref as RefObject<HTMLAnchorElement>}
-            className={cx(
-              'text-base select-none font-medium block px-4 py-2 focus:outline-none cursor-pointer transition',
-              isFocused && 'bg-gray-100',
-            )}
-            href={item.props.href}
-            aria-current={item.props['aria-current']}
-          >
-            {item.rendered}
-          </a>
+        <Link
+          href={item.props.href}
+          {...menuItemProps}
+          ref={ref as RefObject<HTMLAnchorElement>}
+          className={cx(
+            'text-base select-none font-medium block px-4 py-2 focus:outline-none cursor-pointer transition',
+            isFocused && 'bg-gray-100',
+          )}
+          aria-current={item.props['aria-current']}
+        >
+          {item.rendered}
         </Link>
       </li>
     )

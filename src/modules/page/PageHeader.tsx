@@ -27,10 +27,7 @@ export function PageHeader(): JSX.Element {
   const router = useRouter()
   const locale = useCurrentLocale()
 
-  const links = (navigation as Record<
-    SiteLocale,
-    Array<{ path: string; label: string }>
-  >)[locale]
+  const links = (navigation as Record<SiteLocale, Array<{ path: string; label: string }>>)[locale]
 
   return (
     <header className="flex bg-white" style={{ gridArea: 'header' }}>
@@ -38,13 +35,12 @@ export function PageHeader(): JSX.Element {
         className="grid flex-1"
         style={{ gridTemplateColumns: 'var(--sidepanel-width, 240px) 1fr' }}
       >
-        <Link href="/">
-          <a
-            aria-current={router.pathname === '/' ? 'page' : undefined}
-            className="z-20 flex items-center px-6 text-2xl font-extrabold tracking-wide text-white transition bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500"
-          >
-            SOLA
-          </a>
+        <Link
+          href="/"
+          aria-current={router.pathname === '/' ? 'page' : undefined}
+          className="z-20 flex items-center px-6 text-2xl font-extrabold tracking-wide text-white transition bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500"
+        >
+          SOLA
         </Link>
         <div className="z-10 flex items-center justify-end px-6 space-x-4 shadow xs:space-x-6">
           <ul className="hidden space-x-4 lg:flex lg:items-center">
@@ -52,13 +48,12 @@ export function PageHeader(): JSX.Element {
               const isCurrent = router.pathname === path
               return (
                 <li key={path}>
-                  <Link href={path}>
-                    <a
-                      aria-current={isCurrent ? 'page' : undefined}
-                      className="inline-block px-2 py-2 text-sm font-medium text-center text-gray-700 transition border-b border-transparent hover:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-                    >
-                      {label}
-                    </a>
+                  <Link
+                    href={path}
+                    aria-current={isCurrent ? 'page' : undefined}
+                    className="inline-block px-2 py-2 text-sm font-medium text-center text-gray-700 transition border-b border-transparent hover:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+                  >
+                    {label}
                   </Link>
                 </li>
               )
@@ -124,10 +119,12 @@ function LanguageToggle() {
   const otherLocale = locale === 'de' ? 'en' : 'de'
 
   return (
-    <Link href={router.asPath} locale={otherLocale}>
-      <a className="p-2 text-sm font-medium transition bg-yellow-400 rounded hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500">
-        {otherLocale.toUpperCase()}
-      </a>
+    <Link
+      href={router.asPath}
+      locale={otherLocale}
+      className="p-2 text-sm font-medium transition bg-yellow-400 rounded hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500"
+    >
+      {otherLocale.toUpperCase()}
     </Link>
   )
 }

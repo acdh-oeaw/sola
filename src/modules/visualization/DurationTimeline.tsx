@@ -8,31 +8,16 @@ import { useDimensions } from '@/lib/visualization/useDimensions'
 import { useDuration } from '@/lib/visualization/useDuration'
 import { config } from '@/modules/visualization/config'
 
-export function DurationTimeline({
-  entity,
-}: {
-  entity: SolaEntityDetails
-}): JSX.Element | null {
+export function DurationTimeline({ entity }: { entity: SolaEntityDetails }): JSX.Element | null {
   const wrapperRef = useRef<HTMLDivElement>(null)
   const svgRef = useRef<SVGSVGElement>(null)
   const dimensions = useDimensions(wrapperRef)
-  const {
-    beginAxis,
-    endAxis,
-    minDate,
-    maxDate,
-    getStartDate,
-    getEndDate,
-  } = useDuration(entity)
+  const { beginAxis, endAxis, minDate, maxDate, getStartDate, getEndDate } = useDuration(entity)
   const startDate = getStartDate()
   const endDate = getEndDate()
 
   useEffect(() => {
-    if (
-      svgRef.current === null ||
-      dimensions === null ||
-      entity.primary_date == null
-    ) {
+    if (svgRef.current === null || dimensions === null || entity.primary_date == null) {
       return
     }
 

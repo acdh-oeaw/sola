@@ -10,9 +10,7 @@ export function useSiteMetadata(): SiteMetadata {
   const metadata = useContext(SiteMetadataContext)
 
   if (metadata === null) {
-    throw new Error(
-      '`useSiteMetadata` must be nested inside a `SiteMetadataProvider`.',
-    )
+    throw new Error('`useSiteMetadata` must be nested inside a `SiteMetadataProvider`.')
   }
 
   return metadata

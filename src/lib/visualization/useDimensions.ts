@@ -1,4 +1,3 @@
-import { ResizeObserver } from '@juggle/resize-observer'
 import type { RefObject } from 'react'
 import { useEffect, useState } from 'react'
 
@@ -9,9 +8,7 @@ import { useEffect, useState } from 'react'
  *
  * @param ref React ref to the element to observe.
  */
-export function useDimensions(
-  ref: RefObject<HTMLElement>,
-): DOMRectReadOnly | null {
+export function useDimensions(ref: RefObject<HTMLElement>): DOMRectReadOnly | null {
   const [dimensions, setDimensions] = useState<DOMRectReadOnly | null>(null)
 
   useEffect(() => {

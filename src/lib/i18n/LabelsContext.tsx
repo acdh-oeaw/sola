@@ -20,11 +20,6 @@ export interface LabelsProviderProps {
   labels: Labels
 }
 
-export function LabelsProvider({
-  children,
-  labels,
-}: LabelsProviderProps): JSX.Element {
-  return (
-    <LabelsContext.Provider value={labels}>{children}</LabelsContext.Provider>
-  )
+export function LabelsProvider({ children, labels }: LabelsProviderProps): JSX.Element {
+  return <LabelsContext.Provider value={labels}>{children}</LabelsContext.Provider>
 }

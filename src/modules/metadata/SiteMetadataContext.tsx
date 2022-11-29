@@ -15,12 +15,12 @@ export interface SiteMetadataProviderProps {
 /**
  * Provides site metadata for the currently active locale.
  */
-export function SiteMetadataProvider(
-  props: SiteMetadataProviderProps,
-): JSX.Element {
+export function SiteMetadataProvider(props: SiteMetadataProviderProps): JSX.Element {
   const locale = useCurrentLocale()
 
-  const siteMetadata = useMemo(() => metadata[locale], [locale])
+  const siteMetadata = useMemo(() => {
+    return metadata[locale]
+  }, [locale])
 
   return (
     <SiteMetadataContext.Provider value={siteMetadata}>

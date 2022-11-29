@@ -1,40 +1,56 @@
 import { useFocusRing } from '@react-aria/focus'
 import { useHover } from '@react-aria/interactions'
-import { useTab, useTabs } from '@react-aria/tabs'
+import { useTab, useTabList, useTabPanel } from '@react-aria/tabs'
 import { mergeProps } from '@react-aria/utils'
-import type { SingleSelectListState } from '@react-stately/list'
-import { useTabsState } from '@react-stately/tabs'
-import type { AriaTabProps, AriaTabsProps } from '@react-types/tabs'
+import { type TabListState, useTabListState } from '@react-stately/tabs'
+import type { Node } from '@react-types/shared'
+import type { AriaTabListProps, AriaTabPanelProps, AriaTabProps } from '@react-types/tabs'
 import cx from 'clsx'
 import type { Ref } from 'react'
 import { useRef } from 'react'
 
 export { Item } from '@react-stately/collections'
 
-export type TabsProps<T> = AriaTabsProps<T>
+export type TabsProps<T> = AriaTabListProps<T>
 
-/* eslint-disable-next-line @typescript-eslint/ban-types */
 export function Tabs<T extends object>(props: TabsProps<T>): JSX.Element {
   const tablistRef = useRef<HTMLDivElement>(null)
-  const state = useTabsState(props)
-  const { tabListProps, tabPanelProps } = useTabs(props, state, tablistRef)
+  const state = useTabListState(props)
+  const { tabListProps } = useTabList(props, state, tablistRef)
 
   return (
     <div className="space-y-4">
       <TabList {...tabListProps} tablistRef={tablistRef} state={state} />
-      <div
-        className="focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
-        {...tabPanelProps}
-      >
-        {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
-        {state.selectedItem != null ? state.selectedItem.props.children : null}
-      </div>
+      {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
+      <TabPanel key={state.selectedItem?.key} state={state} />
+    </div>
+  )
+}
+
+export interface TabPanelProps<T> extends AriaTabPanelProps {
+  state: TabListState<T>
+}
+
+function TabPanel<T>(props: TabPanelProps<T>) {
+  const { state, ...rest } = props
+
+  const ref = useRef<HTMLDivElement>(null)
+  const { tabPanelProps } = useTabPanel(rest, state, ref)
+
+  return (
+    <div
+      className="focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+      {...tabPanelProps}
+      ref={ref}
+    >
+      {/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
+      {state.selectedItem?.props.children}
     </div>
   )
 }
 
 interface TabListProps<T> {
-  state: SingleSelectListState<T>
+  state: TabListState<T>
   tablistRef: Ref<HTMLDivElement>
 }
 
@@ -42,20 +58,17 @@ function TabList<T>(props: TabListProps<T>) {
   const { state, tablistRef, ...rest } = props
 
   return (
-    <div
-      {...rest}
-      ref={tablistRef}
-      className="flex space-x-4 border-b border-gray-200"
-    >
-      {[...state.collection].map((item) => (
-        <Tab key={item.key} item={item} state={state} />
-      ))}
+    <div {...rest} ref={tablistRef} className="flex space-x-4 border-b border-gray-200">
+      {[...state.collection].map((item) => {
+        return <Tab key={item.key} item={item} state={state} />
+      })}
     </div>
   )
 }
 
-interface TabProps<T> extends AriaTabProps<T> {
-  state: SingleSelectListState<T>
+interface TabProps<T> extends AriaTabProps {
+  state: TabListState<T>
+  item: Node<T>
 }
 
 function Tab<T>(props: TabProps<T>) {
@@ -63,11 +76,10 @@ function Tab<T>(props: TabProps<T>) {
   const { key, rendered } = item
 
   const ref = useRef<HTMLDivElement>(null)
-  const { tabProps } = useTab({ item }, state, ref)
+  const { tabProps, isSelected } = useTab({ key }, state, ref)
 
   const { hoverProps, isHovered } = useHover({})
   const { focusProps, isFocusVisible } = useFocusRing()
-  const isSelected = state.selectedKey === key
 
   return (
     <div

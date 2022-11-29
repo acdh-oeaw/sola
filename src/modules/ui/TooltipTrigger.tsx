@@ -30,6 +30,7 @@ export function TooltipTrigger(props: TooltipTriggerProps): JSX.Element {
 
   return (
     <span className="relative inline-flex min-w-0">
+      {/* @ts-expect-error Fix types later. */}
       {cloneElement(props.children, { ref, ...triggerProps })}
 
       {state.isOpen ? (
@@ -43,11 +44,10 @@ export function TooltipTrigger(props: TooltipTriggerProps): JSX.Element {
 
 interface TooltipProps extends AriaTooltipProps {
   state: TooltipTriggerState
+  children: ReactNode
 }
 
 function Tooltip({ state, ...props }: TooltipProps): JSX.Element {
-  // FIXME:
-  // @ts-expect-error needs state in next react-aria release (to allow keeping tooltip open on hover)
   const { tooltipProps } = useTooltip(props, state)
 
   return (

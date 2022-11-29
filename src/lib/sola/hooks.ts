@@ -1,3 +1,5 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+
 import { useRouter } from 'next/router'
 import { useCallback, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -134,7 +136,9 @@ export function useSolaPassagesFilter() {
   const setSolaPassagesFilter = useCallback(function setSolaPassagesFilter(
     filter: SolaPassagesFilter,
   ) {
-    setFilter((prev) => ({ ...prev, ...filter }))
+    setFilter((prev) => {
+      return { ...prev, ...filter }
+    })
   },
   [])
 
@@ -157,8 +161,7 @@ export function useSolaFilteredPassages(
   const { person, passage } = useSolaRelationTypes()
 
   const query = useMemo(() => {
-    const hasAuthorsFilter =
-      filter.authors !== undefined && filter.authors.length > 0
+    const hasAuthorsFilter = filter.authors !== undefined && filter.authors.length > 0
 
     return sanitize({
       name__icontains: filter.name,
@@ -170,9 +173,7 @@ export function useSolaFilteredPassages(
       publication_set__person_relationtype_set__id: hasAuthorsFilter
         ? person.isAuthorOf
         : undefined,
-      publication_relationtype_set__id: hasAuthorsFilter
-        ? passage.isIncludedIn
-        : undefined,
+      publication_relationtype_set__id: hasAuthorsFilter ? passage.isIncludedIn : undefined,
     })
   }, [filter, person, passage])
 
@@ -265,9 +266,9 @@ export function useSolaSelectedEntity() {
   const selected: SolaSelectedEntity | null = useMemo(() => {
     if (router.isReady) {
       const { query } = router
-      const id = getQueryParam(query.id, false, Number)
+      const id = getQueryParam(query['id'], false, Number)
       if (id !== undefined && id > 0) {
-        const type = getQueryParam(query.type, false, capitalize)
+        const type = getQueryParam(query['type'], false, capitalize)
         if (type !== undefined && isSolaEntityType(type)) {
           return { id, type }
         }
@@ -364,7 +365,9 @@ export function useSolaPassagesFilterOptionsTree(
   passageTypes: Record<number, SolaVocabulary> | undefined,
   translation: string,
 ) {
-  const getParentId = useCallback((entity) => entity.parent_class?.id, [])
+  const getParentId = useCallback((entity: any) => {
+    return entity.parent_class?.id
+  }, [])
   const _passageTopics = useHierarchicalData(passageTopics, getParentId)
   const _passageTypes = useHierarchicalData(passageTypes, getParentId)
 
@@ -378,7 +381,11 @@ export function useSolaPassagesFilterOptionsTree(
       if (parent.children.size === 0) return parent
 
       const childTopics = Array.from(parent.children)
-      if (!childTopics.find((topic) => topic.id === parent.id)) {
+      if (
+        !childTopics.find((topic) => {
+          return topic.id === parent.id
+        })
+      ) {
         parent.children.add({
           id: parent.id,
           name: translation,
@@ -398,7 +405,9 @@ export function useSolaPassagesFilterOptionsTree(
    * Also, group types without children in their own section.
    */
   const passageTypesTree = useMemo(() => {
-    const otherSection = _passageTypes.find((type) => type.id === -1) ?? {
+    const otherSection = _passageTypes.find((type) => {
+      return type.id === -1
+    }) ?? {
       id: -1,
       name: translation,
       children: new Set(),
@@ -415,7 +424,11 @@ export function useSolaPassagesFilterOptionsTree(
       }
 
       const childTopics = Array.from(parent.children)
-      if (!childTopics.find((topic) => topic.id === parent.id)) {
+      if (
+        !childTopics.find((topic) => {
+          return topic.id === parent.id
+        })
+      ) {
         parent.children.add({
           id: parent.id,
           name: translation,
@@ -439,8 +452,8 @@ export function useSolaPassagesFilterOptionsTree(
  * Returns relation type ids, mapped by entity type.
  */
 export function useSolaRelationTypes() {
-  const relationTypes = useMemo(
-    () => ({
+  const relationTypes = useMemo(() => {
+    return {
       passage: {
         hasBibleCitation: 205,
         hasBibleReference: 204,
@@ -449,9 +462,8 @@ export function useSolaRelationTypes() {
       person: {
         isAuthorOf: 187,
       },
-    }),
-    [],
-  )
+    }
+  }, [])
   return relationTypes
 }
 
@@ -459,9 +471,7 @@ export function useSolaRelationTypes() {
  * Returns SOLA entity metadata specific for passages:
  * publication authors and bible passages.
  */
-export function useSolaPassageMetadata(
-  passage: SolaPassageDetails | undefined,
-) {
+export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) {
   const locale = useCurrentLocale()
 
   const relationTypes = useSolaRelationTypes()
@@ -471,11 +481,12 @@ export function useSolaPassageMetadata(
    * "is_included_in" (id 189), then get related author of that publication with
    * relation type "is_author_of" (id 187).
    */
-  const isIncludedInRelation = passage?.relations.find(
-    (relation) =>
+  const isIncludedInRelation = passage?.relations.find((relation) => {
+    return (
       relation.related_entity.type === 'Publication' &&
-      relation.relation_type.id === relationTypes.passage.isIncludedIn,
-  )
+      relation.relation_type.id === relationTypes.passage.isIncludedIn
+    )
+  })
   const publicationId = isIncludedInRelation?.related_entity.id
 
   /**
@@ -486,21 +497,26 @@ export function useSolaPassageMetadata(
 
   const authors = useQuery(
     ['getPublicationById', locale, publicationId, {}],
-    /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-    () => getSolaPublicationById({ id: publicationId!, locale }),
+
+    () => {
+      return getSolaPublicationById({ id: publicationId!, locale })
+    },
     {
       enabled: publicationId !== undefined && persons.data !== undefined,
       select: (results) => {
-        const isAuthorOfRelations = results.relations.filter(
-          (relation) =>
+        const isAuthorOfRelations = results.relations.filter((relation) => {
+          return (
             relation.related_entity.type === 'Person' &&
-            relation.relation_type.id === relationTypes.person.isAuthorOf,
-        )
-        const authorIds = isAuthorOfRelations.map(
-          (relation) => relation.related_entity.id,
-        )
-        /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-        return authorIds.map((id) => persons.data![id]!)
+            relation.relation_type.id === relationTypes.person.isAuthorOf
+          )
+        })
+        const authorIds = isAuthorOfRelations.map((relation) => {
+          return relation.related_entity.id
+        })
+
+        return authorIds.map((id) => {
+          return persons.data![id]!
+        })
       },
     },
   )
@@ -508,25 +524,30 @@ export function useSolaPassageMetadata(
   /**
    * Fetch relations to bible and corresponding bible passages.
    */
-  const bibleRelations = passage?.relations.filter(
-    (relation) =>
+  const bibleRelations = passage?.relations.filter((relation) => {
+    return (
       relation.related_entity.type === 'Publication' &&
       relation.related_entity.id === 248 /* bible id */ &&
-      [
-        relationTypes.passage.hasBibleCitation ||
-          relationTypes.passage.hasBibleReference,
-      ].includes(relation.relation_type.id),
-  )
+      [relationTypes.passage.hasBibleCitation || relationTypes.passage.hasBibleReference].includes(
+        relation.relation_type.id,
+      )
+    )
+  })
 
   /**
    * Info about the referenced/cited bible passage is a property of
    * passage->publication relation.
    */
-  const bibleRelationIds = bibleRelations?.map((relation) => relation.id) ?? []
+  const bibleRelationIds =
+    bibleRelations?.map((relation) => {
+      return relation.id
+    }) ?? []
   const query = { id__in: bibleRelationIds }
   const biblePassages = useQuery(
     ['getSolaPassagePublicationRelations', locale, query],
-    () => getSolaPassagePublicationRelations({ query, locale }),
+    () => {
+      return getSolaPassagePublicationRelations({ query, locale })
+    },
     {
       enabled: bibleRelationIds.length > 0,
       select: (results) => {
@@ -546,19 +567,14 @@ export function useSolaPassageMetadata(
              * not touch capitalization at all!
              */
             // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-            (bibleBooks as Record<string, string>)[result.bible_book_ref!] ??
-              result.bible_book_ref,
-            [result.bible_chapter_ref, result.bible_verse_ref]
-              .filter(Boolean)
-              .join(':'),
+            (bibleBooks as Record<string, string>)[result.bible_book_ref!] ?? result.bible_book_ref,
+            [result.bible_chapter_ref, result.bible_verse_ref].filter(Boolean).join(':'),
           ]
             .filter(Boolean)
             .join(' ')
           const reference = [
             result.bible_book_ref,
-            [result.bible_chapter_ref, result.bible_verse_ref]
-              .filter(Boolean)
-              .join(':'),
+            [result.bible_chapter_ref, result.bible_verse_ref].filter(Boolean).join(':'),
           ]
             .filter(Boolean)
             .join('.')
@@ -612,7 +628,9 @@ export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
 
   const bibliography = useQuery(
     ['getSolaEntityBibliographyById', locale, id, query],
-    () => getSolaEntityBibliographyById({ id: id!, query, locale }),
+    () => {
+      return getSolaEntityBibliographyById({ id: id!, query, locale })
+    },
     { enabled: id !== undefined },
   )
 
@@ -631,17 +649,16 @@ export function useSolaTextTypes() {
   const textTypesByLocale: Record<
     SolaEntityType,
     Record<SiteLocale, Array<number>>
-  > = useMemo(
-    () => ({
+  > = useMemo(() => {
+    return {
       Event: { de: [253], en: [254] },
       Institution: { de: [180], en: [181] },
       Passage: { de: [5, 2, 6], en: [5, 3, 61] },
       Person: { de: [185], en: [186] },
       Place: { de: [], en: [] },
       Publication: { de: [178], en: [179] },
-    }),
-    [],
-  )
+    }
+  }, [])
   return textTypesByLocale
 }
 
@@ -660,23 +677,33 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
    */
   const textTypes = useQuery(
     ['getTextTypes', locale, {}],
-    () => getSolaTextTypes({ locale, query: defaultQuery }),
+    () => {
+      return getSolaTextTypes({ locale, query: defaultQuery })
+    },
     { select: mapResultsById },
   )
 
   /** Include annotations and inline HTML `<mark>` elements. */
   const query = { highlight: true, inline_annotations: true }
 
-  const ids = entity?.text.map((text) => text.id) ?? []
+  const ids =
+    entity?.text.map((text) => {
+      return text.id
+    }) ?? []
 
   const textTypesByLocale = useSolaTextTypes()
 
   const texts = useQuery(
     ['getSolaTextsByIds', locale, ids, query],
-    () => Promise.all(ids.map((id) => getSolaTextById({ id, query, locale }))),
+    () => {
+      return Promise.all(
+        ids.map((id) => {
+          return getSolaTextById({ id, query, locale })
+        }),
+      )
+    },
     {
-      enabled:
-        entity !== undefined && ids.length > 0 && textTypes.data !== undefined,
+      enabled: entity !== undefined && ids.length > 0 && textTypes.data !== undefined,
       select: (results) => {
         const map: Record<number, SolaTextDetails> = {}
         results.forEach((text) => {
@@ -699,10 +726,7 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
             kind: {
               ...text.kind,
               /* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-              label: textTypes.data![text.kind.id]!.name.replace(
-                /\s\((DE|EN)\)$/,
-                '',
-              ),
+              label: textTypes.data![text.kind.id]!.name.replace(/\s\((DE|EN)\)$/, ''),
             },
           }
         })
@@ -721,17 +745,23 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 export function useSolaUsers() {
   const locale = useCurrentLocale()
 
-  const users = useQuery(['users'], () => getSolaUsers({ locale }), {
-    select(data) {
-      const map: Record<string, SolaUser> = {}
-
-      data.results.forEach((user) => {
-        map[user.username] = user
-      })
-
-      return map
+  const users = useQuery(
+    ['users'],
+    () => {
+      return getSolaUsers({ locale })
     },
-  })
+    {
+      select(data) {
+        const map: Record<string, SolaUser> = {}
+
+        data.results.forEach((user) => {
+          map[user.username] = user
+        })
+
+        return map
+      },
+    },
+  )
 
   return users
 }
@@ -750,9 +780,9 @@ function mapById<T extends { id: number }>(entities: Array<T>) {
 /**
  * Removes pagination info and maps entities by id.
  */
-function mapResultsById<
-  T extends SolaEntity | SolaVocabulary | SolaPassageSearchResult
->(data: Results<T>) {
+function mapResultsById<T extends SolaEntity | SolaPassageSearchResult | SolaVocabulary>(
+  data: Results<T>,
+) {
   return mapById(data.results)
 }
 

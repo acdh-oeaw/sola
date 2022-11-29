@@ -21,7 +21,9 @@ function addQueryParams(url: URL, query?: Record<string, unknown>) {
   if (query === undefined) return url
   Object.entries(query).forEach(([key, value]) => {
     if (Array.isArray(value)) {
-      const values = value.filter((value) => value != null)
+      const values = value.filter((value) => {
+        return value != null
+      })
       if (values.length > 0) {
         /** Arrays will be stringified to "val1,val2,val3". */
         url.searchParams.set(key, String(values))
@@ -46,12 +48,7 @@ export interface RequestConfig {
 /**
  * Dispatches API request.
  */
-export async function request<T>({
-  path,
-  baseUrl,
-  query,
-  options,
-}: RequestConfig): Promise<T> {
+export async function request<T>({ path, baseUrl, query, options }: RequestConfig): Promise<T> {
   const url = new URL(path, baseUrl)
   addQueryParams(url, query)
 

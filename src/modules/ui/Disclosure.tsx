@@ -25,7 +25,9 @@ export function Disclosure({
   const [isOpen, setOpen] = useState(initialOpen)
 
   function toggleOpen() {
-    setOpen((isOpen) => !isOpen)
+    setOpen((isOpen) => {
+      return !isOpen
+    })
   }
 
   return (
@@ -44,12 +46,7 @@ export function Disclosure({
         <Label as="span" className={className}>
           {title}
         </Label>
-        <Chevron
-          className={cx(
-            'flex-shrink-0',
-            isOpen ? 'transform rotate-180' : undefined,
-          )}
-        />
+        <Chevron className={cx('flex-shrink-0', isOpen ? 'transform rotate-180' : undefined)} />
       </button>
       {isOpen ? <div id={panelId}>{children}</div> : null}
     </div>

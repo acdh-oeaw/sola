@@ -1,4 +1,4 @@
-import globby from 'globby'
+import { globby } from 'globby'
 import path from 'path'
 
 const pagesFolder = path.join(process.cwd(), 'src', 'pages')

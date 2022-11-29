@@ -37,11 +37,9 @@ export const entries = Object.entries as <T>(obj: T) => Entries<T>
 /**
  * Mark fields as optional.
  */
-export type OptionalFields<T, K extends keyof T> = Omit<T, K> &
-  Partial<Pick<T, K>>
+export type OptionalFields<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>
 
 /**
  * Mark fields as required.
  */
-export type RequiredFields<T, K extends keyof T> = Omit<T, K> &
-  Required<Pick<T, K>>
+export type RequiredFields<T, K extends keyof T> = Omit<T, K> & Required<Pick<T, K>>

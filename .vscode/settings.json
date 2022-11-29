@@ -1,16 +1,31 @@
 {
+  "css.validate": false,
   "editor.codeActionsOnSave": {
-    "source.fixAll.eslint": true
+    "source.fixAll": true
   },
   "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnSave": true,
-  "eslint.format.enable": true,
-  "typescript.tsdk": "node_modules/typescript/lib",
-  "[typescript,typescriptreact,javascript]": {
-    "editor.defaultFormatter": "dbaeumer.vscode-eslint",
-    "editor.formatOnSave": false
+  "editor.inlayHints.enabled": "offUnlessPressed",
+  "editor.rulers": [100],
+  "eslint.enable": true,
+  "eslint.validate": ["javascript", "typescript", "typescriptreact"],
+  "explorer.excludeGitIgnore": true,
+  "files.eol": "\n",
+  "less.validate": false,
+  "scss.validate": false,
+  "search.exclude": {
+    "package-lock.json": true
   },
-  "[markdown,mdx]": {
-    "files.trimTrailingWhitespace": false
+  "stylelint.enable": true,
+  "stylelint.snippet": ["css", "postcss"],
+  "stylelint.validate": ["css", "postcss"],
+  "tailwindCSS.validate": true,
+  "terminal.integrated.enablePersistentSessions": false,
+  "typescript.enablePromptUseWorkspaceTsdk": true,
+  "typescript.inlayHints.parameterNames.enabled": "all",
+  "typescript.preferences.importModuleSpecifier": "non-relative",
+  "typescript.tsdk": "node_modules/typescript/lib",
+  "[markdown][mdx]": {
+    "editor.wordWrap": "on"
   }
 }

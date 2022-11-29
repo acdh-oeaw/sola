@@ -8,7 +8,7 @@ import fromMarkdown from 'remark-parse'
 import toHast from 'remark-rehype'
 import toMarkdown from 'remark-stringify'
 import stripMarkdown from 'strip-markdown'
-import unified from 'unified'
+import { unified } from 'unified'
 import YAML from 'yaml'
 
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
@@ -64,7 +64,7 @@ export async function getCmsPage<T extends Record<string, unknown>>(
   const fileContents = await fs.readFile(filePath, { encoding: 'utf-8' })
   const processed = await md.process(fileContents)
 
-  const html = String(processed.contents)
+  const html = String(processed)
   const { frontmatter: metadata } = processed.data as {
     frontmatter: T
   }
@@ -77,7 +77,7 @@ export interface CmsTeamMember {
   firstName: string
   lastName: string
   boss?: boolean
-  group: 'current' | 'former' | 'acdh'
+  group: 'acdh' | 'current' | 'former'
   title?: string
   affiliation?: string
   image?: string
@@ -90,9 +90,7 @@ export interface CmsTeamMember {
 /**
  * Returns team member data as JSON.
  */
-export async function getCmsTeamMembers(
-  locale: SiteLocale,
-): Promise<Array<CmsTeamMember>> {
+export async function getCmsTeamMembers(locale: SiteLocale): Promise<Array<CmsTeamMember>> {
   const folderPath = path.join(dataBasePath, 'team', locale)
   const folderContents = await fs.readdir(folderPath)
 
@@ -105,7 +103,9 @@ export async function getCmsTeamMembers(
     }),
   )
 
-  data.sort((a, b) => a.lastName.localeCompare(b.lastName))
+  data.sort((a, b) => {
+    return a.lastName.localeCompare(b.lastName)
+  })
 
   return data
 }
@@ -124,9 +124,7 @@ export interface CmsPostBase {
 /**
  * Returns list of posts with abstracts.
  */
-export async function getCmsPostsOverview(
-  locale: SiteLocale,
-): Promise<Array<CmsPostBase>> {
+export async function getCmsPostsOverview(locale: SiteLocale): Promise<Array<CmsPostBase>> {
   const folderPath = path.join(postBasePath, locale)
   const folderContents = await fs.readdir(folderPath)
 
@@ -136,7 +134,7 @@ export async function getCmsPostsOverview(
       const fileContents = await fs.readFile(filePath, { encoding: 'utf-8' })
       const processed = await excerpt.process(fileContents)
 
-      const abstract = String(processed.contents)
+      const abstract = String(processed)
       const { frontmatter } = processed.data as {
         frontmatter: CmsPostMetadata
       }
@@ -151,7 +149,9 @@ export async function getCmsPostsOverview(
     }),
   )
 
-  data.sort((a, b) => (a.metadata.date > b.metadata.date ? -1 : 1))
+  data.sort((a, b) => {
+    return a.metadata.date > b.metadata.date ? -1 : 1
+  })
 
   return data
 }
@@ -174,15 +174,12 @@ export interface CmsPost {
 /**
  * Returns list of posts with abstracts.
  */
-export async function getCmsPostById(
-  id: string,
-  locale: SiteLocale,
-): Promise<CmsPost> {
+export async function getCmsPostById(id: string, locale: SiteLocale): Promise<CmsPost> {
   const filePath = path.join(postBasePath, locale, id + postExtension)
   const fileContents = await fs.readFile(filePath, { encoding: 'utf-8' })
   const processed = await md.process(fileContents)
 
-  const html = String(processed.contents)
+  const html = String(processed)
   const { frontmatter: metadata } = processed.data as {
     frontmatter: CmsPostMetadata
   }
@@ -193,10 +190,10 @@ export async function getCmsPostById(
 /**
  * Returns all post ids.
  */
-export async function getCmsPostIds(
-  locale: SiteLocale,
-): Promise<Array<string>> {
+export async function getCmsPostIds(locale: SiteLocale): Promise<Array<string>> {
   const folderPath = path.join(postBasePath, locale)
   const folderContents = await fs.readdir(folderPath)
-  return folderContents.map((file) => file.slice(0, -postExtension.length))
+  return folderContents.map((file) => {
+    return file.slice(0, -postExtension.length)
+  })
 }
