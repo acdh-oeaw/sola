@@ -1,6 +1,8 @@
 import { request } from '@/api/sola/runtime'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
-import { api as baseUrl } from '~/config/site.json'
+import site from '~/config/site.json' assert { type: 'json' }
+
+const { api: baseUrl } = site
 
 export interface SolaEntityBase {
   id: number

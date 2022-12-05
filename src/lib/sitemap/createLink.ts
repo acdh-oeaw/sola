@@ -2,7 +2,9 @@ import type { Element } from 'xast'
 import { x } from 'xastscript'
 
 import { addQueryParams } from '@/lib/url/addQueryParams'
-import { url as baseUrl } from '~/config/site.json'
+import site from '~/config/site.json' assert { type: 'json' }
+
+const { url: baseUrl } = site
 
 export function createLink(route: string, query?: Record<string, unknown>): Element {
   const url = new URL(route, baseUrl)

@@ -60,8 +60,11 @@ import { TextField } from '@/modules/ui/TextField'
 import { TooltipTrigger } from '@/modules/ui/TooltipTrigger'
 import { DurationTimeline } from '@/modules/visualization/DurationTimeline'
 import { Visualization } from '@/modules/visualization/Visualization'
-import { url as baseUrl } from '~/config/site.json'
-import { colors } from '~/config/sola.json'
+import site from '~/config/site.json' assert { type: 'json' }
+import sola from '~/config/sola.json' assert { type: 'json' }
+
+const { url: baseUrl } = site
+const { colors } = sola
 
 /**
  * i18n.

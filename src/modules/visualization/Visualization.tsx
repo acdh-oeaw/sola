@@ -19,7 +19,9 @@ import type { SolaSelectedEntity } from '@/lib/sola/types'
 import type { Node } from '@/modules/visualization/createNode'
 import { createNode } from '@/modules/visualization/createNode'
 import { Timelines } from '@/modules/visualization/Timelines'
-import { colors } from '~/config/sola.json'
+import sola from '~/config/sola.json' assert { type: 'json' }
+
+const { colors } = sola
 
 const labels = {
   en: {

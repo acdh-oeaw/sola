@@ -1,5 +1,7 @@
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
-import { imprintUrl, serviceId } from '~/config/acdh.json'
+import acdh from '~/config/acdh.json' assert { type: 'json' }
+
+const { imprintUrl, serviceId } = acdh
 
 function createImprintUrl(locale: SiteLocale) {
   const url = new URL(imprintUrl)

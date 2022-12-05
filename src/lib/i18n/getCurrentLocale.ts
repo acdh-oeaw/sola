@@ -1,4 +1,6 @@
-import { defaultLocale, locales } from '~/config/site.json'
+import site from '~/config/site.json' assert { type: 'json' }
+
+const { defaultLocale, locales } = site
 
 /**
  * Unfortunately, typescript currently does not support importing json modules `as const`,

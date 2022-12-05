@@ -44,7 +44,7 @@ import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import type { SolaPassagesFilter, SolaSelectedEntity } from '@/lib/sola/types'
 import { getQueryParam } from '@/lib/url/getQueryParam'
 import { capitalize } from '@/lib/util/capitalize'
-import bibleBooks from '~/config/bible.json'
+import bibleBooks from '~/config/bible.json' assert { type: 'json' }
 
 /** No entitiy type has more than 1000 entries. */
 const defaultQuery = { limit: 1000 }

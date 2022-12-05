@@ -7,7 +7,7 @@ import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import { Menu as MenuIcon } from '@/modules/icons/Menu'
 import { Item as MenuItem, MenuButton } from '@/modules/ui/MenuButton'
-import navigation from '~/config/navigation.json'
+import navigation from '~/config/navigation.json' assert { type: 'json' }
 
 const labels = {
   en: {

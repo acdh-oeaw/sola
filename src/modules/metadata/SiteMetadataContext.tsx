@@ -2,7 +2,7 @@ import { createContext, useMemo } from 'react'
 
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
-import metadata from '~/config/metadata.json'
+import metadata from '~/config/metadata.json' assert { type: 'json' }
 
 export type SiteMetadata = typeof metadata[SiteLocale]
 
