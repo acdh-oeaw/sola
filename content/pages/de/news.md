@@ -1,7 +1,7 @@
 ---
 title: Neuigkeiten
 ---
-`0﻿6/12/2022`
+`12/06/2022`
 
 # From Sun-Day to the Lord’s Day
 
@@ -14,8 +14,6 @@ title: Neuigkeiten
 * Illustrations:8 b/w, 2 tables b/w., 1 maps b/w
 * Language(s):English, German
 * Publication Year:2023
-
-
 
 ![](https://www.brepols.net/files/product/IS-9782503598260-1/cover_1_m.jpg?637780429213423229?1)
 
