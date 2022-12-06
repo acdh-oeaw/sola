@@ -37,7 +37,10 @@ const nextConfig = {
   poweredByHeader: false,
   reactStrictMode: true,
   async rewrites() {
-    return [{ source: '/sitemap.xml', destination: '/api/sitemap' }]
+    return [
+      { source: '/sitemap.xml', destination: '/api/sitemap' },
+      { source: '/admin', destination: '/admin/index.html' },
+    ]
   },
   typescript: {
     ignoreBuildErrors: true,
