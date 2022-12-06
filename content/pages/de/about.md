@@ -1,7 +1,6 @@
 ---
 title: Über das Projekt
 ---
-
 ## Der Sonntag in der Spätantike und im frühen Mittelalter
 
 Forschungsprojekt, finanziert vom Österreichischen Wissenschaftsfonds (FWF), Projekt P 31428-G32.
@@ -9,7 +8,7 @@ Forschungsprojekt, finanziert vom Österreichischen Wissenschaftsfonds (FWF), Pr
 Umgesetzt in Zusammenarbeit mit dem Austrian Centre for Digital Humanities and Cultural Heritage
 (ACDH-CH) der Österreichischen Akademie der Wissenschaften (ÖAW).
 
-Januar 2019 – Dezember 2022.
+Januar 2019 – Oktobber 2023
 
 ### Allgemeines
 

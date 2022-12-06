@@ -1,7 +1,6 @@
 ---
 title: About the project
 ---
-
 ## Sunday Observance in Late Antiquity
 
 Research project funded by the Austrian Science Fund (FWF), project P 31428-G32.
@@ -9,7 +8,7 @@ Research project funded by the Austrian Science Fund (FWF), project P 31428-G32.
 Implemented in collaboration with the Austrian Centre for Digital Humanities and Cultural Heritage
 (ACDH-CH) of the Austrian Academy of Sciences (ÖAW).
 
-January 2019 - December 2022.
+January 2019 - October 2023.
 
 ### General remarks
 
