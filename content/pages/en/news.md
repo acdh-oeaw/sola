@@ -1,11 +1,13 @@
 ---
 title: News
 ---
+`0﻿6/12/2022`
+
 # From Sun-Day to the Lord’s Day
 
 ## The Cultural History of Sunday in Late Antiquity and the Early Middle Ages
 
-### [Uta Heil](https://www.brepols.net/products?q=$author:%22Uta%20Heil%22) (ed)
+### Uta Heil (ed)
 
 * Pages: approx. 500 p.
 * Size:156 x 234 mm
