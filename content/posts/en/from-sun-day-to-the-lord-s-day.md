@@ -1,5 +1,6 @@
 ---
-title: Publication: From Sun-Day to the Lord’s Day
+title: From Sun-Day to the Lord’s Day
+shortTitle: "Publication: From Sun-Day to the Lord’s Day"
 date: 2022-12-07T10:44:24.038Z
 abstract: Forthcoming publication with contributions of the international
   conference "From Sun-Day to the Day of the Lord", Vienna 2019/10/10–12
