@@ -1,4 +1,6 @@
 ---
+title: From Sun-Day to the Lord’s Day
+date: 2022-12-07T10:44:24.038Z
 abstract: |-
   The Cultural History of Sunday in Late Antiquity and the Early Middle Ages
 
