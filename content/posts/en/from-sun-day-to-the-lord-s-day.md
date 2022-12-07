@@ -2,9 +2,9 @@
 title: From Sun-Day to the Lord’s Day
 date: 2022-12-07T10:19:18.767Z
 abstract: |-
-  ## The Cultural History of Sunday in Late Antiquity and the Early Middle Ages
+  The Cultural History of Sunday in Late Antiquity and the Early Middle Ages
 
-  ### Uta Heil (ed)
+  Uta Heil (ed)
 
   * Pages: approx. 500 p.
   * Size:156 x 234 mm
