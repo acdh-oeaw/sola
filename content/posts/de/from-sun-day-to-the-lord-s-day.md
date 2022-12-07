@@ -1,6 +1,6 @@
 ---
 title: From Sun-Day to the Lord’s Day
-shortTitle: "Publication: From Sun-Day to the Lord’s Day"
+shortTitle: "Publikation: From Sun-Day to the Lord’s Day"
 date: 2022-12-07T10:44:24.038Z
 abstract: Im Februar 2023 erscheindende Veröffentlichung mit Beiträgen der
   internationalen Konferenz "Vom Sonnentag zum Tag des Herrn", Wien 10.–12. 10.
