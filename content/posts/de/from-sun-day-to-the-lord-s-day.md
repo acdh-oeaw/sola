@@ -3,8 +3,7 @@ title: From Sun-Day to the Lord’s Day
 shortTitle: "Publikation: From Sun-Day to the Lord’s Day"
 date: 2022-12-07T10:44:24.038Z
 abstract: Im Februar 2023 erscheindende Veröffentlichung mit Beiträgen der
-  internationalen Konferenz "Vom Sonnentag zum Tag des Herrn", Wien 10.–12. 10.
-  2019
+  internationalen Konferenz "Vom Sonnentag zum Tag des Herrn", Wien 10.–12. Oktober 2019
 ---
 ## The Cultural History of Sunday in Late Antiquity and the Early Middle Ages
 
