@@ -1,6 +1,6 @@
 ---
-title: "Uta Heil (ed.): The apocryphal Sunday. History and Texts from Late Antiquity"
-shortTitle: "Publication: The apocryphal Sunday"
+title: "Uta Heil (ed.): The Apocryphal Sunday. History and Texts from Late Antiquity"
+shortTitle: "Publication: The Apocryphal Sunday"
 date: 2023-02-07T15:57:45.147Z
 abstract: Forthcoming summer 2023
 attachments:
