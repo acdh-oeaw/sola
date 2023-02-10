@@ -1,10 +1,13 @@
 ---
 title: Sitzung auf der 24th International Congress of Byzantine Studies
-  Byzantium – Bridge Between Worlds Venice and Padua, 22.–27. August 2022
+  Byzantium – Bridge Between Worlds. Venice and Padua, 22.–27. August 2022
 shortTitle: Times of Power in Late Antiquity
 date: 2023-02-07T14:55:30.521Z
-abstract: "Vorträge auf der 24th International Congress of Byzantine Studies
-  Byzantium – Bridge Between Worlds Venice and Padua, 22.–27. August 2022 "
+abstract: >-
+  Vorträge auf der 24th International Congress of Byzantine Studies Byzantium –
+  Bridge Between Worlds.
+
+  Venice and Padua, 22.–27. August 2022 
 gallery:
   - image: /assets/posts/1675692340638.jpg
   - image: /assets/posts/1675692340435.jpg
