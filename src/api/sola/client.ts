@@ -141,7 +141,7 @@ export interface SolaBibsonomyReference {
   attribute: string | null
 
   entrytype: string // 'book'
-  author: string
+  author: string | null
   title: string
   address: string
   publisher: string

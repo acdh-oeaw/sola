@@ -1635,6 +1635,8 @@ function Texts({
 function Bibliography({ bibliography }: { bibliography: Array<SolaBibsonomyReference> }) {
   const sorted = useMemo(() => {
     return bibliography.sort((a, b) => {
+      if (a.author == null) return -1
+      if (b.author == null) return 1
       return a.author.localeCompare(b.author)
     })
   }, [bibliography])
@@ -1656,6 +1658,7 @@ function BibliographicReference({ reference }: { reference: SolaBibsonomyReferen
   const entry = useMemo(() => {
     const text = []
 
+    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
     if (reference.author) text.push(reference.author + ':')
     if (reference.title) text.push(reference.title + '.')
     if (reference.address) text.push(reference.address + ':')
