@@ -8,12 +8,12 @@ Forschungsprojekt, finanziert vom Österreichischen Wissenschaftsfonds (FWF), Pr
 Umgesetzt in Zusammenarbeit mit dem Austrian Centre for Digital Humanities and Cultural Heritage
 (ACDH-CH) der Österreichischen Akademie der Wissenschaften (ÖAW).
 
-Januar 2019 – Oktobber 2023
+Januar 2019 – Dezember 2023
 
 ### Allgemeines
 
 Das vierjährige Projekt erforscht die Bedeutung des Sonntags bzw. Herrentags zwischen etwa 300 und
-630 n.Chr., also besonders die Zeit nach dem Gesetz Konstantins zur Sonntagsruhe (überliefert für
+700 n.Chr., also besonders die Zeit nach dem Gesetz Konstantins zur Sonntagsruhe (überliefert für
 321 n.Chr.) bis zum Ausklang der Spätantike. Als Basis werden Quellentexte des griechischen und
 lateinischen Sprachraums dieser Zeit herangezogen. Gesucht werden Passagen, die den Sonntag als
 Ruhe- und Feiertag behandeln: Wie wird die Arbeitsruhe interpretiert? Was heiligt diesen Tag?

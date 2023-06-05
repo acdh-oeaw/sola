@@ -8,12 +8,12 @@ Research project funded by the Austrian Science Fund (FWF), project P 31428-G32.
 Implemented in collaboration with the Austrian Centre for Digital Humanities and Cultural Heritage
 (ACDH-CH) of the Austrian Academy of Sciences (ÖAW).
 
-January 2019 - October 2023.
+January 2019 - December 2023
 
 ### General remarks
 
 The four-year project investigates the significance of the Sunday or Lord's Day between about 300
-and 630 AD, in particular the period after Constantine's law on Sunday rest (handed down for 321 AD)
+and 700 AD, in particular the period after Constantine's law on Sunday rest (handed down for 321 AD)
 until the end of Late Antiquity. As a basis source texts of the Greek and Latin language of this
 time are consulted. We are looking for passages that treat Sunday as a day of rest and a holiday:
 How is rest from work interpreted? What sanctifies this day? What behavior is appropriate? What
