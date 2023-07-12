@@ -6,7 +6,7 @@ abstract: Im Februar 2023 erschienene Veröffentlichung mit Beiträgen der
   internationalen Konferenz "Vom Sonnentag zum Tag des Herrn", Wien 10.–12.
   Oktober 2019
 attachments:
-  - label: Introduction
+  - label: Introduction by Uta Heil
     file: /assets/posts/m.celama-eb.5.128964.pdf
 ---
 ## The Cultural History of Sunday in Late Antiquity and the Early Middle Ages
