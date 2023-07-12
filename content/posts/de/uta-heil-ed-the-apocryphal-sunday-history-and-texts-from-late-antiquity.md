@@ -8,21 +8,13 @@ attachments:
   - file: /assets/posts/heil_theapocryphalsunday.pdf
     label: Coverentwurf
 ---
-Table of Content
-
-
+<https://www.barnesandnoble.com/w/the-apocryphal-sunday-uta-heil/1142954549>Table of Content
 
 **A Introduction**
 
-
-
 1 Contexts – Uta Heil
 
-
-
 2 Texts in addition to the *Letter from Heaven* – Uta Heil
-
-
 
 3 *Letter from Heaven*
 
@@ -46,8 +38,6 @@ Table of Content
 
 3.5 History of the *Letter from Heaven* – Uta Heil
 
-
-
 4 Considerations
 
 4.1 Framing, Structure, and Discovery Legends – Uta Heil
@@ -70,17 +60,9 @@ Table of Content
 
 4.4 Punishment of Women – Uta Heil
 
-
-
 5 Evaluation – Uta Heil
 
-
-
-
-
 **B Texts and Translations**
-
-
 
 1 The Letter of Licinianus of Cartagena – Philip Polcar
 
@@ -95,8 +77,6 @@ Table of Content
 6 *Letter from Heaven* – *Greek Recension Beta* – Angela Zielinski Kinney
 
 7 *Letter from Heaven* – *Greek Recension* *Beta* (London) – Canan Arıkan-Caba
-
-
 
 8 The so-called *Acts of the Council of Caesarea* – Uta Heil and Christoph Scheerer
 
@@ -117,7 +97,5 @@ Table of Content
 16 The *Second Apocryphal Apocalypse of John* – Uta Heil
 
 17 The *Apocalypse of Anastasia* – Uta Heil
-
-
 
 **C Literature**
