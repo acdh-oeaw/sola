@@ -3,7 +3,7 @@ title: "Uta Heil (Hrsg.): The Apocryphal Sunday. History and Texts from Late
   Antiquity"
 shortTitle: "Publikation: The Apocryphal Sunday"
 date: 2023-02-07T15:57:45.147Z
-abstract: Erscheint Sommer 2023
+abstract: ""
 attachments:
   - file: /assets/posts/heil_theapocryphalsunday.pdf
     label: Coverentwurf
@@ -14,15 +14,11 @@ A range of apocryphal and pseudepigraphic texts from Late Antiquity points to th
 
 This volume presents various versions of the Letter from Heaven, as well as other texts (the pseudepigraphic Acts of the Synod of Caesarea; pseudepigraphic sermons of Eusebius of Alexandria, John Chrysostom, and Basil of Caesarea; passages from the Didascalia or Diataxis of Jesus Christ; the Second Apocryphal Apocalypse of John; the Visio Pauli; a sermon of Sophronius of Jerusalem; and the Apocalypse of Anastasia), together with a translation and commentary. An introduction tells the story of this letter and integrates it and the other texts into the cultural history of Sunday. It becomes clear that Sunday as a day of rest and a feast day was not in the foreground of the development of an ecclesiastical festival calendar for a long time, although Emperor Constantine enacted a law on holiday rest on Sunday in 321 CE. Sunday, rather, marks the end of the Christianization of time and the calendar, when Easter, Pentecost, Christmas, and martyrs' feasts were already taken for granted. The authors of these texts obviously wanted to accelerate , which is why an anonymous person even resorted to presenting Christ himself as the author of this letter. Here, severe punishments are threatened to all who do not observe Sunday, who work as if it were a weekday, and who skip worship. The broad tradition shows that the letter was read and distributed despite all the criticism, and was even turned into an early form of a chain letter.
 
-
-
-<https://www.barnesandnoble.com/w/the-apocryphal-sunday-uta-heil/1142954549>
+https://www.fortresspress.com/store/product/9781506491073/The-Apocryphal-Sunday
 
 
 
 I﻿nhalt:
-
-
 
 **A Introduction**
 
