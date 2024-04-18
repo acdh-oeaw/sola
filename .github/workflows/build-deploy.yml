@@ -116,12 +116,12 @@ jobs:
   deploy:
     name: Deploy docker image
     needs: [env, vars, build]
-    uses: acdh-oeaw/gl-autodevops-minimal-port/.github/workflows/deploy-cluster-2.yml@main
+    uses: acdh-oeaw/gl-autodevops-minimal-port/.github/workflows/deploy.yml@main
     secrets: inherit
     with:
       environment: '${{ needs.env.outputs.environment }}'
       DOCKER_TAG: '${{ needs.env.outputs.registry }}/${{ needs.env.outputs.image }}'
-      APP_NAME: 'frontend${{ needs.env.outputs.app_name }}'
+      APP_NAME: '${{ needs.env.outputs.app_name }}'
       APP_ROOT: '/'
       SERVICE_ID: '${{ vars.SERVICE_ID }}'
       PUBLIC_URL: '${{ needs.vars.outputs.public_url }}'
