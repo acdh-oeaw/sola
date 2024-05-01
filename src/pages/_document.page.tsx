@@ -24,6 +24,11 @@ export default class Document extends NextDocument {
           <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
 
           <link rel="manifest" href={`${webmanifestPrefix}/site.webmanifest`} />
+
+          <meta
+            name="google-site-verification"
+            content="2E6Gsm_z7nNdzTg7J9dZ-V3QJVDpPerwRtSGF0ulrMA"
+          />
         </Head>
         <body>
           <Main />
