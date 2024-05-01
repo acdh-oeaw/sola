@@ -8,15 +8,16 @@ export async function getStaticPages(): Promise<Array<string>> {
     path.join(pagesFolder, '**/*.tsx'),
     '!' + path.join(pagesFolder, '_*.tsx'),
     '!' + path.join(pagesFolder, 'api'),
-    '!' + path.join(pagesFolder, '404.tsx'),
-    '!' + path.join(pagesFolder, 'imprint.tsx'),
+    '!' + path.join(pagesFolder, '404.page.tsx'),
+    '!' + path.join(pagesFolder, '500.page.tsx'),
+    '!' + path.join(pagesFolder, 'imprint.page.tsx'),
   ])
 
   const pages: Array<string> = []
   fileNames.forEach((fileName) => {
     const path = fileName
       .slice(pagesFolder.length)
-      .replace(/\.tsx$/, '')
+      .replace(/\.page.tsx$/, '')
       .replace(/\/index$/, '')
     /** Exclude dynamic pages. */
     if (!path.includes('[')) {

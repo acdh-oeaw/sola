@@ -1,6 +1,6 @@
 import { log } from '@stefanprobst/log'
 import type { NextApiRequest, NextApiResponse } from 'next'
-import path from 'path'
+import path from 'path/posix'
 
 import { getCmsPostIds } from '@/api/cms'
 import type { SolaEntity } from '@/api/sola/client'
@@ -29,6 +29,7 @@ export default async function handler(
 ): Promise<void> {
   try {
     const locales = ['en', 'de'] as Array<SiteLocale>
+    const defaultLocale: SiteLocale = 'en'
 
     /** Static pages (without imprint page). */
     const pages = await getStaticPages()
@@ -36,7 +37,7 @@ export default async function handler(
     const links = locales
       .map((locale) => {
         return pages.map((page) => {
-          return createLink(path.join(locale, page))
+          return createLink(locale === defaultLocale ? page : path.join(locale, page))
         })
       })
       .flat()
@@ -46,7 +47,9 @@ export default async function handler(
       locales.map(async (locale) => {
         const ids = await getCmsPostIds(locale)
         return ids.map((id) => {
-          return createLink(path.join('posts', locale, id))
+          return createLink(
+            locale === defaultLocale ? path.join('posts', id) : path.join(locale, 'posts', id),
+          )
         })
       }),
     )
@@ -69,6 +72,12 @@ export default async function handler(
       return locales
         .map((locale) => {
           return entities.map((entity) => {
+            if (locale === defaultLocale) {
+              return createLink('dataset', {
+                id: entity.id,
+                type: entity.type,
+              })
+            }
             return createLink(path.join(locale, 'dataset'), {
               id: entity.id,
               type: entity.type,
