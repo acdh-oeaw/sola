@@ -1,6 +1,6 @@
 import type { SimulationNodeDatum } from 'd3-force'
 
-import type { SolaEntity } from '@/api/sola/client'
+import type { SolaListEntity } from '@/api/sola/client'
 
 export interface Node extends SimulationNodeDatum {
   id: number
@@ -10,7 +10,7 @@ export interface Node extends SimulationNodeDatum {
   color: string
 }
 
-export function createNode<T extends SolaEntity>(entity: T, color: string): Node {
+export function createNode<T extends SolaListEntity>(entity: T, color: string): Node {
   return {
     id: entity.id,
     label: entity.name,

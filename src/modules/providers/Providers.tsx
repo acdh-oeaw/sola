@@ -14,6 +14,7 @@ export const queryClient = new QueryClient({
     queries: {
       cacheTime: Infinity,
       staleTime: Infinity,
+      keepPreviousData: true,
       refetchOnMount: false,
       refetchOnWindowFocus: false,
     },

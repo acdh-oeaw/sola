@@ -1,5 +1,6 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
+import { groupBy, keyBy } from '@acdh-oeaw/lib'
 import { useRouter } from 'next/router'
 import { useCallback, useMemo, useState } from 'react'
 import { useQuery } from 'react-query'
@@ -10,33 +11,29 @@ import type {
   SolaEntityDetails,
   SolaEntityRelation,
   SolaEntityType,
+  SolaListEntity,
   SolaPassageDetails,
-  SolaPassageSearchResult,
   SolaTextDetails,
   SolaUser,
   SolaVocabulary,
 } from '@/api/sola/client'
 import {
+  getSolaEntities,
   getSolaEntityBibliographyById,
   getSolaEventById,
-  getSolaEvents,
   getSolaInstitutionById,
-  getSolaInstitutions,
   getSolaPassageById,
   getSolaPassagePublicationRelations,
-  getSolaPassages,
   getSolaPassageTopics,
   getSolaPassageTypes,
   getSolaPersonById,
   getSolaPersons,
   getSolaPlaceById,
-  getSolaPlaces,
   getSolaPublicationById,
   getSolaPublications,
   getSolaTextById,
   getSolaTextTypes,
   getSolaUsers,
-  searchSolaPassages,
 } from '@/api/sola/client'
 import { useHierarchicalData } from '@/lib/data/useHierarchicalData'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
@@ -46,8 +43,8 @@ import { getQueryParam } from '@/lib/url/getQueryParam'
 import { capitalize } from '@/lib/util/capitalize'
 import bibleBooks from '~/config/bible.json' assert { type: 'json' }
 
-/** No entitiy type has more than 1000 entries. */
-const defaultQuery = { limit: 1000 }
+/** Fetch everything from the list endpoint in one request. */
+const defaultQuery = { limit: 10_000 }
 
 /**
  * Fetches all SOLA entities and returns entities mapped by id.
@@ -55,57 +52,42 @@ const defaultQuery = { limit: 1000 }
 export function useSolaEntities() {
   const locale = useCurrentLocale()
 
-  const events = useQuery(
-    ['getSolaEvents', locale, {}],
-    () => {
-      return getSolaEvents({ query: defaultQuery, locale })
-    },
-    { select: mapResultsById },
-  )
-  const institutions = useQuery(
-    ['getSolaInstitutions', locale, {}],
-    () => {
-      return getSolaInstitutions({ query: defaultQuery, locale })
-    },
-    { select: mapResultsById },
-  )
-  const passages = useQuery(
-    ['getSolaPassages', locale, {}],
-    () => {
-      return getSolaPassages({ query: defaultQuery, locale })
-    },
-    { select: mapResultsById },
-  )
-  const persons = useQuery(
-    ['getSolaPersons', locale, {}],
-    () => {
-      return getSolaPersons({ query: defaultQuery, locale })
-    },
-    { select: mapResultsById },
-  )
-  const places = useQuery(
-    ['getSolaPlaces', locale, {}],
-    () => {
-      return getSolaPlaces({ query: defaultQuery, locale })
-    },
-    { select: mapResultsById },
-  )
-  const publications = useQuery(
-    ['getSolaPublications', locale, {}],
-    () => {
-      return getSolaPublications({ query: defaultQuery, locale })
-    },
-    { select: mapResultsById },
-  )
+  return useQuery(['getSolaEntities', locale, {}], async () => {
+    const data = await getSolaEntities({ query: defaultQuery, locale })
 
-  return {
-    events,
-    institutions,
-    passages,
-    persons,
-    places,
-    publications,
-  }
+    const grouped = groupBy(data.results, (result) => {
+      return result.type
+    })
+
+    const results = {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      events: keyBy(grouped.Event ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      institutions: keyBy(grouped.Institution ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      passages: keyBy(grouped.Passage ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      persons: keyBy(grouped.Person ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      places: keyBy(grouped.Place ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      publications: keyBy(grouped.Publication ?? [], (entry) => {
+        return entry.id
+      }),
+    }
+
+    return results
+  })
 }
 
 /**
@@ -158,70 +140,63 @@ export function useSolaFilteredPassages(
 ) {
   const locale = useCurrentLocale()
 
-  const { person, passage } = useSolaRelationTypes()
+  const { passage } = useSolaRelationTypes()
 
   const query = useMemo(() => {
     const hasAuthorsFilter = filter.authors !== undefined && filter.authors.length > 0
 
     return sanitize({
+      search: searchTerm,
       name__icontains: filter.name,
       kind__id__in: filter.types,
       topic__id__in: filter.topics,
       publication_set__id__in: filter.publications,
-      /** Filter passage by publication authors. */
+      /** Filter passage by publication authors with the updated endpoint. */
       publication_set__person_set__id__in: filter.authors,
-      publication_set__person_relationtype_set__id: hasAuthorsFilter
-        ? person.isAuthorOf
-        : undefined,
+      /** This should no longer be necessary. */
+      // publication_set__person_relationtype_set__id: hasAuthorsFilter
+      //   ? person.isAuthorOf
+      //   : undefined,
       publication_relationtype_set__id: hasAuthorsFilter ? passage.isIncludedIn : undefined,
     })
-  }, [filter, person, passage])
+  }, [filter, searchTerm, passage])
 
-  const filteredPassages = useQuery(
-    ['getSolaPassages', locale, query],
-    () => {
-      return getSolaPassages({ query: { ...defaultQuery, ...query }, locale })
-    },
-    { select: mapResultsById },
-  )
+  return useQuery(['getSolaEntities', locale, query], async () => {
+    const data = await getSolaEntities({ query: { ...defaultQuery, ...query }, locale })
 
-  const passagesSearchResults = useQuery(
-    ['searchSolaPassages', locale, searchTerm],
-    () => {
-      return searchSolaPassages({
-        query: { ...defaultQuery, search: searchTerm },
-        locale,
-      })
-    },
-    { select: mapResultsById },
-  )
-
-  const passagesSearchResultsData = passagesSearchResults.data
-  const filteredPassagesData = filteredPassages.data as typeof passagesSearchResultsData
-
-  const passages = useMemo(() => {
-    if (filteredPassagesData == null) return passagesSearchResultsData
-    if (passagesSearchResultsData == null) return filteredPassagesData
-
-    const merged = {} as typeof passagesSearchResultsData
-
-    Object.entries(filteredPassagesData).forEach(([id, entry]) => {
-      // @ts-expect-error Number as index
-      if (passagesSearchResultsData[id] != null) {
-        // @ts-expect-error Number as index
-        merged[id] = entry
-      }
+    const grouped = groupBy(data.results, (result) => {
+      return result.type
     })
 
-    return merged
-  }, [filteredPassagesData, passagesSearchResultsData])
+    const results = {
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      events: keyBy(grouped.Event ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      institutions: keyBy(grouped.Institution ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      passages: keyBy(grouped.Passage ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      persons: keyBy(grouped.Person ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      places: keyBy(grouped.Place ?? [], (entry) => {
+        return entry.id
+      }),
+      // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+      publications: keyBy(grouped.Publication ?? [], (entry) => {
+        return entry.id
+      }),
+    }
 
-  return {
-    data: passages,
-    isLoading: filteredPassages.isLoading || passagesSearchResults.isLoading,
-    // eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-    error: filteredPassages.error || passagesSearchResults.error,
-  }
+    return results
+  })
 }
 
 /**
@@ -365,6 +340,7 @@ export function useSolaPassagesFilterOptionsTree(
   passageTypes: Record<number, SolaVocabulary> | undefined,
   translation: string,
 ) {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const getParentId = useCallback((entity: any) => {
     return entity.parent_class?.id
   }, [])
@@ -493,16 +469,18 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
    * No need to fetch authors with `getSolaPersons?id__in=authorIds`,
    * since we already have all persons cached.
    */
-  const { persons } = useSolaEntities()
+  const q = useSolaEntities()
+  const persons = q.data?.persons
 
   const authors = useQuery(
     ['getPublicationById', locale, publicationId, {}],
 
     () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return getSolaPublicationById({ id: publicationId!, locale })
     },
     {
-      enabled: publicationId !== undefined && persons.data !== undefined,
+      enabled: publicationId !== undefined && persons !== undefined,
       select: (results) => {
         const isAuthorOfRelations = results.relations.filter((relation) => {
           return (
@@ -515,7 +493,8 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
         })
 
         return authorIds.map((id) => {
-          return persons.data![id]!
+          // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+          return persons![id]!
         })
       },
     },
@@ -629,6 +608,7 @@ export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
   const bibliography = useQuery(
     ['getSolaEntityBibliographyById', locale, id, query],
     () => {
+      // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
       return getSolaEntityBibliographyById({ id: id!, query, locale })
     },
     { enabled: id !== undefined },
@@ -780,9 +760,7 @@ function mapById<T extends { id: number }>(entities: Array<T>) {
 /**
  * Removes pagination info and maps entities by id.
  */
-function mapResultsById<T extends SolaEntity | SolaPassageSearchResult | SolaVocabulary>(
-  data: Results<T>,
-) {
+function mapResultsById<T extends SolaEntity | SolaListEntity | SolaVocabulary>(data: Results<T>) {
   return mapById(data.results)
 }
 

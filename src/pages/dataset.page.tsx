@@ -11,13 +11,8 @@ import type {
   SolaEntityDetails,
   SolaEntityRelation,
   SolaEntityType,
-  SolaEvent,
-  SolaInstitution,
-  SolaPassage,
+  SolaListEntity,
   SolaPassageDetails,
-  SolaPerson,
-  SolaPlace,
-  SolaPublication,
   SolaTextDetails,
   SolaVocabulary,
 } from '@/api/sola/client'
@@ -516,13 +511,7 @@ function ContentPanel({
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [filter])
 
-  const isLoadingInitialData =
-    solaEntities.events.status === 'loading' ||
-    solaEntities.institutions.status === 'loading' ||
-    solaEntities.passages.status === 'loading' ||
-    solaEntities.persons.status === 'loading' ||
-    solaEntities.places.status === 'loading' ||
-    solaEntities.publications.status === 'loading'
+  const isLoadingInitialData = solaEntities.status === 'loading'
 
   if (isLoadingInitialData) {
     return (
@@ -571,14 +560,17 @@ function VisualizationPanel({
   setSelectedSolaEntity,
   selectedSolaEntityRelations,
 }: {
-  solaEntities: {
-    events: QueryObserverResult<Record<number, SolaEvent>, unknown>
-    institutions: QueryObserverResult<Record<number, SolaInstitution>, unknown>
-    passages: QueryObserverResult<Record<number, SolaPassage>, unknown>
-    persons: QueryObserverResult<Record<number, SolaPerson>, unknown>
-    places: QueryObserverResult<Record<number, SolaPlace>, unknown>
-    publications: QueryObserverResult<Record<number, SolaPublication>, unknown>
-  }
+  solaEntities: QueryObserverResult<
+    {
+      events: Record<number, SolaListEntity>
+      institutions: Record<number, SolaListEntity>
+      passages: Record<number, SolaListEntity>
+      persons: Record<number, SolaListEntity>
+      places: Record<number, SolaListEntity>
+      publications: Record<number, SolaListEntity>
+    },
+    unknown
+  >
   filter: SolaPassagesFilter
   setFilter: (filter: SolaPassagesFilter) => void
   searchTerm: string | undefined
@@ -591,12 +583,12 @@ function VisualizationPanel({
 
   const filteredSolaPassages = useSolaFilteredPassages(filter, searchTerm)
 
-  const countedSolaEvents = count(solaEntities.events.data)
-  const countedSolaInstitutions = count(solaEntities.institutions.data)
-  const countedSolaPassages = count(solaEntities.passages.data)
-  const countedSolaPersons = count(solaEntities.persons.data)
-  const countedSolaPlaces = count(solaEntities.places.data)
-  const countedSolaPublications = count(solaEntities.publications.data)
+  const countedSolaEvents = count(solaEntities.data?.events)
+  const countedSolaInstitutions = count(solaEntities.data?.institutions)
+  const countedSolaPassages = count(solaEntities.data?.passages)
+  const countedSolaPersons = count(solaEntities.data?.persons)
+  const countedSolaPlaces = count(solaEntities.data?.places)
+  const countedSolaPublications = count(solaEntities.data?.publications)
 
   return (
     <section
@@ -1071,7 +1063,7 @@ function PrintButton({
   editorId,
 }: {
   entity?: SolaEntityDetails
-  authors?: Array<SolaPerson>
+  authors?: Array<SolaListEntity>
   relations: Record<SolaEntityType, Array<SolaEntityRelation>>
   biblePassages?: Record<string, string>
   primary?: SolaTextDetails
@@ -1249,7 +1241,7 @@ function Authors({
   authors,
   setSelectedSolaEntity,
 }: {
-  authors: QueryObserverResult<Array<SolaPerson>, unknown>
+  authors: QueryObserverResult<Array<SolaListEntity>, unknown>
   setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void
 }) {
   const t = useLabels() as typeof labels[SiteLocale]

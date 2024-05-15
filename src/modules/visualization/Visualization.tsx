@@ -2,17 +2,10 @@ import { Fragment, useCallback, useMemo } from 'react'
 import type { QueryObserverResult } from 'react-query'
 
 import type {
-  SolaEntity,
   SolaEntityDetails,
   SolaEntityRelation,
   SolaEntityType,
-  SolaEvent,
-  SolaInstitution,
-  SolaPassage,
-  SolaPassageSearchResult,
-  SolaPerson,
-  SolaPlace,
-  SolaPublication,
+  SolaListEntity,
 } from '@/api/sola/client'
 import { useCurrentLocale } from '@/lib/i18n/useCurrentLocale'
 import type { SolaSelectedEntity } from '@/lib/sola/types'
@@ -35,19 +28,23 @@ const labels = {
 }
 
 export interface VisualizationProps {
-  solaEntities: {
-    events: QueryObserverResult<Record<number, SolaEvent>, unknown>
-    institutions: QueryObserverResult<Record<number, SolaInstitution>, unknown>
-    passages: QueryObserverResult<Record<number, SolaPassage>, unknown>
-    persons: QueryObserverResult<Record<number, SolaPerson>, unknown>
-    places: QueryObserverResult<Record<number, SolaPlace>, unknown>
-    publications: QueryObserverResult<Record<number, SolaPublication>, unknown>
-  }
-  filteredSolaPassages: {
-    error: unknown
-    isLoading: boolean
-    data: Record<number, SolaPassageSearchResult> | undefined
-  }
+  solaEntities: QueryObserverResult<
+    {
+      events: Record<number, SolaListEntity>
+      institutions: Record<number, SolaListEntity>
+      passages: Record<number, SolaListEntity>
+      persons: Record<number, SolaListEntity>
+      places: Record<number, SolaListEntity>
+      publications: Record<number, SolaListEntity>
+    },
+    unknown
+  >
+  filteredSolaPassages: QueryObserverResult<
+    {
+      passages: Record<number, SolaListEntity>
+    },
+    unknown
+  >
   selectedSolaEntity: QueryObserverResult<SolaEntityDetails, unknown>
   setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void
   selectedSolaEntityRelations: Record<SolaEntityType, Array<SolaEntityRelation>>
@@ -64,12 +61,12 @@ export function Visualization({
 }: VisualizationProps): JSX.Element {
   const locale = useCurrentLocale()
 
-  const events = useNodes(solaEntities.events.data)
-  const institutions = useNodes(solaEntities.institutions.data)
-  const passages = useNodes(solaEntities.passages.data)
-  const persons = useNodes(solaEntities.persons.data)
-  const places = useNodes(solaEntities.places.data)
-  const publications = useNodes(solaEntities.publications.data)
+  const events = useNodes(solaEntities.data?.events)
+  const institutions = useNodes(solaEntities.data?.institutions)
+  const passages = useNodes(solaEntities.data?.passages)
+  const persons = useNodes(solaEntities.data?.persons)
+  const places = useNodes(solaEntities.data?.places)
+  const publications = useNodes(solaEntities.data?.publications)
 
   const timelines = useMemo(() => {
     return [
@@ -152,7 +149,7 @@ export function Visualization({
         }
         case 'Passage': {
           if (filteredSolaPassages.data === undefined) return false
-          if (filteredSolaPassages.data[node.id] !== undefined) {
+          if (filteredSolaPassages.data.passages[node.id] !== undefined) {
             return true
           }
           return false
@@ -193,14 +190,14 @@ export function Visualization({
         getLabelForNodeType={getLabelForNodeType}
       />
       <Alternate
-        filteredSolaPassages={filteredSolaPassages.data}
+        filteredSolaPassages={filteredSolaPassages.data?.passages}
         setSelectedSolaEntity={setSelectedSolaEntity}
       />
     </Fragment>
   )
 }
 
-function useNodes<T extends SolaEntity>(map?: Record<number, T>) {
+function useNodes<T extends SolaListEntity>(map?: Record<number, T>) {
   return useMemo(() => {
     return Object.values(map ?? {})
       .filter(hasPrimaryDate)
@@ -210,7 +207,7 @@ function useNodes<T extends SolaEntity>(map?: Record<number, T>) {
   }, [map])
 }
 
-function hasPrimaryDate(entity: SolaEntity) {
+function hasPrimaryDate(entity: SolaListEntity) {
   const hasDate = entity.primary_date != null && entity.primary_date.length > 0
   if (!hasDate && entity.type !== 'Place') {
     // console.log('Entity without primary date', entity)
@@ -225,7 +222,7 @@ function Alternate({
   filteredSolaPassages,
   setSelectedSolaEntity,
 }: {
-  filteredSolaPassages?: Record<number, SolaPassageSearchResult>
+  filteredSolaPassages?: Record<number, SolaListEntity>
   setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void
 }) {
   if (filteredSolaPassages === undefined) return null
