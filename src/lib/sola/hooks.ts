@@ -27,10 +27,8 @@ import {
   getSolaPassageTopics,
   getSolaPassageTypes,
   getSolaPersonById,
-  getSolaPersons,
   getSolaPlaceById,
   getSolaPublicationById,
-  getSolaPublications,
   getSolaTextById,
   getSolaTextTypes,
   getSolaUsers,
@@ -288,8 +286,6 @@ export function useSolaSelectedEntity() {
 export function useSolaFilterOptions() {
   const locale = useCurrentLocale()
 
-  const { person } = useSolaRelationTypes()
-
   const passageTopics = useQuery(
     ['getSolaPassageTopics', locale, {}],
     () => {
@@ -304,24 +300,10 @@ export function useSolaFilterOptions() {
     },
     { select: mapResultsById },
   )
-  const publications = useQuery(
-    ['getSolaPublications', locale, {}],
-    () => {
-      return getSolaPublications({ query: defaultQuery, locale })
-    },
-    { select: mapResultsById },
-  )
-  const authorQuery = { publication_relationtype_set__id: person.isAuthorOf }
-  const authors = useQuery(
-    ['getSolaPersons', locale, authorQuery],
-    () => {
-      return getSolaPersons({
-        query: { ...authorQuery, ...defaultQuery },
-        locale,
-      })
-    },
-    { select: mapResultsById },
-  )
+
+  const { data } = useSolaEntities()
+  const publications = data?.publications
+  const authors = data?.persons
 
   return {
     authors,

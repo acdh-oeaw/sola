@@ -1,23 +1,16 @@
+import { groupBy } from '@acdh-oeaw/lib'
 import { log } from '@stefanprobst/log'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import path from 'path/posix'
 
 import { getCmsPostIds } from '@/api/cms'
-import type { SolaEntity } from '@/api/sola/client'
-import {
-  getSolaEvents,
-  getSolaInstitutions,
-  getSolaPassages,
-  getSolaPersons,
-  getSolaPlaces,
-  getSolaPublications,
-} from '@/api/sola/client'
+import { type SolaListEntity, getSolaEntities } from '@/api/sola/client'
 import type { SiteLocale } from '@/lib/i18n/getCurrentLocale'
 import { createLink } from '@/lib/sitemap/createLink'
 import { createSitemap } from '@/lib/sitemap/createSitemap'
 import { getStaticPages } from '@/lib/sitemap/getStaticPages'
 
-const query = { limit: 1000 }
+const query = { limit: 10_000 }
 
 /**
  * Generates a dynamic sitemap. Requests to `/sitemap.xml` will be handled here
@@ -58,17 +51,15 @@ export default async function handler(
     /** Pages for SOLA entities. */
     /** Only fetch for one locale, since ids and type are the same for all locales. */
     const locale = locales[0] as SiteLocale
-    const [events, institutions, passages, persons, places, publications] = await Promise.all([
-      getSolaEvents({ locale, query }),
-      getSolaInstitutions({ locale, query }),
-      getSolaPassages({ locale, query }),
-      getSolaPersons({ locale, query }),
-      getSolaPlaces({ locale, query }),
-      getSolaPublications({ locale, query }),
-    ])
+
+    const data = await getSolaEntities({ query, locale })
+
+    const grouped = groupBy(data.results, (result) => {
+      return result.type
+    })
 
     /* eslint-disable-next-line no-inner-declarations */
-    function createLinksForEntities(entities: Array<SolaEntity>) {
+    function createLinksForEntities(entities: Array<SolaListEntity> = []) {
       return locales
         .map((locale) => {
           return entities.map((entity) => {
@@ -87,12 +78,12 @@ export default async function handler(
         .flat()
     }
 
-    links.push(...createLinksForEntities(events.results))
-    links.push(...createLinksForEntities(institutions.results))
-    links.push(...createLinksForEntities(passages.results))
-    links.push(...createLinksForEntities(persons.results))
-    links.push(...createLinksForEntities(places.results))
-    links.push(...createLinksForEntities(publications.results))
+    links.push(...createLinksForEntities(grouped.Event))
+    links.push(...createLinksForEntities(grouped.Institution))
+    links.push(...createLinksForEntities(grouped.Passage))
+    links.push(...createLinksForEntities(grouped.Person))
+    links.push(...createLinksForEntities(grouped.Place))
+    links.push(...createLinksForEntities(grouped.Publication))
 
     const sitemap = createSitemap(links)
 

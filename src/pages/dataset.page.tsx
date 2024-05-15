@@ -261,8 +261,8 @@ function FilterPanel({
     }
   }, [searchTerm])
 
-  const sortedAuthors = useSortedData(authors.data, 'name')
-  const sortedPublications = useSortedData(publications.data, 'name')
+  const sortedAuthors = useSortedData(authors, 'name')
+  const sortedPublications = useSortedData(publications, 'name')
   const { passageTopicsTree, passageTypesTree } = useSolaPassagesFilterOptionsTree(
     passageTopics.data,
     passageTypes.data,
@@ -270,10 +270,10 @@ function FilterPanel({
   )
 
   if (
-    authors.data === undefined ||
+    authors === undefined ||
     passageTopics.data === undefined ||
     passageTypes.data === undefined ||
-    publications.data === undefined
+    publications === undefined
   ) {
     return (
       <aside
@@ -679,10 +679,10 @@ function ActiveFilterList({
   const options = useSolaFilterOptions()
 
   if (
-    options.authors.data === undefined ||
+    options.authors === undefined ||
     options.passageTopics.data === undefined ||
     options.passageTypes.data === undefined ||
-    options.publications.data === undefined
+    options.publications === undefined
   ) {
     return <div className="pb-2 text-xs">&nbsp;</div>
   }
@@ -741,7 +741,7 @@ function ActiveFilterList({
               <dd className="flex min-w-0">
                 <ul className="flex flex-wrap items-center min-w-0 md:justify-end md:space-x-1">
                   {authors.map((id) => {
-                    const name = options.authors.data?.[id]?.name
+                    const name = options.authors?.[id]?.name
                     return (
                       <li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
@@ -782,7 +782,7 @@ function ActiveFilterList({
               <dd className="flex min-w-0">
                 <ul className="flex flex-wrap items-center min-w-0 md:justify-end md:space-x-1">
                   {publications.map((id) => {
-                    const name = options.publications.data?.[id]?.name
+                    const name = options.publications?.[id]?.name
                     return (
                       <li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
                         <Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
