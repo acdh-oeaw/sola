@@ -49,7 +49,7 @@ WORKDIR /app
 
 USER node
 
-COPY --from=build --chown=node:node /app/next.config.js ./
+COPY --from=build --chown=node:node /app/next.config.ts ./
 COPY --from=build --chown=node:node /app/.next/standalone ./
 COPY --from=build --chown=node:node /app/.next/static ./.next/static
 # exclude assets which should have been optimized with `next/image`.
