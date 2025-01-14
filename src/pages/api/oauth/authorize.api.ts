@@ -1,1 +1,1 @@
-export { authorize as default } from '@stefanprobst/netlify-cms-oauth-client'
+export { authorize as default } from "@stefanprobst/netlify-cms-oauth-client";

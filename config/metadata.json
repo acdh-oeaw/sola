@@ -1,34 +1,34 @@
 {
-  "en": {
-    "url": "https://sola.acdh.oeaw.ac.at/",
-    "title": "Sunday Observance in Late Antiquity",
-    "shortTitle": "SOLA",
-    "description": "Passages from Greek and Latin literature on the cultural history of Sunday from the time of Emperor Constantine to the end of Late Antiquity.",
-    "favicon": {
-      "src": "public/assets/images/logo.svg"
-    },
-    "image": {
-      "src": "/android-chrome-512x512.png",
-      "alt": ""
-    },
-    "twitter": {
-      "handle": ""
-    }
-  },
-  "de": {
-    "url": "https://sola.acdh.oeaw.ac.at/",
-    "title": "Der Sonntag in der Spätantike",
-    "shortTitle": "SOLA",
-    "description": "Passagen aus der griechischen und lateinischen Literatur zur Kulturgeschichte des Sonntags seit der Zeit des Kaisers Konstantin bis zum Ausklang der Spätantike.",
-    "favicon": {
-      "src": "public/assets/images/logo.svg"
-    },
-    "image": {
-      "src": "/android-chrome-512x512.png",
-      "alt": ""
-    },
-    "twitter": {
-      "handle": ""
-    }
-  }
+	"en": {
+		"url": "https://sola.acdh.oeaw.ac.at/",
+		"title": "Sunday Observance in Late Antiquity",
+		"shortTitle": "SOLA",
+		"description": "Passages from Greek and Latin literature on the cultural history of Sunday from the time of Emperor Constantine to the end of Late Antiquity.",
+		"favicon": {
+			"src": "public/assets/images/logo.svg"
+		},
+		"image": {
+			"src": "/android-chrome-512x512.png",
+			"alt": ""
+		},
+		"twitter": {
+			"handle": ""
+		}
+	},
+	"de": {
+		"url": "https://sola.acdh.oeaw.ac.at/",
+		"title": "Der Sonntag in der Spätantike",
+		"shortTitle": "SOLA",
+		"description": "Passagen aus der griechischen und lateinischen Literatur zur Kulturgeschichte des Sonntags seit der Zeit des Kaisers Konstantin bis zum Ausklang der Spätantike.",
+		"favicon": {
+			"src": "public/assets/images/logo.svg"
+		},
+		"image": {
+			"src": "/android-chrome-512x512.png",
+			"alt": ""
+		},
+		"twitter": {
+			"handle": ""
+		}
+	}
 }

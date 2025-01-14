@@ -11,7 +11,7 @@
  * }
  */
 export class UnreachableError extends Error {
-  constructor(value: never) {
-    super(`Unreachable: ${JSON.stringify(value)}.`)
-  }
+	constructor(value: never) {
+		super(`Unreachable: ${JSON.stringify(value)}.`);
+	}
 }

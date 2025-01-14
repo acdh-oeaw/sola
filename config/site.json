@@ -1,6 +1,6 @@
 {
-  "locales": ["de", "en"],
-  "defaultLocale": "en",
-  "url": "https://sola.acdh.oeaw.ac.at/",
-  "api": "https://sola.acdh-dev.oeaw.ac.at/"
+	"locales": ["de", "en"],
+	"defaultLocale": "en",
+	"url": "https://sola.acdh.oeaw.ac.at/",
+	"api": "https://sola.acdh-dev.oeaw.ac.at/"
 }

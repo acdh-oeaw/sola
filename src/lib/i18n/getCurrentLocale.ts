@@ -1,6 +1,6 @@
-import site from '~/config/site.json' assert { type: 'json' }
+import site from "~/config/site.json" assert { type: "json" };
 
-const { defaultLocale, locales } = site
+const { defaultLocale, locales } = site;
 
 /**
  * Unfortunately, typescript currently does not support importing json modules `as const`,
@@ -8,16 +8,16 @@ const { defaultLocale, locales } = site
  *
  * @see https://github.com/microsoft/TypeScript/issues/32063
  */
-export type SiteLocale = 'de' | 'en'
+export type SiteLocale = "de" | "en";
 
 export function getCurrentLocale(locale: string | undefined): SiteLocale {
-  if (locale === undefined || !isSupportedLocale(locale)) {
-    return defaultLocale as SiteLocale
-  }
+	if (locale === undefined || !isSupportedLocale(locale)) {
+		return defaultLocale as SiteLocale;
+	}
 
-  return locale
+	return locale;
 }
 
 function isSupportedLocale(locale: string): locale is SiteLocale {
-  return locales.includes(locale)
+	return locales.includes(locale);
 }

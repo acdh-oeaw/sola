@@ -1,10 +1,10 @@
-import type { NextRouter } from 'next/router'
-import { useRouter } from 'next/router'
-import { useMemo } from 'react'
+import type { NextRouter } from "next/router";
+import { useRouter } from "next/router";
+import { useMemo } from "react";
 
-import { addQueryParams } from '@/lib/url/addQueryParams'
-import { createUrlFromPath } from '@/lib/url/createUrlFromPath'
-import { useSiteMetadata } from '@/modules/metadata/useSiteMetadata'
+import { addQueryParams } from "@/lib/url/addQueryParams";
+import { createUrlFromPath } from "@/lib/url/createUrlFromPath";
+import { useSiteMetadata } from "@/modules/metadata/useSiteMetadata";
 
 /**
  * Returns the canonical URL for the current route's pathname.
@@ -13,20 +13,20 @@ import { useSiteMetadata } from '@/modules/metadata/useSiteMetadata'
  * only the pathname is used for the canonical URL, and all query params
  * are removed.
  */
-export function useCanonicalUrl(query?: NextRouter['query']): string {
-  const router = useRouter()
-  const { url: siteUrl } = useSiteMetadata()
+export function useCanonicalUrl(query?: NextRouter["query"]): string {
+	const router = useRouter();
+	const { url: siteUrl } = useSiteMetadata();
 
-  const canonicalUrl = useMemo(() => {
-    const { pathname } = createUrlFromPath(router.asPath)
-    const url = createUrlFromPath([router.locale, pathname].join(''), siteUrl)
+	const canonicalUrl = useMemo(() => {
+		const { pathname } = createUrlFromPath(router.asPath);
+		const url = createUrlFromPath([router.locale, pathname].join(""), siteUrl);
 
-    if (query !== undefined) {
-      addQueryParams(url, query)
-    }
+		if (query !== undefined) {
+			addQueryParams(url, query);
+		}
 
-    return url.toString()
-  }, [router, siteUrl, query])
+		return url.toString();
+	}, [router, siteUrl, query]);
 
-  return canonicalUrl
+	return canonicalUrl;
 }
