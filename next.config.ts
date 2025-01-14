@@ -1,14 +1,14 @@
-import type { NextConfig } from "next";
 import createBundleAnalyzer from "@next/bundle-analyzer";
+import type { NextConfig } from "next";
 
 import metadata from "~/config/metadata.json";
 
 const withBundleAnalyzer = createBundleAnalyzer({
-	enabled: process.env["BUNDLE_ANALYZER"] === "enabled",
+	enabled: process.env.BUNDLE_ANALYZER === "enabled",
 });
 
 const locales = Object.keys(metadata);
-const defaultLocale = locales[0] as string;
+const defaultLocale = locales[0]!;
 
 const nextConfig: NextConfig = {
 	eslint: {

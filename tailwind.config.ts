@@ -1,10 +1,10 @@
-import type { Config } from "tailwindcss";
-import defaultTheme from "tailwindcss/defaultTheme";
-import colors from "tailwindcss/colors";
 import typographyPlugin from "@tailwindcss/typography";
+import type { Config } from "tailwindcss";
+import colors from "tailwindcss/colors";
+import defaultTheme from "tailwindcss/defaultTheme";
 
 function px(px: number): string {
-	return `${px / 16}rem`;
+	return `${String(px / 16)}rem`;
 }
 
 const config: Config = {
