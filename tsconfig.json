@@ -1,29 +1,25 @@
 {
-  "extends": "@acdh-oeaw/tsconfig",
-  "compilerOptions": {
-    "baseUrl": ".",
-    "exactOptionalPropertyTypes": false,
-    "paths": {
-      "@/*": [
-        "./src/*"
-      ],
-      "~/*": [
-        "./*"
-      ]
-    },
-    "esModuleInterop": true,
-    "module": "esnext",
-    "moduleResolution": "node",
-    "resolveJsonModule": true
-  },
-  "include": [
-    "./next-env.d.ts",
-    "./**/*.ts",
-    "./**/*.tsx",
-    "./*.config.mjs",
-    "./*.config.cjs"
-  ],
-  "exclude": [
-    "node_modules"
-  ]
+	"$schema": "https://json.schemastore.org/tsconfig",
+	"extends": "@acdh-oeaw/tsconfig",
+	"compilerOptions": {
+		"paths": {
+			"@/*": ["./src/*"],
+			"~/*": ["./*"],
+		},
+		"plugins": [{ "name": "next" }]
+	},
+	"include": [
+		"./next-env.d.ts",
+		"./**/*.d.ts",
+		"./**/*.js",
+		// "./**/*.mdx",
+		"./**/*.ts",
+		"./**/*.tsx",
+		".next/types/**/*.ts"
+	],
+	"exclude": ["node_modules", "out"],
+	"mdx": {
+		"checkMdx": false,
+		"plugins": ["remark-frontmatter", "remark-gfm"]
+	}
 }

@@ -1,7 +1,7 @@
 name: Build and deploy
 
 concurrency:
-  group: '${{ github.workflow }}-${{ github.ref }}-build-deploy'
+  group: "${{ github.workflow }}-${{ github.ref }}-build-deploy"
   cancel-in-progress: true
 
 on:
@@ -32,17 +32,17 @@ jobs:
           echo "ENVIRONMENT=$ENVIRONMENT" >> $GITHUB_OUTPUT
           echo "APP_NAME_SUFFIX=$APP_NAME_SUFFIX" >> $GITHUB_OUTPUT
     outputs:
-      environment: '${{ steps.environment.outputs.ENVIRONMENT }}'
-      app_name: 'sola-frontend${{ steps.environment.outputs.APP_NAME_SUFFIX }}'
-      registry: 'ghcr.io'
-      image: '${{ github.repository }}'
+      environment: "${{ steps.environment.outputs.ENVIRONMENT }}"
+      app_name: "sola-frontend${{ steps.environment.outputs.APP_NAME_SUFFIX }}"
+      registry: "ghcr.io"
+      image: "${{ github.repository }}"
 
   vars:
     name: Generate public url
     needs: [env]
     runs-on: ubuntu-22.04
     environment:
-      name: '${{ needs.env.outputs.environment }}'
+      name: "${{ needs.env.outputs.environment }}"
     steps:
       - name: Generate public URL
         id: public_url
@@ -55,7 +55,7 @@ jobs:
 
           echo "PUBLIC_URL=$PUBLIC_URL" >> $GITHUB_OUTPUT
     outputs:
-      public_url: '${{ steps.public_url.outputs.PUBLIC_URL }}'
+      public_url: "${{ steps.public_url.outputs.PUBLIC_URL }}"
 
   build:
     name: Build and push docker image
@@ -64,6 +64,8 @@ jobs:
     permissions:
       contents: read
       packages: write
+    environment:
+      name: "${{ needs.env.outputs.environment }}"
 
     steps:
       - name: Checkout repository
@@ -75,15 +77,15 @@ jobs:
       - name: Log in to the Container registry
         uses: docker/login-action@v3
         with:
-          registry: '${{ needs.env.outputs.registry }}'
-          username: '${{ github.actor }}'
-          password: '${{ secrets.GITHUB_TOKEN }}'
+          registry: "${{ needs.env.outputs.registry }}"
+          username: "${{ github.actor }}"
+          password: "${{ secrets.GITHUB_TOKEN }}"
 
       - name: Extract metadata (tags, labels) for Docker
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: '${{ needs.env.outputs.registry }}/${{ needs.env.outputs.image }}'
+          images: "${{ needs.env.outputs.registry }}/${{ needs.env.outputs.image }}"
           tags: |
             type=raw,value={{sha}}
             type=ref,event=branch
@@ -93,23 +95,27 @@ jobs:
           #   type=raw,value=latest
 
       - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
-          tags: '${{ steps.meta.outputs.tags }}'
-          labels: '${{ steps.meta.outputs.labels }}'
+          tags: "${{ steps.meta.outputs.tags }}"
+          labels: "${{ steps.meta.outputs.labels }}"
           build-args: |
-            "OAUTH_PROVIDER=${{ vars.K8S_SECRET_OAUTH_PROVIDER }}"
-            "OAUTH_CLIENT_ID=${{ secrets.K8S_SECRET_OAUTH_CLIENT_ID }}"
-            "OAUTH_CLIENT_SECRET=${{ secrets.K8S_SECRET_OAUTH_CLIENT_SECRET }}"
-            "OAUTH_REDIRECT_URL=${{ vars.K8S_SECRET_OAUTH_REDIRECT_URL }}"
-            "OAUTH_ALLOWED_ORIGIN=${{ vars.K8S_SECRET_OAUTH_ALLOWED_ORIGIN }}"
             "NEXT_PUBLIC_APP_BASE_URL=${{ needs.vars.outputs.public_url }}"
             "NEXT_PUBLIC_BOTS=${{ vars.NEXT_PUBLIC_BOTS }}"
+            "NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION=${{ vars.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION }}"
+            "NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG=${{ vars.NEXT_PUBLIC_KEYSTATIC_GITHUB_APP_SLUG }}"
+            "NEXT_PUBLIC_KEYSTATIC_GITHUB_REPO_NAME=${{ vars.NEXT_PUBLIC_KEYSTATIC_GITHUB_REPO_NAME }}"
+            "NEXT_PUBLIC_KEYSTATIC_GITHUB_REPO_OWNER=${{ vars.NEXT_PUBLIC_KEYSTATIC_GITHUB_REPO_OWNER }}"
+            "NEXT_PUBLIC_KEYSTATIC_MODE=${{ vars.NEXT_PUBLIC_KEYSTATIC_MODE }}"
             "NEXT_PUBLIC_MATOMO_BASE_URL=${{ vars.NEXT_PUBLIC_MATOMO_BASE_URL }}"
             "NEXT_PUBLIC_MATOMO_ID=${{ vars.NEXT_PUBLIC_MATOMO_ID }}"
             "NEXT_PUBLIC_REDMINE_ID=${{ vars.SERVICE_ID }}"
+          secrets: |
+            "KEYSTATIC_GITHUB_CLIENT_ID=${{ secrets.K8S_SECRET_KEYSTATIC_GITHUB_CLIENT_ID }}"
+            "KEYSTATIC_GITHUB_CLIENT_SECRET=${{ secrets.K8S_SECRET_KEYSTATIC_GITHUB_CLIENT_SECRET }}"
+            "KEYSTATIC_SECRET=${{ secrets.K8S_SECRET_KEYSTATIC_SECRET }}"
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
@@ -119,10 +125,10 @@ jobs:
     uses: acdh-oeaw/gl-autodevops-minimal-port/.github/workflows/deploy.yml@main
     secrets: inherit
     with:
-      environment: '${{ needs.env.outputs.environment }}'
-      DOCKER_TAG: '${{ needs.env.outputs.registry }}/${{ needs.env.outputs.image }}'
-      APP_NAME: '${{ needs.env.outputs.app_name }}'
-      APP_ROOT: '/'
-      SERVICE_ID: '${{ vars.SERVICE_ID }}'
-      PUBLIC_URL: '${{ needs.vars.outputs.public_url }}'
-      default_port: '3000'
+      environment: "${{ needs.env.outputs.environment }}"
+      DOCKER_TAG: "${{ needs.env.outputs.registry }}/${{ needs.env.outputs.image }}"
+      APP_NAME: "${{ needs.env.outputs.app_name }}"
+      APP_ROOT: "/"
+      SERVICE_ID: "${{ vars.SERVICE_ID }}"
+      PUBLIC_URL: "${{ needs.vars.outputs.public_url }}"
+      default_port: "3000"

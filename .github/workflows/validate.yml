@@ -1,10 +1,11 @@
 name: Validate
 
 concurrency:
-  group: '${{ github.workflow }}-${{ github.ref }}-validate'
+  group: "${{ github.workflow }}-${{ github.ref }}-validate"
   cancel-in-progress: true
 
 on:
+  workflow_dispatch:
   pull_request:
     branches:
       - main
@@ -13,8 +14,28 @@ on:
       - main
 
 jobs:
+  changes:
+    name: Check changed files
+    runs-on: ubuntu-22.04
+
+    outputs:
+      src: ${{ steps.filter.outputs.src }}
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - uses: dorny/paths-filter@v3
+        id: filter
+        with:
+          filters: |
+            src:
+              - '!(content|public)/**'
+
   validate:
     name: Validate
+    needs: [changes]
+    if: ${{ needs.changes.outputs.src == 'true' }}
     runs-on: ${{ matrix.os }}
     timeout-minutes: 60
 
@@ -30,80 +51,82 @@ jobs:
 
       # Necessary because `actions/setup-node` does not yet support `corepack`.
       # @see https://github.com/actions/setup-node/issues/531
-      # - name: Install pnpm
-      #   uses: pnpm/action-setup@v3
+      - name: Install pnpm
+        uses: pnpm/action-setup@v4
 
-      # - name: Use Node.js ${{ matrix.node-version }}
-      #   uses: actions/setup-node@v4
-      #   with:
-      #     node-version: ${{ matrix.node-version }}
-      #     cache: 'pnpm'
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ matrix.node-version }}
+          cache: "pnpm"
 
-      # - name: Install dependencies
-      #   run: pnpm install --frozen-lockfile
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
 
-      # - name: Lint commit messages
-      #   uses: acdh-oeaw/commitlint-action@v1
+      - name: Format
+        run: pnpm run format:check
 
-      # - name: Format
-      #   run: pnpm run format:check
+      - name: Lint
+        run: pnpm run lint:check
 
-      # - name: Lint
-      #   run: pnpm run lint:check
+      - name: Typecheck
+        run: pnpm run types:check
 
-      # - name: Typecheck
-      #   run: pnpm run types:check
+      - name: Test
+        run: pnpm run test
 
-      # - name: Test
-      #   run: pnpm run test
+      - name: Get playwright version
+        run: |
+          PLAYWRIGHT_VERSION=$(pnpm ls @playwright/test --json | jq --raw-output '.[0].devDependencies["@playwright/test"].version')
+          echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
 
-      # - name: Get playwright version
-      #   run: |
-      #     PLAYWRIGHT_VERSION=$(pnpm ls @playwright/test --json | jq --raw-output '.[0].devDependencies["@playwright/test"].version')
-      #     echo "PLAYWRIGHT_VERSION=$PLAYWRIGHT_VERSION" >> $GITHUB_ENV
+      - name: Cache playwright browsers
+        uses: actions/cache@v4
+        id: cache-playwright-browsers
+        with:
+          path: "~/.cache/ms-playwright"
+          key: "${{ matrix.os }}-playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}"
 
-      # - name: Cache playwright browsers
-      #   uses: actions/cache@v4
-      #   id: cache-playwright-browsers
-      #   with:
-      #     path: "~/.cache/ms-playwright"
-      #     key: "${{ matrix.os }}-playwright-browsers-${{ env.PLAYWRIGHT_VERSION }}"
+      - name: Install playwright browsers
+        if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
+        run: pnpm exec playwright install --with-deps
+      - name: Install playwright browsers (operating system dependencies)
+        if: steps.cache-playwright-browsers.outputs.cache-hit == 'true'
+        run: pnpm exec playwright install-deps
 
-      # - name: Install playwright browsers
-      #   if: steps.cache-playwright-browsers.outputs.cache-hit != 'true'
-      #   run: pnpm exec playwright install --with-deps
-      # - name: Install playwright browsers (operating system dependencies)
-      #   if: steps.cache-playwright-browsers.outputs.cache-hit == 'true'
-      #   run: pnpm exec playwright install-deps
+      # https://nextjs.org/docs/pages/building-your-application/deploying/ci-build-caching#github-actions
+      - name: Cache Next.js build output
+        uses: actions/cache@v4
+        with:
+          path: "${{ github.workspace }}/.next/cache"
+          key: "${{ matrix.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}"
 
-      # # https://nextjs.org/docs/pages/building-your-application/deploying/ci-build-caching#github-actions
-      # - name: Cache Next.js build output
-      #   uses: actions/cache@v4
-      #   with:
-      #     path: "${{ github.workspace }}/.next/cache"
-      #     key: "${{ matrix.os }}-nextjs-${{ hashFiles('pnpm-lock.yaml') }}"
+      - name: Build app
+        run: pnpm run build
+        env:
+          NEXT_PUBLIC_APP_BASE_URL: "http://localhost:3000"
+          NEXT_PUBLIC_MATOMO_BASE_URL: "${{ vars.NEXT_PUBLIC_MATOMO_BASE_URL }}"
+          NEXT_PUBLIC_REDMINE_ID: "${{ vars.SERVICE_ID }}"
 
-      # - name: Build app
-      #   run: pnpm run build
-      #   env:
-      #     NEXT_PUBLIC_APP_BASE_URL: "http://localhost:3000"
-      #     NEXT_PUBLIC_REDMINE_ID: "${{ vars.SERVICE_ID }}"
+      - name: Run e2e tests
+        run: pnpm run test:e2e
+        env:
+          NEXT_PUBLIC_APP_BASE_URL: "http://localhost:3000"
+          NEXT_PUBLIC_MATOMO_BASE_URL: "${{ vars.NEXT_PUBLIC_MATOMO_BASE_URL }}"
+          NEXT_PUBLIC_REDMINE_ID: "${{ vars.SERVICE_ID }}"
 
-      # - name: Run e2e tests
-      #   run: pnpm run test:e2e
-      #   env:
-      #     NEXT_PUBLIC_APP_BASE_URL: "http://localhost:3000"
-
-      # - uses: actions/upload-artifact@v4
-      #   if: always()
-      #   with:
-      #     name: playwright-report
-      #     path: playwright-report/
-      #     retention-days: 30
+      - uses: actions/upload-artifact@v4
+        if: ${{ !cancelled() }}
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 30
 
   build-deploy:
-    if: ${{ github.event_name == 'push' }}
+    name: Build and deploy
     needs: [validate]
+    # @see https://github.com/orgs/community/discussions/45058
+    if: ${{ github.event_name == 'push' && !failure() && !cancelled() }}
     uses: ./.github/workflows/build-deploy.yml
     secrets: inherit
     # https://docs.github.com/en/actions/using-workflows/reusing-workflows#access-and-permissions

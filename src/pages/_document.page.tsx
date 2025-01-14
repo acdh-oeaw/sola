@@ -6,7 +6,6 @@ import NextDocument, { Head, Html, Main, NextScript } from 'next/document'
 export default class Document extends NextDocument {
   render(): JSX.Element {
     const { locale, defaultLocale } = this.props.__NEXT_DATA__
-    const webmanifestPrefix = locale === defaultLocale ? '' : `/${locale}`
 
     return (
       <Html>
@@ -19,11 +18,9 @@ export default class Document extends NextDocument {
             crossOrigin="anonymous"
           />
 
-          <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
-          <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
-          <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+          <link rel="apple-touch-icon" sizes="180x180" href="/apple-icon.png" />
 
-          <link rel="manifest" href={`${webmanifestPrefix}/site.webmanifest`} />
+          <link rel="manifest" href="/site.webmanifest" />
 
           <meta
             name="google-site-verification"

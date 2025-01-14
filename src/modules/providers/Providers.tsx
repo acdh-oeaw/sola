@@ -1,6 +1,5 @@
 import { I18nProvider } from '@react-aria/i18n'
 import { OverlayProvider } from '@react-aria/overlays'
-import { SSRProvider } from '@react-aria/ssr'
 import { useRouter } from 'next/router'
 import { QueryClient, QueryClientProvider } from 'react-query'
 
@@ -34,11 +33,9 @@ export function Providers(props: ProvidersProps): JSX.Element {
   return (
     <SiteMetadataProvider>
       <QueryClientProvider client={queryClient}>
-        <SSRProvider>
-          <I18nProvider locale={locale}>
-            <OverlayProvider>{props.children}</OverlayProvider>
-          </I18nProvider>
-        </SSRProvider>
+				<I18nProvider locale={locale}>
+					<OverlayProvider>{props.children}</OverlayProvider>
+				</I18nProvider>
       </QueryClientProvider>
     </SiteMetadataProvider>
   )

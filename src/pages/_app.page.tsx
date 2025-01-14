@@ -19,14 +19,6 @@ import { Providers } from '@/modules/providers/Providers'
 export default function App({ Component, pageProps, router }: AppProps): JSX.Element {
   const { locale, defaultLocale } = router
 
-  useEffect(() => {
-    const webmanifestPrefix = locale === defaultLocale ? '' : `/${locale}`
-    const link = document.querySelector('link[rel="manifest"]')
-    if (link != null) {
-      link.setAttribute('href', `${webmanifestPrefix}/site.webmanifest`)
-    }
-  }, [locale, defaultLocale])
-
   return (
     <Fragment>
       <Head>

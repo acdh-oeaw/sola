@@ -1,15 +1,15 @@
-const defaultTheme = require('tailwindcss/defaultTheme')
-const colors = require('tailwindcss/colors')
+import type { Config } from "tailwindcss";
+import defaultTheme from 'tailwindcss/defaultTheme'
+import colors from 'tailwindcss/colors'
+import typographyPlugin from "@tailwindcss/typography"
 
-/** @type {(px: number) => string} */
-function px(px) {
+function px(px: number): string {
   return `${px / 16}rem`
 }
 
-/** @type {import('tailwindcss').Config} */
-const config = {
+const config: Config = {
   content: ['./config/**/*.@(json)', './src/**/*.@(css|html|js|ts|tsx)'],
-  plugins: [require('@tailwindcss/typography')],
+  plugins: [typographyPlugin],
   theme: {
     extend: {
       colors: {
@@ -45,4 +45,4 @@ const config = {
   },
 }
 
-module.exports = config
+export default config

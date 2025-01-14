@@ -1,16 +1,16 @@
+import type { NextConfig } from "next"
 import createBundleAnalyzer from '@next/bundle-analyzer'
 
-import metadata from './config/metadata.json' with { type: "json" };
+import metadata from '~/config/metadata.json'
 
 const withBundleAnalyzer = createBundleAnalyzer({
   enabled: process.env['BUNDLE_ANALYZER'] === 'enabled',
 })
 
 const locales = Object.keys(metadata)
-const defaultLocale = /** @type {string} */ (locales[0])
+const defaultLocale = locales[0] as string
 
-/** @type {import('next').NextConfig} */
-const nextConfig = {
+const nextConfig: NextConfig = {
   eslint: {
     dirs: ['.'],
     ignoreDuringBuilds: true,
