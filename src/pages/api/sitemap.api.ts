@@ -1,5 +1,5 @@
 import { groupBy } from '@acdh-oeaw/lib'
-import { log } from '@stefanprobst/log'
+import { log } from '@acdh-oeaw/lib'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import path from 'path/posix'
 

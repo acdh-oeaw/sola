@@ -1,13 +1,29 @@
 {
-  "extends": "@stefanprobst/tsconfig",
+  "extends": "@acdh-oeaw/tsconfig",
   "compilerOptions": {
     "baseUrl": ".",
     "exactOptionalPropertyTypes": false,
     "paths": {
-      "@/*": ["./src/*"],
-      "~/*": ["./*"]
-    }
+      "@/*": [
+        "./src/*"
+      ],
+      "~/*": [
+        "./*"
+      ]
+    },
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true
   },
-  "include": ["./next-env.d.ts", "./**/*.ts", "./**/*.tsx", "./*.config.mjs", "./*.config.cjs"],
-  "exclude": ["node_modules"]
+  "include": [
+    "./next-env.d.ts",
+    "./**/*.ts",
+    "./**/*.tsx",
+    "./*.config.mjs",
+    "./*.config.cjs"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }
