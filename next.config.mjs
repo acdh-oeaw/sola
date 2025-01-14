@@ -1,6 +1,6 @@
 import createBundleAnalyzer from '@next/bundle-analyzer'
 
-import metadata from './config/metadata.json' assert { type: 'json' }
+import metadata from './config/metadata.json' with { type: "json" };
 
 const withBundleAnalyzer = createBundleAnalyzer({
   enabled: process.env['BUNDLE_ANALYZER'] === 'enabled',
@@ -15,8 +15,8 @@ const nextConfig = {
     dirs: ['.'],
     ignoreDuringBuilds: true,
   },
-  async headers() {
-    return [
+  headers() {
+    return Promise.resolve([
       {
         source: '/assets/fonts/inter-var-latin.woff2',
         headers: [
@@ -26,7 +26,7 @@ const nextConfig = {
           },
         ],
       },
-    ]
+    ])
   },
   i18n: {
     locales,
@@ -36,11 +36,11 @@ const nextConfig = {
   pageExtensions: ['api.ts', 'page.tsx'],
   poweredByHeader: false,
   reactStrictMode: true,
-  async rewrites() {
-    return [
+  rewrites() {
+    return Promise.resolve([
       { source: '/sitemap.xml', destination: '/api/sitemap' },
       { source: '/admin', destination: '/admin/index.html' },
-    ]
+    ])
   },
   typescript: {
     ignoreBuildErrors: true,

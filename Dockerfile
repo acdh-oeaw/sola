@@ -1,7 +1,7 @@
 # syntax=docker/dockerfile:1
 
 # build
-FROM node:18-slim AS build
+FROM node:22-slim AS build
 
 RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
@@ -25,7 +25,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 RUN npm run build
 
 # serve
-FROM node:20-slim AS serve
+FROM node:22-slim AS serve
 
 RUN mkdir /app && chown -R node:node /app
 WORKDIR /app
