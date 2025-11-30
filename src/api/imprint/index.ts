@@ -4,7 +4,7 @@ import acdh from "~/config/acdh.json" assert { type: "json" };
 const { imprintUrl, serviceId } = acdh;
 
 function createImprintUrl(locale: SiteLocale) {
-	const url = new URL("/" + String(serviceId), imprintUrl);
+	const url = new URL(`/${String(serviceId)}`, imprintUrl);
 	url.searchParams.set("locale", locale);
 	return url;
 }

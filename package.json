@@ -4,8 +4,7 @@
 	"license": "MIT",
 	"type": "module",
 	"engines": {
-		"node": "22.x",
-		"pnpm": "9.x"
+		"node": "24.x"
 	},
 	"packageManager": "pnpm@9.15.4",
 	"scripts": {
@@ -107,7 +106,7 @@
 		"@types/d3-scale": "^4.0.2",
 		"@types/d3-selection": "^3.0.3",
 		"@types/d3-zoom": "^3.0.1",
-		"@types/node": "^22.10.6",
+		"@types/node": "^24.10.1",
 		"@types/react": "^18.3.18",
 		"decap-server": "^3.1.2",
 		"eslint": "^9.18.0",
