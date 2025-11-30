@@ -54,7 +54,6 @@
 		"@react-stately/tree": "^3.4.0",
 		"@stefanprobst/netlify-cms-oauth-client": "^0.1.2",
 		"@stefanprobst/next-error-boundary": "^3.0.2",
-		"@stefanprobst/next-mdx": "^2.0.3",
 		"@stefanprobst/next-page-metadata": "^2.0.5",
 		"@stefanprobst/remark-excerpt": "^2.0.2",
 		"@stefanprobst/remark-extract-yaml-frontmatter": "^3.0.0",
