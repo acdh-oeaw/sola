@@ -1,0 +1,9 @@
+onlyBuiltDependencies:
+  - deasync
+  - esbuild
+  - sharp
+  - simple-git-hooks
+
+shellEmulator: true
+
+strictDepBuilds: true

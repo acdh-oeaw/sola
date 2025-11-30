@@ -49,8 +49,6 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v6
 
-      # Necessary because `actions/setup-node` does not yet support `corepack`.
-      # @see https://github.com/actions/setup-node/issues/531
       - name: Install pnpm
         uses: pnpm/action-setup@v4
 
