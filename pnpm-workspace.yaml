@@ -1,8 +1,11 @@
-onlyBuiltDependencies:
-  - deasync
-  - esbuild
-  - sharp
-  - simple-git-hooks
+allowBuilds:
+  esbuild: true
+  sharp: true
+  simple-git-hooks: true
+engineStrict: true
+
+minimumReleaseAgeExclude:
+  - prettier@3.10.0
 
 shellEmulator: true
 
