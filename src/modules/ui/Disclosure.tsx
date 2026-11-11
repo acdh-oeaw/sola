@@ -37,7 +37,7 @@ export function Disclosure({
 				aria-controls={panelId}
 				aria-expanded={isOpen}
 				className={cx(
-					"py-1 rounded flex items-center space-x-2 text-left justify-between focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400",
+					"py-1 rounded-sm flex items-center space-x-2 text-left justify-between focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400",
 					className,
 				)}
 				onClick={toggleOpen}
@@ -46,7 +46,7 @@ export function Disclosure({
 				<Label as="span" className={className}>
 					{title}
 				</Label>
-				<Chevron className={cx("flex-shrink-0", isOpen ? "transform rotate-180" : undefined)} />
+				<Chevron className={cx("shrink-0", isOpen ? "transform rotate-180" : undefined)} />
 			</button>
 			{isOpen ? <div id={panelId}>{children}</div> : null}
 		</div>

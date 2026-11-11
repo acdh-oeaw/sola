@@ -139,7 +139,7 @@ function Attachments({
 					return (
 						<li key={index}>
 							<a
-								className="text-gray-700 transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+								className="text-gray-700 transition focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 								href={attachment.file}
 							>
 								{attachment.label}

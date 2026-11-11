@@ -52,7 +52,7 @@ function Tooltip({ state, ...props }: TooltipProps): JSX.Element {
 
 	return (
 		<span
-			className="absolute right-0 z-30 px-2 py-0.5 mt-1 text-xs font-medium text-gray-100 bg-gray-900 rounded w-max top-full"
+			className="absolute right-0 z-30 px-2 py-0.5 mt-1 text-xs font-medium text-gray-100 bg-gray-900 rounded-sm w-max top-full"
 			{...mergeProps(props, tooltipProps)}
 		>
 			{props.children}

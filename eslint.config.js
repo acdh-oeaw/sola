@@ -3,10 +3,10 @@
 import baseConfig from "@acdh-oeaw/eslint-config";
 import nodeConfig from "@acdh-oeaw/eslint-config-node";
 import reactConfig from "@acdh-oeaw/eslint-config-react";
-import tailwindcssConfig from "@acdh-oeaw/eslint-config-tailwindcss";
 import nextPlugin from "@next/eslint-plugin-next";
 import { defineConfig } from "eslint/config";
 import gitignore from "eslint-config-flat-gitignore";
+import tailwindcss from "eslint-plugin-better-tailwindcss";
 
 /** @type {Config} */
 const config = defineConfig(
@@ -14,7 +14,31 @@ const config = defineConfig(
 	baseConfig,
 	reactConfig,
 	nextPlugin.configs["core-web-vitals"],
-	/** @type {import("eslint").Linter.Config[]} */ (/** @type {unknown} */ (tailwindcssConfig)),
+	{
+		plugins: { "better-tailwindcss": tailwindcss },
+		settings: {
+			"better-tailwindcss": { entryPoint: "src/styles/globals.css", variables: [] },
+		},
+		rules: {
+			"better-tailwindcss/no-unknown-classes": [
+				"error",
+				{
+					ignore: [
+						"main-panel",
+						"details-panel",
+						"timeline-canvas",
+						"timeline-x-axis-top",
+						"canvas",
+						"x-axis-top",
+						"x-axis-bottom",
+						"y-axis-left",
+						"y-axis-right",
+					],
+				},
+			],
+			"better-tailwindcss/no-conflicting-classes": "error",
+		},
+	},
 	{
 		rules: {
 			"arrow-body-style": ["error", "always"],

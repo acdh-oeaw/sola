@@ -172,7 +172,7 @@ function TeamMember({
 							<dd className="flex items-center space-x-1.5">
 								<Globe />
 								<a
-									className="transition hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+									className="transition hover:text-gray-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 									href={teamMember.website}
 									rel="noopener noreferrer"
 									target="_blank"
@@ -188,7 +188,7 @@ function TeamMember({
 							<dd className="flex items-center space-x-1.5">
 								<Email />
 								<a
-									className="transition hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+									className="transition hover:text-gray-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 									href={`mailto:${teamMember.email}`}
 									rel="noopener noreferrer"
 									target="_blank"
@@ -204,7 +204,7 @@ function TeamMember({
 							<dd className="flex items-center space-x-1.5">
 								<Phone />
 								<a
-									className="transition hover:text-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+									className="transition hover:text-gray-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 									href={`tel:${teamMember.phone}`}
 									rel="noopener noreferrer"
 									target="_blank"

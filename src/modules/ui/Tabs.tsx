@@ -39,7 +39,7 @@ function TabPanel<T>(props: TabPanelProps<T>) {
 
 	return (
 		<div
-			className="focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+			className="focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 			{...tabPanelProps}
 			ref={ref}
 		>
@@ -87,7 +87,7 @@ function Tab<T>(props: TabProps<T>) {
 			ref={ref}
 			className={cx(
 				"cursor-pointer pb-2 border-b",
-				"focus:outline-none",
+				"focus:outline-hidden",
 				isSelected ? "font-semibold border-gray-700" : "border-transparent",
 				isHovered && "",
 				isFocusVisible && "ring-2 ring-yellow-300",

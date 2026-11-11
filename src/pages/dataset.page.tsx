@@ -288,7 +288,7 @@ function FilterPanel({
 
 	return (
 		<aside
-			className="overflow-y-auto bg-gray-900 focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
+			className="overflow-y-auto bg-gray-900 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
 			style={{ gridArea: "panel" }}
 		>
 			<form className="flex flex-col px-4 py-6 space-y-3" onSubmit={onSubmit}>
@@ -296,7 +296,7 @@ function FilterPanel({
 					<h2 className="font-semibold text-gray-300">{t.filterPassages}</h2>
 					<ClearButton
 						aria-label={t.reset}
-						className="p-2 text-gray-300 transition rounded hover:text-gray-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-gray-800"
+						className="p-2 text-gray-300 transition rounded-sm hover:text-gray-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-gray-800"
 						onClick={() => {
 							setFilter({
 								authors: undefined,
@@ -313,13 +313,13 @@ function FilterPanel({
           label={t.title}
           value={title}
           onChange={setTitle}
-          className="transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+          className="transition focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
         /> */}
 				<TextField
 					label={t.search}
 					value={searchTermInput}
 					onChange={setSearchTermInput}
-					className="transition focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+					className="transition focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 				/>
 				<hr className="border-gray-500" />
 				<Disclosure
@@ -606,7 +606,7 @@ function VisualizationPanel({
 					)}
 				</div>
 				<div className="flex flex-col space-y-1">
-					<ul className="flex flex-wrap text-xs text-gray-500 md:justify-end md:space-x-2">
+					<ul className="flex flex-wrap text-xs text-gray-500 md:justify-end md:gap-x-2">
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
 							<div className={cx("w-3 h-3 transition", colors.bg["Event"])} />
 							<span>
@@ -719,13 +719,13 @@ function ActiveFilterList({
 									<TooltipTrigger tooltip={`${t.filteredBy} ${t.title}: ${name}`}>
 										<button
 											type="button"
-											className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+											className="font-medium truncate rounded-sm cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 										>
 											{name}
 										</button>
 									</TooltipTrigger>
 									<ClearButton
-										className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+										className="rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 										onClick={() => {
 											setFilter({ name: undefined });
 										}}
@@ -749,13 +749,13 @@ function ActiveFilterList({
 													<TooltipTrigger tooltip={`${t.filteredBy} ${t.authors[0]}: ${name}`}>
 														<button
 															type="button"
-															className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+															className="font-medium truncate rounded-sm cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 														>
 															{name}
 														</button>
 													</TooltipTrigger>
 													<ClearButton
-														className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+														className="rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 														onClick={() => {
 															setFilter({
 																authors:
@@ -792,13 +792,13 @@ function ActiveFilterList({
 													>
 														<button
 															type="button"
-															className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+															className="font-medium truncate rounded-sm cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 														>
 															{name}
 														</button>
 													</TooltipTrigger>
 													<ClearButton
-														className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+														className="rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 														onClick={() => {
 															setFilter({
 																publications:
@@ -834,13 +834,13 @@ function ActiveFilterList({
 													<TooltipTrigger tooltip={`${t.filteredBy} ${t.topics[0]}: ${name}`}>
 														<button
 															type="button"
-															className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+															className="font-medium truncate rounded-sm cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 														>
 															{name}
 														</button>
 													</TooltipTrigger>
 													<ClearButton
-														className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+														className="rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 														onClick={() => {
 															setFilter({
 																topics:
@@ -875,13 +875,13 @@ function ActiveFilterList({
 													<TooltipTrigger tooltip={`${t.filteredBy} ${t.types[0]}: ${name}`}>
 														<button
 															type="button"
-															className="font-medium truncate rounded cursor-default focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+															className="font-medium truncate rounded-sm cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 														>
 															{name}
 														</button>
 													</TooltipTrigger>
 													<ClearButton
-														className="rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+														className="rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 														onClick={() => {
 															setFilter({
 																types:
@@ -981,7 +981,7 @@ function DetailsPanel({
 		<Fragment>
 			<SchemaOrg schema={metadata} />
 			<section
-				className="overflow-y-auto focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
+				className="overflow-y-auto focus:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
 				style={{ gridArea: "details" }}
 			>
 				<div className="grid min-h-full gap-6 p-6 details-panel">
@@ -1040,7 +1040,7 @@ function CopyLinkButton() {
 
 	return (
 		<button
-			className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+			className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded-sm hover:bg-gray-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-gray-900"
 			onClick={() => {
 				const url = new URL(router.asPath, baseUrl);
 				navigator.clipboard.writeText(String(url));
@@ -1216,7 +1216,7 @@ function PrintButton({
 				</p>
 			</div>
 			<button
-				className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded hover:bg-gray-300 focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+				className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded-sm hover:bg-gray-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-gray-900"
 				onClick={print}
 				type="button"
 			>
@@ -1231,7 +1231,7 @@ function EntityType({ type }: { type?: SolaEntityType }) {
 	if (type === undefined) return null;
 
 	const classNames = cx(
-		"text-xs font-medium tracking-wider uppercase pointer-events-none py-1 px-2 rounded inline-block",
+		"text-xs font-medium tracking-wider uppercase pointer-events-none py-1 px-2 rounded-sm inline-block",
 		colors.bg[type],
 	);
 
@@ -1263,7 +1263,7 @@ function Authors({
 					return (
 						<Badge key={author.id} className={cx("transition", colors.bg.Person)}>
 							<button
-								className="font-medium cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+								className="font-medium cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-gray-900"
 								onClick={() => {
 									setSelectedSolaEntity({
 										id: author.id,
@@ -1359,10 +1359,10 @@ function PassageProperties({
 										<li className="min-w-0 mb-1 mr-1" key={topic.id}>
 											<Badge
 												variant="tight"
-												className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200"
+												className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:text-gray-200"
 											>
 												<button
-													className="rounded px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+													className="rounded-sm px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 													onClick={() => {
 														return setFilter({
 															topics: [topic.id],
@@ -1390,10 +1390,10 @@ function PassageProperties({
 										<li className="min-w-0 mb-1 mr-1" key={kind.id}>
 											<Badge
 												variant="tight"
-												className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:gray-200"
+												className="inline-block max-w-full text-gray-100 transition bg-gray-800 hover:bg-black hover:text-gray-200"
 											>
 												<button
-													className="rounded px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+													className="rounded-sm px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 													onClick={() => {
 														return setFilter({
 															types: [kind.id],
@@ -1472,7 +1472,7 @@ function Relations({
 													)}
 												>
 													<button
-														className="px-2 py-0.5 rounded inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+														className="px-2 py-0.5 rounded-sm inline-block font-medium truncate cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-gray-900"
 														onClick={() => {
 															setSelectedSolaEntity({
 																id: relation.related_entity.id,
@@ -1521,7 +1521,7 @@ function BiblePassages({
 								className="inline-block max-w-full font-medium transition bg-blue-300"
 							>
 								<a
-									className="rounded px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-none focus-visible:ring-2 focus-visible:ring-gray-900"
+									className="rounded-sm px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-gray-900"
 									href={url}
 									target="_blank"
 									rel="noopener noreferrer"
@@ -1593,7 +1593,10 @@ function Texts({
 
 	return (
 		<div
-			className={cx(styles["texts"], "grid grid-cols-2 gap-6 p-6 text-sm bg-white rounded shadow")}
+			className={cx(
+				styles["texts"],
+				"grid grid-cols-2 gap-6 p-6 text-sm bg-white rounded-sm shadow-sm",
+			)}
 		>
 			{hasPrimaryText ? (
 				<div className="space-y-4">

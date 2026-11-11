@@ -1,5 +1,55 @@
-.box-decoration-clone {
-	box-decoration-break: clone;
+@import "tailwindcss";
+@import "./custom-properties.css";
+
+@source "../../config";
+
+@plugin "@tailwindcss/typography";
+
+@theme {
+	--font-sans:
+		var(--font-inter), ui-sans-serif, system-ui, sans-serif, "Apple Color Emoji", "Segoe UI Emoji",
+		"Segoe UI Symbol", "Noto Color Emoji";
+	--font-body: var(--font-sans);
+	--font-display: var(--font-sans);
+	--text-sm: 0.8125rem;
+	--text-sm--line-height: 1.25rem;
+	--text-base: 0.9375rem;
+	--text-base--line-height: 1.5rem;
+	--container-65ch: 65ch;
+	--container-80ch: 80ch;
+	--breakpoint-2xs: 20rem;
+	--breakpoint-xs: 30rem;
+	--breakpoint-sm: 40rem;
+	--breakpoint-md: 48rem;
+	--breakpoint-lg: 64rem;
+	--breakpoint-xl: 81.75rem;
+	--breakpoint-2xl: 100rem;
+	--breakpoint-3xl: 120rem;
+}
+
+@theme inline {
+	--color-primary-50: var(--color-blue-50);
+	--color-primary-100: var(--color-blue-100);
+	--color-primary-200: var(--color-blue-200);
+	--color-primary-300: var(--color-blue-300);
+	--color-primary-400: var(--color-blue-400);
+	--color-primary-500: var(--color-blue-500);
+	--color-primary-600: var(--color-blue-600);
+	--color-primary-700: var(--color-blue-700);
+	--color-primary-800: var(--color-blue-800);
+	--color-primary-900: var(--color-blue-900);
+	--color-primary-950: var(--color-blue-950);
+}
+
+/* Preserve the v3 default border color. */
+@layer base {
+	*,
+	::before,
+	::after,
+	::backdrop,
+	::file-selector-button {
+		border-color: var(--color-gray-200, currentColor);
+	}
 }
 
 *,
@@ -39,7 +89,7 @@ input[type="search"]::-webkit-search-decoration {
 }
 
 mark {
-	@apply rounded bg-gray-300 p-1 inline break-words box-decoration-clone;
+	@apply rounded-sm bg-gray-300 p-1 inline break-words box-decoration-clone;
 }
 
 .main-panel {
@@ -48,7 +98,7 @@ mark {
 	grid-template-columns: var(--sidepanel-width, 256px) 1fr;
 }
 
-@screen lg {
+@media (width >= 64rem) {
 	.main-panel {
 		max-height: calc(100vh - var(--header-height, 60px));
 	}
@@ -59,7 +109,7 @@ mark {
 	grid-template-columns: 1fr;
 }
 
-@screen xl {
+@media (width >= 81.75rem) {
 	.details-panel {
 		grid-template-columns: var(--details-sidepanel-width, 360px) 1fr;
 	}

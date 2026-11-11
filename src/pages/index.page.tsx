@@ -84,7 +84,7 @@ export default function IndexPage(props: IndexPageProps): JSX.Element {
 						/>
 						<Link
 							href="/dataset"
-							className="inline-block px-10 py-5 text-sm font-semibold tracking-wider text-gray-800 uppercase transition bg-yellow-400 rounded hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500"
+							className="inline-block px-10 py-5 text-sm font-semibold tracking-wider text-gray-800 uppercase transition bg-yellow-400 rounded-sm hover:bg-yellow-500 focus:outline-hidden focus-visible:bg-yellow-500"
 						>
 							{props.labels.button}
 						</Link>

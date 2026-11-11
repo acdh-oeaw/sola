@@ -13,7 +13,7 @@
 	--visualization-height: 400px;
 }
 
-@screen xs {
+@media (width >= 30rem) {
 	:root {
 		--sidepanel-width: 256px;
 	}

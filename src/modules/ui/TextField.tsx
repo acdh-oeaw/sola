@@ -21,7 +21,7 @@ export function TextField({ className, ...props }: TextFieldProps): JSX.Element 
 			<Label {...labelProps}>{label}</Label>
 			<input
 				type="text"
-				className={cx("px-2 py-1 text-sm rounded", className)}
+				className={cx("px-2 py-1 text-sm rounded-sm bg-white", className)}
 				{...(inputProps as InputHTMLAttributes<HTMLInputElement>)}
 				ref={ref}
 				autoComplete="off"
