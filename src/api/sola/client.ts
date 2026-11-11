@@ -69,12 +69,7 @@ export interface SolaPlaceDetails extends SolaPlace, SolaEntityDetailsBase {}
 export interface SolaPublicationDetails extends SolaPublication, SolaEntityDetailsBase {}
 
 export type SolaEntity =
-	| SolaEvent
-	| SolaInstitution
-	| SolaPassage
-	| SolaPerson
-	| SolaPlace
-	| SolaPublication;
+	SolaEvent | SolaInstitution | SolaPassage | SolaPerson | SolaPlace | SolaPublication;
 export type SolaEntityDetails =
 	| SolaEventDetails
 	| SolaInstitutionDetails
@@ -167,16 +162,18 @@ interface RequestConfig {
 	locale: SiteLocale;
 }
 
-interface GetAllRequestConfig<T extends Record<string, unknown> = Record<string, unknown>>
-	extends RequestConfig {
+interface GetAllRequestConfig<
+	T extends Record<string, unknown> = Record<string, unknown>,
+> extends RequestConfig {
 	query?: T & {
 		limit?: number;
 		offset?: number;
 	};
 }
 
-interface GetByIdRequestConfig<T extends Record<string, unknown> = Record<string, unknown>>
-	extends RequestConfig {
+interface GetByIdRequestConfig<
+	T extends Record<string, unknown> = Record<string, unknown>,
+> extends RequestConfig {
 	id: number;
 	query?: T;
 }
