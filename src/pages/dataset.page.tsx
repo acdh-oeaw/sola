@@ -1593,7 +1593,10 @@ function Texts({
 
 	return (
 		<div
-			className={cx(styles["texts"], "grid grid-cols-2 gap-6 p-6 text-sm bg-white rounded-sm shadow-sm")}
+			className={cx(
+				styles["texts"],
+				"grid grid-cols-2 gap-6 p-6 text-sm bg-white rounded-sm shadow-sm",
+			)}
 		>
 			{hasPrimaryText ? (
 				<div className="space-y-4">
