@@ -155,6 +155,25 @@
 		"pre-commit": "pnpm exec lint-staged"
 	},
 	"stylelint": {
-		"extends": "@acdh-oeaw/stylelint-config"
+		"extends": "@acdh-oeaw/stylelint-config",
+		"rules": {
+			"at-rule-no-unknown": [
+				true,
+				{
+					"ignoreAtRules": [
+						"screen",
+						"tailwind"
+					]
+				}
+			],
+			"at-rule-prelude-no-invalid": [
+				true,
+				{
+					"ignoreAtRules": [
+						"apply"
+					]
+				}
+			]
+		}
 	}
 }
