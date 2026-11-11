@@ -110,7 +110,7 @@ function Post({ post, t }: { post: ContentPostBase; t: (typeof labels)[SiteLocal
 		<Fragment>
 			<Link
 				href={`/posts/${post.id}`}
-				className="focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+				className="focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 			>
 				<h2 className="my-4 text-2xl font-bold text-gray-700">{post.metadata.title}</h2>
 			</Link>
@@ -120,7 +120,7 @@ function Post({ post, t }: { post: ContentPostBase; t: (typeof labels)[SiteLocal
 			<p className="my-3 leading-7 text-gray-700">{post.metadata.abstract}</p>
 			<Link
 				href={`/posts/${post.id}`}
-				className="inline-block px-4 py-2 text-sm font-semibold tracking-wider text-gray-700 uppercase transition bg-yellow-400 rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-yellow-500"
+				className="inline-block px-4 py-2 text-sm font-semibold tracking-wider text-gray-700 uppercase transition bg-yellow-400 rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-yellow-500"
 			>
 				{t.readMore}
 			</Link>

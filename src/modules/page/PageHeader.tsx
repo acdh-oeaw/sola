@@ -39,11 +39,11 @@ export function PageHeader(): JSX.Element {
 				<Link
 					href="/"
 					aria-current={router.pathname === "/" ? "page" : undefined}
-					className="z-20 flex items-center px-6 text-2xl font-extrabold tracking-wide text-white transition bg-yellow-400 hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500"
+					className="z-20 flex items-center px-6 text-2xl font-extrabold tracking-wide text-white transition bg-yellow-400 hover:bg-yellow-500 focus:outline-hidden focus-visible:bg-yellow-500"
 				>
 					SOLA
 				</Link>
-				<div className="z-10 flex items-center justify-end px-6 space-x-4 shadow xs:space-x-6">
+				<div className="z-10 flex items-center justify-end px-6 space-x-4 shadow-sm xs:space-x-6">
 					<ul className="hidden space-x-4 lg:flex lg:items-center">
 						{links.map(({ path, label }) => {
 							const isCurrent = router.pathname === path;
@@ -52,7 +52,7 @@ export function PageHeader(): JSX.Element {
 									<Link
 										href={path}
 										aria-current={isCurrent ? "page" : undefined}
-										className="inline-block px-2 py-2 text-sm font-medium text-center text-gray-700 transition border-b border-transparent hover:border-gray-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+										className="inline-block px-2 py-2 text-sm font-medium text-center text-gray-700 transition border-b border-transparent hover:border-gray-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 									>
 										{label}
 									</Link>
@@ -123,7 +123,7 @@ function LanguageToggle() {
 		<Link
 			href={router.asPath}
 			locale={otherLocale}
-			className="p-2 text-sm font-medium transition bg-yellow-400 rounded hover:bg-yellow-500 focus:outline-none focus-visible:bg-yellow-500"
+			className="p-2 text-sm font-medium transition bg-yellow-400 rounded-sm hover:bg-yellow-500 focus:outline-hidden focus-visible:bg-yellow-500"
 		>
 			{otherLocale.toUpperCase()}
 		</Link>

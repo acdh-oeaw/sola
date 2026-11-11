@@ -43,7 +43,7 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>): JSX.Ele
 				{...buttonProps}
 				ref={ref}
 				className={cx(
-					"flex items-center justify-between px-4 py-2 space-x-1 transition rounded focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-gray-100",
+					"flex items-center justify-between px-4 py-2 space-x-1 transition rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-gray-100",
 					state.isOpen && "bg-gray-100",
 				)}
 				type="button"
@@ -113,7 +113,7 @@ function Menu<T extends object>(props: MenuProps<T>): JSX.Element {
 		<ul
 			{...mergeProps(menuProps, domProps)}
 			ref={ref}
-			className="py-1 bg-white rounded shadow-lg w-max focus:outline-none"
+			className="py-1 bg-white rounded-sm shadow-lg w-max focus:outline-hidden"
 		>
 			{[...state.collection].map((item) => {
 				return (
@@ -172,7 +172,7 @@ function MenuItem<T>({ item, state, onAction, onClose }: MenuItemProps<T>) {
 					{...menuItemProps}
 					ref={ref as RefObject<HTMLAnchorElement>}
 					className={cx(
-						"text-base select-none font-medium block px-4 py-2 focus:outline-none cursor-pointer transition",
+						"text-base select-none font-medium block px-4 py-2 focus:outline-hidden cursor-pointer transition",
 						isFocused && "bg-gray-100",
 					)}
 					aria-current={item.props["aria-current"]}
@@ -188,7 +188,7 @@ function MenuItem<T>({ item, state, onAction, onClose }: MenuItemProps<T>) {
 			{...menuItemProps}
 			ref={ref as RefObject<HTMLLIElement>}
 			className={cx(
-				"text-base select-none font-medium block px-4 py-2 focus:outline-none cursor-pointer transition",
+				"text-base select-none font-medium block px-4 py-2 focus:outline-hidden cursor-pointer transition",
 				isFocused && "bg-gray-100",
 			)}
 		>

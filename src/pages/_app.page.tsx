@@ -1,5 +1,3 @@
-import "tailwindcss/tailwind.css";
-import "@/styles/custom-properties.css";
 import "@/styles/globals.css";
 
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";

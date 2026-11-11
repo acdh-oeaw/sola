@@ -15,7 +15,7 @@ export function Badge({
 	variant,
 }: BadgeProps): JSX.Element {
 	const classNames = cx(
-		"rounded inline-flex items-center",
+		"rounded-sm inline-flex items-center",
 		variant !== "tight" && "py-0.5 px-2",
 		className ?? "bg-gray-300 text-gray-700",
 	);

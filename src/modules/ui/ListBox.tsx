@@ -31,7 +31,7 @@ export function ListBox<T extends object>(props: ListBoxProps<T>): JSX.Element {
 			<ul
 				{...listBoxProps}
 				ref={ref}
-				className="py-1 space-y-1 overflow-y-auto text-sm bg-white rounded max-h-32"
+				className="py-1 space-y-1 overflow-y-auto text-sm bg-white rounded-sm max-h-32"
 			>
 				{[...state.collection].map((item) => {
 					return item.type === "section" ? (
@@ -77,7 +77,7 @@ function Option<T>({ item, state }: OptionProps<T>) {
 				(isFocusVisible || isHovered) && "bg-gray-100",
 			)}
 		>
-			<div className="inline-flex items-center justify-center flex-shrink-0 w-5 h-5 mr-1">
+			<div className="inline-flex items-center justify-center shrink-0 w-5 h-5 mr-1">
 				{isSelected ? <CheckMark className="w-4 h-4" /> : null}
 			</div>
 			{item.rendered}

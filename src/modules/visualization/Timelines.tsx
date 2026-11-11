@@ -264,7 +264,7 @@ export function Timelines({
 
 	return (
 		<div aria-hidden ref={wrapperRef} className="absolute inset-0">
-			<svg ref={svgRef} className="w-full h-full overflow-vísible">
+			<svg ref={svgRef} className="w-full h-full overflow-visible">
 				<defs>
 					<clipPath id={CLIPPATH_ID}>
 						{dimensions ? (
@@ -324,7 +324,7 @@ const Tooltip = function Tooltip({
 			role="tooltip"
 			className={cx(
 				styles["tooltip"],
-				"p-2 text-xs transition-opacity duration-150 rounded shadow-lg bg-gray-50 pointer-events-none z-30",
+				"p-2 text-xs transition-opacity duration-150 rounded-sm shadow-lg bg-gray-50 pointer-events-none z-30",
 				isVisible ? "opacity-100" : "opacity-0",
 			)}
 			{...props}

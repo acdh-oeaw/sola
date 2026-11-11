@@ -32,7 +32,7 @@ export function PageFooter(): JSX.Element {
 			<ul className="flex flex-col items-center justify-center space-y-4 text-xs text-gray-700 sm:flex-row sm:space-y-0 sm:space-x-12">
 				<li>
 					<a
-						className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+						className="inline-block p-1 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 						href="https://www.univie.ac.at"
 						rel="noopener noreferrer"
 						target="_blank"
@@ -48,7 +48,7 @@ export function PageFooter(): JSX.Element {
 				</li>
 				<li>
 					<a
-						className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+						className="inline-block p-1 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 						href="https://www.fwf.ac.at"
 						rel="noopener noreferrer"
 						target="_blank"
@@ -64,7 +64,7 @@ export function PageFooter(): JSX.Element {
 				</li>
 				<li>
 					<a
-						className="inline-block p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+						className="inline-block p-1 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 						href="https://acdh.oeaw.ac.at"
 						rel="noopener noreferrer"
 						target="_blank"
@@ -83,7 +83,7 @@ export function PageFooter(): JSX.Element {
 				<span>&copy; {new Date().getFullYear()} | </span>
 				<Link
 					href="/imprint"
-					className="p-1 focus:outline-none focus-visible:ring-2 focus-visible:ring-yellow-400"
+					className="p-1 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 				>
 					{labels[locale].imprint}
 				</Link>
