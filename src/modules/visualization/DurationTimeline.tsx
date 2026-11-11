@@ -1,6 +1,7 @@
 import { axisTop } from "d3-axis";
 import { scaleTime } from "d3-scale";
 import { select } from "d3-selection";
+import type { JSX } from "react";
 import { useEffect, useRef } from "react";
 
 import type { SolaEntityDetails } from "@/api/sola/client";

@@ -1,5 +1,5 @@
 import cx from "clsx";
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 
 export interface ContainerProps {
 	as?: keyof JSX.IntrinsicElements;

@@ -1,0 +1,7 @@
+.texts mark {
+	background-color: rgb(252 231 243); /* bg-pink-100 */
+}
+
+.texts mark[data-entity-class="PassagePublication"] {
+	background-color: rgb(219 234 254); /* bg-blue-100 */
+}

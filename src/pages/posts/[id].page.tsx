@@ -5,10 +5,11 @@ import type {
 	GetStaticPropsResult,
 } from "next";
 import Image from "next/image";
+import type { JSX } from "react";
 import { Fragment } from "react";
 
-import type { CmsPost } from "@/api/cms";
-import { getCmsPostById, getCmsPostIds } from "@/api/cms";
+import type { ContentPost } from "@/api/content";
+import { getContentPostById, getContentPostIds } from "@/api/content";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { Metadata } from "@/modules/metadata/Metadata";
@@ -40,7 +41,7 @@ type PagePath = {
 
 export interface PostPageProps {
 	labels: (typeof labels)[SiteLocale];
-	post: CmsPost;
+	post: ContentPost;
 }
 
 /**
@@ -54,7 +55,7 @@ export async function getStaticPaths(
 	const paths = (
 		await Promise.all(
 			locales.map(async (locale) => {
-				const ids = await getCmsPostIds(locale);
+				const ids = await getContentPostIds(locale);
 				return ids.map((id) => {
 					return { params: { id }, locale };
 				});
@@ -69,7 +70,7 @@ export async function getStaticPaths(
 }
 
 /**
- * Make post contents from CMS available to client.
+ * Make post contents from local files available to client.
  */
 export async function getStaticProps(
 	context: GetStaticPropsContext<PagePath>,
@@ -85,7 +86,7 @@ export async function getStaticProps(
 		throw new Error("Post Not Found.");
 	}
 
-	const post = await getCmsPostById(id, locale);
+	const post = await getContentPostById(id, locale);
 
 	return {
 		props: {
@@ -125,7 +126,7 @@ function Attachments({
 	attachments,
 	t,
 }: {
-	attachments?: CmsPost["metadata"]["attachments"];
+	attachments?: ContentPost["metadata"]["attachments"];
 	t: (typeof labels)[SiteLocale]["data"];
 }) {
 	if (attachments === undefined || attachments.length === 0) return null;
@@ -155,7 +156,7 @@ function ImageGallery({
 	images,
 	t,
 }: {
-	images?: CmsPost["metadata"]["gallery"];
+	images?: ContentPost["metadata"]["gallery"];
 	t: (typeof labels)[SiteLocale]["data"];
 }) {
 	if (images === undefined || images.length === 0) return null;

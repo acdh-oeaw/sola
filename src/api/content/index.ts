@@ -1,5 +1,3 @@
-import excerptMarkdown from "@stefanprobst/remark-excerpt";
-import parseYamlFrontmatter from "@stefanprobst/remark-extract-yaml-frontmatter";
 import { promises as fs } from "fs";
 import path from "path";
 import toHtml from "rehype-stringify";
@@ -11,6 +9,8 @@ import stripMarkdown from "strip-markdown";
 import { unified } from "unified";
 import YAML from "yaml";
 
+import { excerptMarkdown } from "@/lib/content/remark-excerpt";
+import { parseYamlFrontmatter } from "@/lib/content/remark-frontmatter";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 
 const basePath = path.resolve("content");
@@ -47,7 +47,7 @@ const excerpt = unified()
 	.use(stripMarkdown)
 	.use(toMarkdown);
 
-export interface CmsPage<T extends Record<string, unknown>> {
+export interface ContentPage<T extends Record<string, unknown>> {
 	id: string;
 	html: string;
 	metadata: T;
@@ -56,10 +56,10 @@ export interface CmsPage<T extends Record<string, unknown>> {
 /**
  * Returns page contents as HTML and JSON metadata.
  */
-export async function getCmsPage<T extends Record<string, unknown>>(
+export async function getContentPage<T extends Record<string, unknown>>(
 	id: string,
 	locale: SiteLocale,
-): Promise<CmsPage<T>> {
+): Promise<ContentPage<T>> {
 	const filePath = path.join(pageBasePath, locale, id + pageExtension);
 	const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
 	const processed = await md.process(fileContents);
@@ -72,7 +72,7 @@ export async function getCmsPage<T extends Record<string, unknown>>(
 	return { id, html, metadata };
 }
 
-export interface CmsTeamMember {
+export interface ContentTeamMember {
 	id: string;
 	firstName: string;
 	lastName: string;
@@ -90,11 +90,11 @@ export interface CmsTeamMember {
 /**
  * Returns team member data as JSON.
  */
-export async function getCmsTeamMembers(locale: SiteLocale): Promise<Array<CmsTeamMember>> {
+export async function getContentTeamMembers(locale: SiteLocale): Promise<Array<ContentTeamMember>> {
 	const folderPath = path.join(dataBasePath, "team", locale);
 	const folderContents = await fs.readdir(folderPath);
 
-	const data: Array<CmsTeamMember> = await Promise.all(
+	const data: Array<ContentTeamMember> = await Promise.all(
 		folderContents.map(async (file) => {
 			const filePath = path.join(folderPath, file);
 			const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
@@ -110,25 +110,25 @@ export async function getCmsTeamMembers(locale: SiteLocale): Promise<Array<CmsTe
 	return data;
 }
 
-export type CmsPostBaseMetadata = {
+export type ContentPostBaseMetadata = {
 	title: string;
 	date: string;
 	abstract: string;
 };
 
-export interface CmsPostBase {
+export interface ContentPostBase {
 	id: string;
-	metadata: CmsPostBaseMetadata;
+	metadata: ContentPostBaseMetadata;
 }
 
 /**
  * Returns list of posts with abstracts.
  */
-export async function getCmsPostsOverview(locale: SiteLocale): Promise<Array<CmsPostBase>> {
+export async function getContentPostsOverview(locale: SiteLocale): Promise<Array<ContentPostBase>> {
 	const folderPath = path.join(postBasePath, locale);
 	const folderContents = await fs.readdir(folderPath);
 
-	const data: Array<CmsPostBase> = await Promise.all(
+	const data: Array<ContentPostBase> = await Promise.all(
 		folderContents.map(async (file) => {
 			const filePath = path.join(folderPath, file);
 			const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
@@ -136,7 +136,7 @@ export async function getCmsPostsOverview(locale: SiteLocale): Promise<Array<Cms
 
 			const abstract = String(processed);
 			const { frontmatter } = processed.data as {
-				frontmatter: CmsPostMetadata;
+				frontmatter: ContentPostMetadata;
 			};
 
 			const metadata = {
@@ -156,7 +156,7 @@ export async function getCmsPostsOverview(locale: SiteLocale): Promise<Array<Cms
 	return data;
 }
 
-export type CmsPostMetadata = {
+export type ContentPostMetadata = {
 	title: string;
 	shortTitle?: string;
 	date: string;
@@ -165,23 +165,23 @@ export type CmsPostMetadata = {
 	gallery?: Array<{ alt?: string; image: string }>;
 };
 
-export interface CmsPost {
+export interface ContentPost {
 	id: string;
 	html: string;
-	metadata: CmsPostMetadata;
+	metadata: ContentPostMetadata;
 }
 
 /**
  * Returns list of posts with abstracts.
  */
-export async function getCmsPostById(id: string, locale: SiteLocale): Promise<CmsPost> {
+export async function getContentPostById(id: string, locale: SiteLocale): Promise<ContentPost> {
 	const filePath = path.join(postBasePath, locale, id + postExtension);
 	const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
 	const processed = await md.process(fileContents);
 
 	const html = String(processed);
 	const { frontmatter: metadata } = processed.data as {
-		frontmatter: CmsPostMetadata;
+		frontmatter: ContentPostMetadata;
 	};
 
 	return { id, html, metadata };
@@ -190,7 +190,7 @@ export async function getCmsPostById(id: string, locale: SiteLocale): Promise<Cm
 /**
  * Returns all post ids.
  */
-export async function getCmsPostIds(locale: SiteLocale): Promise<Array<string>> {
+export async function getContentPostIds(locale: SiteLocale): Promise<Array<string>> {
 	const folderPath = path.join(postBasePath, locale);
 	const folderContents = await fs.readdir(folderPath);
 	return folderContents.map((file) => {

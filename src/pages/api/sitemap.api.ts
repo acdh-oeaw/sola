@@ -3,7 +3,7 @@ import { log } from "@acdh-oeaw/lib";
 import type { NextApiRequest, NextApiResponse } from "next";
 import path from "path/posix";
 
-import { getCmsPostIds } from "@/api/cms";
+import { getContentPostIds } from "@/api/content";
 import { type SolaListEntity, getSolaEntities } from "@/api/sola/client";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { createLink } from "@/lib/sitemap/createLink";
@@ -38,7 +38,7 @@ export default async function handler(
 		/** Dynamic post pages. */
 		const posts = await Promise.all(
 			locales.map(async (locale) => {
-				const ids = await getCmsPostIds(locale);
+				const ids = await getContentPostIds(locale);
 				return ids.map((id) => {
 					return createLink(
 						locale === defaultLocale ? path.join("posts", id) : path.join(locale, "posts", id),

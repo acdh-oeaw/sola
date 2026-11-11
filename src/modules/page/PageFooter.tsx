@@ -1,4 +1,5 @@
 import Link from "next/link";
+import type { JSX } from "react";
 
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 

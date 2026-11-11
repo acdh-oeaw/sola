@@ -69,7 +69,12 @@ export interface SolaPlaceDetails extends SolaPlace, SolaEntityDetailsBase {}
 export interface SolaPublicationDetails extends SolaPublication, SolaEntityDetailsBase {}
 
 export type SolaEntity =
-	SolaEvent | SolaInstitution | SolaPassage | SolaPerson | SolaPlace | SolaPublication;
+	| SolaEvent
+	| SolaInstitution
+	| SolaPassage
+	| SolaPerson
+	| SolaPlace
+	| SolaPublication;
 export type SolaEntityDetails =
 	| SolaEventDetails
 	| SolaInstitutionDetails

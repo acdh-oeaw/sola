@@ -1,0 +1,23 @@
+# yaml-language-server: $schema=https://lefthook.dev/schema.json
+
+glob_matcher: doublestar
+
+pre-commit:
+  parallel: false
+  jobs:
+    - name: lint-code
+      glob: "**/*.{js,ts,tsx}"
+      run: pnpm exec eslint --cache --fix {staged_files}
+      stage_fixed: true
+    - name: lint-styles
+      glob: "**/*.css"
+      run: pnpm exec stylelint --cache --fix {staged_files}
+      stage_fixed: true
+    - name: format
+      exclude:
+        - content/**
+        - public/**
+        - pnpm-lock.yaml
+        - "**/*.mdx"
+      run: pnpm exec oxfmt --write --no-error-on-unmatched-pattern {staged_files}
+      stage_fixed: true

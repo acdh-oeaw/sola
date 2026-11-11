@@ -1,10 +1,9 @@
-import { createSchemaOrg, SchemaOrg } from "@stefanprobst/next-page-metadata";
+import type { QueryObserverResult } from "@tanstack/react-query";
 import cx from "clsx";
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { useRouter } from "next/router";
-import type { FormEvent } from "react";
+import type { FormEvent, JSX } from "react";
 import { Fragment, useEffect, useMemo, useRef, useState } from "react";
-import type { QueryObserverResult } from "react-query";
 
 import type {
 	SolaBibsonomyReference,
@@ -43,6 +42,7 @@ import { printHtml } from "@/lib/util/printHtml";
 import { Document as DocumentIcon } from "@/modules/icons/Document";
 import { Link as LinkIcon } from "@/modules/icons/Link";
 import { Metadata } from "@/modules/metadata/Metadata";
+import { createSchemaOrg, SchemaOrg } from "@/modules/metadata/SchemaOrg";
 import { useAlternateUrls } from "@/modules/metadata/useAlternateUrls";
 import { useCanonicalUrl } from "@/modules/metadata/useCanonicalUrl";
 import { Badge } from "@/modules/ui/Badge";
@@ -55,6 +55,7 @@ import { TextField } from "@/modules/ui/TextField";
 import { TooltipTrigger } from "@/modules/ui/TooltipTrigger";
 import { DurationTimeline } from "@/modules/visualization/DurationTimeline";
 import { Visualization } from "@/modules/visualization/Visualization";
+import styles from "@/styles/dataset.module.css";
 import site from "~/config/site.json" assert { type: "json" };
 import sola from "~/config/sola.json" assert { type: "json" };
 
@@ -1591,7 +1592,9 @@ function Texts({
 	}
 
 	return (
-		<div className="grid grid-cols-2 gap-6 p-6 text-sm bg-white rounded shadow">
+		<div
+			className={cx(styles["texts"], "grid grid-cols-2 gap-6 p-6 text-sm bg-white rounded shadow")}
+		>
 			{hasPrimaryText ? (
 				<div className="space-y-4">
 					<div className="flex border-b border-gray-200">
@@ -1611,15 +1614,6 @@ function Texts({
 					}}
 				</Tabs>
 			) : null}
-			{/* eslint-disable-next-line react/no-unknown-property */}
-			<style jsx global>{`
-				mark {
-					background-color: #fce7f3; /* bg-pink-100 */
-				}
-				mark[data-entity-class="PassagePublication"] {
-					background-color: #dbeafe; /* bg-blue-100 */
-				}
-			`}</style>
 		</div>
 	);
 }

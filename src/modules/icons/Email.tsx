@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 export interface EmailProps {
 	className?: string;
 }

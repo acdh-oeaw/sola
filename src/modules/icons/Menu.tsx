@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 export interface MenuProps {
 	className?: string;
 }

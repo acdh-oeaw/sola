@@ -6,7 +6,7 @@ import { type TabListState, useTabListState } from "@react-stately/tabs";
 import type { Node } from "@react-types/shared";
 import type { AriaTabListProps, AriaTabPanelProps, AriaTabProps } from "@react-types/tabs";
 import cx from "clsx";
-import type { Ref } from "react";
+import type { JSX, Ref } from "react";
 import { useRef } from "react";
 
 export { Item } from "@react-stately/collections";

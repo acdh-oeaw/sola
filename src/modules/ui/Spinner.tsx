@@ -1,5 +1,5 @@
 import { useProgressBar } from "@react-aria/progress";
-import type { SVGProps } from "react";
+import type { JSX, SVGProps } from "react";
 
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 

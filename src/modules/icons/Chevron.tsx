@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 export interface ChevronProps {
 	className?: string;
 }

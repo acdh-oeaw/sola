@@ -7,7 +7,7 @@ import type {
 	AriaTooltipProps,
 	TooltipTriggerProps as AriaTooltipTriggerProps,
 } from "@react-types/tooltip";
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import { cloneElement, Fragment, isValidElement, useRef } from "react";
 
 export interface TooltipTriggerProps extends AriaTooltipTriggerProps {

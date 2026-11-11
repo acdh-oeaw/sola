@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import { PageFooter } from "@/modules/page/PageFooter";
 import { PageHeader } from "@/modules/page/PageHeader";
 

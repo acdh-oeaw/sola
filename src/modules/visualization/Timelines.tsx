@@ -1,3 +1,4 @@
+import { arrow, autoUpdate, flip, offset, shift, useFloating } from "@floating-ui/react-dom";
 import cx from "clsx";
 import { extent } from "d3-array";
 import { axisBottom, axisLeft, axisRight, axisTop } from "d3-axis";
@@ -6,13 +7,13 @@ import { scaleBand, scaleTime } from "d3-scale";
 import { select } from "d3-selection";
 import type { ZoomTransform } from "d3-zoom";
 import { zoom, zoomTransform } from "d3-zoom";
-import type { ComponentPropsWithoutRef, Dispatch, ReactNode, SetStateAction } from "react";
-import { Fragment, useEffect, useRef, useState } from "react";
-import { usePopper } from "react-popper";
+import type { ComponentPropsWithoutRef, Dispatch, JSX, ReactNode, SetStateAction } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { useDimensions } from "@/lib/visualization/useDimensions";
 import { config } from "@/modules/visualization/config";
 import type { Node } from "@/modules/visualization/createNode";
+import styles from "@/modules/visualization/Timelines.module.css";
 
 const TOOLTIP_ID = "tooltip";
 const CLIPPATH_ID = "bounds";
@@ -46,14 +47,11 @@ export function Timelines({
 	const [tooltipAnchor, setTooltipAnchor] = useState<SVGCircleElement | null>(null);
 	const [tooltip, setTooltip] = useState<HTMLDivElement | null>(null);
 	const [tooltipArrow, setTooltipArrow] = useState<HTMLDivElement | null>(null);
-	const { styles, attributes } = usePopper(tooltipAnchor, tooltip, {
-		modifiers: [
-			{ name: "offset", options: { offset: [0, 4] } },
-			{
-				name: "arrow",
-				options: { element: tooltipArrow, padding: 4 },
-			},
-		],
+	const { floatingStyles, middlewareData, placement } = useFloating({
+		elements: { reference: tooltipAnchor, floating: tooltip },
+		placement: "bottom",
+		middleware: [offset(4), flip(), shift(), arrow({ element: tooltipArrow, padding: 4 })],
+		whileElementsMounted: autoUpdate,
 	});
 	const [tooltipContent, setTooltipContent] = useState<Node | null>(null);
 
@@ -164,7 +162,7 @@ export function Timelines({
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				d.x = d.x ?? xScale(d.date) ?? null;
 				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-non-null-assertion
-				d.y = d.y ?? yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2 ?? null;
+				d.y = d.y ?? yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2;
 				return d;
 			});
 		});
@@ -252,13 +250,13 @@ export function Timelines({
 				}
 			})
 			.on("mouseenter", (event, d) => {
-				const element = event.target;
+				const element = event.target as SVGCircleElement;
 				element.setAttribute("aria-describedby", TOOLTIP_ID);
 				setTooltipContent(d);
 				setTooltipAnchor(element);
 			})
 			.on("mouseleave", (event) => {
-				const element = event.target;
+				const element = event.target as SVGCircleElement;
 				element.removeAttribute("aria-describedby");
 				setTooltipAnchor(null);
 			});
@@ -287,14 +285,13 @@ export function Timelines({
 			</svg>
 			<Tooltip
 				setTooltip={setTooltip}
-				style={styles["popper"]}
-				{...attributes["popper"]}
+				style={floatingStyles}
+				data-popper-placement={placement}
 				isVisible={tooltipAnchor !== null}
 			>
 				<TooltipArrow
 					setTooltipArrow={setTooltipArrow}
-					style={styles["arrow"]}
-					{...attributes["arrow"]}
+					style={{ left: middlewareData.arrow?.x, top: middlewareData.arrow?.y }}
 				/>
 				{tooltipContent !== null ? (
 					<div className="flex flex-col space-y-1">
@@ -326,6 +323,7 @@ const Tooltip = function Tooltip({
 			id={TOOLTIP_ID}
 			role="tooltip"
 			className={cx(
+				styles["tooltip"],
 				"p-2 text-xs transition-opacity duration-150 rounded shadow-lg bg-gray-50 pointer-events-none z-30",
 				isVisible ? "opacity-100" : "opacity-0",
 			)}
@@ -342,34 +340,5 @@ function TooltipArrow({
 }: ComponentPropsWithoutRef<"div"> & {
 	setTooltipArrow: Dispatch<SetStateAction<HTMLDivElement | null>>;
 }) {
-	return (
-		<Fragment>
-			<div ref={setTooltipArrow} className="tooltip-arrow" {...props} />
-			{/* eslint-disable-next-line react/no-unknown-property */}
-			<style global jsx>{`
-				.tooltip-arrow,
-				.tooltip-arrow::before {
-					position: absolute;
-					width: 8px;
-					height: 8px;
-					z-index: -1;
-					background: inherit;
-				}
-
-				.tooltip-arrow::before {
-					content: "";
-					transform: rotate(45deg);
-					background: inherit;
-				}
-
-				// this will only work with global styled-jsx
-				#${TOOLTIP_ID}[data-popper-placement^='bottom'] .tooltip-arrow {
-					top: -4px;
-				}
-				#${TOOLTIP_ID}[data-popper-placement^='top'] .tooltip-arrow {
-					bottom: -4px;
-				}
-			`}</style>
-		</Fragment>
-	);
+	return <div ref={setTooltipArrow} className={styles["arrow"]} {...props} />;
 }

@@ -16,9 +16,9 @@ const config: Config = {
 				primary: colors.blue,
 			},
 			fontFamily: {
-				body: ["Inter", ...defaultTheme.fontFamily.sans],
-				display: ["Inter", ...defaultTheme.fontFamily.sans],
-				sans: ["Inter", ...defaultTheme.fontFamily.sans],
+				body: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
+				display: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
+				sans: ["var(--font-inter)", ...defaultTheme.fontFamily.sans],
 			},
 			fontSize: {
 				sm: px(13),

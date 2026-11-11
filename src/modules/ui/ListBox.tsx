@@ -8,7 +8,7 @@ import { useListState } from "@react-stately/list";
 import type { AriaListBoxProps } from "@react-types/listbox";
 import type { Node } from "@react-types/shared";
 import cx from "clsx";
-import type { ReactNode } from "react";
+import type { JSX, ReactNode } from "react";
 import { Fragment, useRef } from "react";
 
 import { CheckMark } from "@/modules/icons/CheckMark";
