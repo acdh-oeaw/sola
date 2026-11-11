@@ -1,5 +1,6 @@
+import type { QueryObserverResult } from "@tanstack/react-query";
+import type { JSX } from "react";
 import { Fragment, useCallback, useMemo } from "react";
-import type { QueryObserverResult } from "react-query";
 
 import type {
 	SolaEntityDetails,

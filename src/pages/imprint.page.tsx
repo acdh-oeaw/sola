@@ -1,4 +1,5 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
+import type { JSX } from "react";
 import { Fragment } from "react";
 
 import { getImprint } from "@/api/imprint";

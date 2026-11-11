@@ -1,5 +1,6 @@
 import { useButton } from "@react-aria/button";
 import { FocusScope } from "@react-aria/focus";
+import type { AriaMenuOptions } from "@react-aria/menu";
 import { useMenu, useMenuItem, useMenuTrigger } from "@react-aria/menu";
 import { DismissButton, useOverlay } from "@react-aria/overlays";
 import { mergeProps } from "@react-aria/utils";
@@ -7,10 +8,10 @@ import { useMenuTriggerState } from "@react-stately/menu";
 import type { TreeState } from "@react-stately/tree";
 import { useTreeState } from "@react-stately/tree";
 import type { AriaMenuProps, MenuTriggerProps } from "@react-types/menu";
-import type { CollectionChildren, Node } from "@react-types/shared";
+import type { CollectionChildren, Key, Node } from "@react-types/shared";
 import cx from "clsx";
 import Link from "next/link";
-import type { HTMLAttributes, Key, ReactNode, RefObject } from "react";
+import type { JSX, ReactNode, RefObject } from "react";
 import { useRef } from "react";
 
 export { Item } from "@react-stately/collections";
@@ -96,7 +97,7 @@ function Popover({ isOpen, onClose, children }: PopoverProps) {
 }
 
 interface MenuProps<T> extends AriaMenuProps<T> {
-	domProps: HTMLAttributes<HTMLElement>;
+	domProps: AriaMenuOptions<unknown>;
 	onClose?: () => void;
 }
 
@@ -106,10 +107,11 @@ function Menu<T extends object>(props: MenuProps<T>): JSX.Element {
 	const state = useTreeState<T>({ ...props, selectionMode: "none" });
 	const ref = useRef<HTMLUListElement>(null);
 	const { menuProps } = useMenu<T>(props, state, ref);
+	const { autoFocus: _autoFocus, ...domProps } = props.domProps;
 
 	return (
 		<ul
-			{...mergeProps(menuProps, props.domProps)}
+			{...mergeProps(menuProps, domProps)}
 			ref={ref}
 			className="py-1 bg-white rounded shadow-lg w-max focus:outline-none"
 		>
@@ -119,7 +121,9 @@ function Menu<T extends object>(props: MenuProps<T>): JSX.Element {
 						key={item.key}
 						item={item}
 						state={state}
-						onAction={props.onAction}
+						onAction={(key) => {
+							props.onAction?.(key, state.collection.getItem(key)!.value!);
+						}}
 						onClose={props.onClose}
 					/>
 				);

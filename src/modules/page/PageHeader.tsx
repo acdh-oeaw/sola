@@ -1,6 +1,7 @@
 import { useInteractionModality } from "@react-aria/interactions";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import type { JSX } from "react";
 import { Fragment } from "react";
 
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";

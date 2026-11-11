@@ -18,7 +18,6 @@ RUN npm install --global "$(node -p 'require("./package.json").packageManager')"
 USER node
 
 ENV CI=true
-ENV SKIP_INSTALL_SIMPLE_GIT_HOOKS=1
 
 RUN pnpm fetch
 

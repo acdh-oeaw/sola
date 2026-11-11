@@ -1,7 +1,7 @@
 import { useTextField } from "@react-aria/textfield";
 import type { AriaTextFieldProps } from "@react-types/textfield";
 import cx from "clsx";
-import type { InputHTMLAttributes, ReactNode } from "react";
+import type { InputHTMLAttributes, JSX, ReactNode } from "react";
 import { useRef } from "react";
 
 import { Label } from "@/modules/ui/Label";

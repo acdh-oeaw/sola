@@ -1,3 +1,5 @@
+import type { JSX } from "react";
+
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 
 import { Clear } from "../icons/Clear";

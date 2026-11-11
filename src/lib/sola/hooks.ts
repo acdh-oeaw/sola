@@ -1,9 +1,9 @@
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 
 import { groupBy, keyBy } from "@acdh-oeaw/lib";
+import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
-import { useQuery } from "react-query";
 
 import type {
 	Results,

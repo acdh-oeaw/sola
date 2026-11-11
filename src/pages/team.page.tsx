@@ -1,8 +1,9 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
+import type { JSX } from "react";
 import { Fragment, useMemo } from "react";
 
-import type { CmsPage, CmsTeamMember } from "@/api/cms";
-import { getCmsPage, getCmsTeamMembers } from "@/api/cms";
+import type { ContentPage, ContentTeamMember } from "@/api/content";
+import { getContentPage, getContentTeamMembers } from "@/api/content";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { Email } from "@/modules/icons/Email";
@@ -49,28 +50,28 @@ export const labels = {
 	},
 } as const;
 
-export type CmsPageMetadata = {
+export type ContentPageMetadata = {
 	title: string;
 };
 
 export interface TeamPageProps {
 	labels: (typeof labels)[SiteLocale];
-	page: CmsPage<CmsPageMetadata>;
+	page: ContentPage<ContentPageMetadata>;
 	data: {
-		team: Array<CmsTeamMember>;
+		team: Array<ContentTeamMember>;
 	};
 }
 
 /**
- * Make page contents from CMS and localised labels available to client.
+ * Make page contents from local files and localised labels available to client.
  */
 export async function getStaticProps(
 	context: GetStaticPropsContext,
 ): Promise<GetStaticPropsResult<TeamPageProps>> {
 	const locale = getCurrentLocale(context.locale);
 
-	const page = await getCmsPage<CmsPageMetadata>("team", locale);
-	const team = await getCmsTeamMembers(locale);
+	const page = await getContentPage<ContentPageMetadata>("team", locale);
+	const team = await getContentTeamMembers(locale);
 
 	return {
 		props: {
@@ -89,7 +90,7 @@ export default function TeamPage(props: TeamPageProps): JSX.Element {
 	const alternateUrls = useAlternateUrls();
 
 	const groupedTeamMembers = useMemo(() => {
-		const map: Record<string, Array<CmsTeamMember>> = {};
+		const map: Record<string, Array<ContentTeamMember>> = {};
 
 		props.data.team.forEach((member) => {
 			if (map[member.group] === undefined) {
@@ -149,7 +150,7 @@ function TeamMember({
 	teamMember,
 	t,
 }: {
-	teamMember: CmsTeamMember;
+	teamMember: ContentTeamMember;
 	t: (typeof labels)[SiteLocale]["data"];
 }) {
 	const hasWebsite = teamMember.website !== undefined && teamMember.website.length > 0;

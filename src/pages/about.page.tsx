@@ -1,8 +1,9 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
+import type { JSX } from "react";
 import { Fragment } from "react";
 
-import type { CmsPage } from "@/api/cms";
-import { getCmsPage } from "@/api/cms";
+import type { ContentPage } from "@/api/content";
+import { getContentPage } from "@/api/content";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { Metadata } from "@/modules/metadata/Metadata";
@@ -26,24 +27,24 @@ export const labels = {
 	},
 } as const;
 
-export type CmsPageMetadata = {
+export type ContentPageMetadata = {
 	title: string;
 };
 
 export interface AboutPageProps {
 	labels: (typeof labels)[SiteLocale];
-	page: CmsPage<CmsPageMetadata>;
+	page: ContentPage<ContentPageMetadata>;
 }
 
 /**
- * Make page contents from CMS and localised labels available to client.
+ * Make page contents from local files and localised labels available to client.
  */
 export async function getStaticProps(
 	context: GetStaticPropsContext,
 ): Promise<GetStaticPropsResult<AboutPageProps>> {
 	const locale = getCurrentLocale(context.locale);
 
-	const page = await getCmsPage<CmsPageMetadata>("about", locale);
+	const page = await getContentPage<ContentPageMetadata>("about", locale);
 
 	return {
 		props: {

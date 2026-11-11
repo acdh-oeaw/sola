@@ -1,23 +1,47 @@
 {
 	"$schema": "https://json.schemastore.org/tsconfig",
-	"extends": "@acdh-oeaw/tsconfig",
 	"compilerOptions": {
+		"allowArbitraryExtensions": true,
+		"allowImportingTsExtensions": true,
+		"allowJs": true,
+		"checkJs": true,
+		"erasableSyntaxOnly": true,
+		"exactOptionalPropertyTypes": false,
+		"incremental": true,
+		"jsx": "react-jsx",
+		"lib": ["dom", "dom.iterable", "es2023"],
+		"module": "preserve",
+		"moduleDetection": "force",
+		"noEmit": true,
+		"noFallthroughCasesInSwitch": true,
+		"noImplicitReturns": true,
+		"noPropertyAccessFromIndexSignature": false,
+		"noUncheckedIndexedAccess": true,
+		"noUncheckedSideEffectImports": true,
 		"paths": {
 			"@/*": ["./src/*"],
 			"~/*": ["./*"]
 		},
-		"plugins": [{ "name": "next" }]
+		"plugins": [
+			{
+				"name": "next"
+			}
+		],
+		"skipLibCheck": true,
+		"strict": true,
+		"target": "es2022",
+		"verbatimModuleSyntax": true
 	},
 	"include": [
 		"./next-env.d.ts",
 		"./**/*.d.ts",
 		"./**/*.js",
-		// "./**/*.mdx",
 		"./**/*.ts",
 		"./**/*.tsx",
+		".next/dev/types/**/*.ts",
 		".next/types/**/*.ts"
 	],
-	"exclude": ["node_modules", "out"],
+	"exclude": ["node_modules", "out", "public"],
 	"mdx": {
 		"checkMdx": false,
 		"plugins": ["remark-frontmatter", "remark-gfm"]

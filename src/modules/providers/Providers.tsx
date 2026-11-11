@@ -1,7 +1,8 @@
 import { I18nProvider } from "@react-aria/i18n";
 import { OverlayProvider } from "@react-aria/overlays";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/router";
-import { QueryClient, QueryClientProvider } from "react-query";
+import type { JSX } from "react";
 
 import { SiteMetadataProvider } from "@/modules/metadata/SiteMetadataContext";
 

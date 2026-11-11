@@ -1,19 +1,20 @@
 /** @typedef {import("typescript-eslint").Config} Config */
 
 import baseConfig from "@acdh-oeaw/eslint-config";
-import nextConfig from "@acdh-oeaw/eslint-config-next";
 import nodeConfig from "@acdh-oeaw/eslint-config-node";
 import reactConfig from "@acdh-oeaw/eslint-config-react";
 import tailwindcssConfig from "@acdh-oeaw/eslint-config-tailwindcss";
+import nextPlugin from "@next/eslint-plugin-next";
+import { defineConfig } from "eslint/config";
 import gitignore from "eslint-config-flat-gitignore";
 
 /** @type {Config} */
-const config = [
+const config = defineConfig(
 	gitignore({ strict: false }),
-	...baseConfig,
-	...reactConfig,
-	...nextConfig,
-	...tailwindcssConfig,
+	baseConfig,
+	reactConfig,
+	nextPlugin.configs["core-web-vitals"],
+	/** @type {import("eslint").Linter.Config[]} */ (/** @type {unknown} */ (tailwindcssConfig)),
 	{
 		rules: {
 			"arrow-body-style": ["error", "always"],
@@ -50,12 +51,10 @@ const config = [
 			"react/jsx-sort-props": ["error", { reservedFirst: true }],
 		},
 	},
-	...nodeConfig.map((config) => {
-		return {
-			files: ["db/**/*.ts", "lib/server/**/*.ts", "**/_actions/**/*.ts"],
-			...config,
-		};
-	}),
-];
+	{
+		files: ["db/**/*.ts", "lib/server/**/*.ts", "**/_actions/**/*.ts"],
+		extends: [nodeConfig],
+	},
+);
 
 export default config;

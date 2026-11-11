@@ -1,3 +1,4 @@
+import type { JSX } from "react";
 import { createContext, useMemo } from "react";
 
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";

@@ -1,9 +1,10 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import Link from "next/link";
+import type { JSX } from "react";
 import { Fragment } from "react";
 
-import type { CmsPage, CmsPostBase } from "@/api/cms";
-import { getCmsPage, getCmsPostsOverview } from "@/api/cms";
+import type { ContentPage, ContentPostBase } from "@/api/content";
+import { getContentPage, getContentPostsOverview } from "@/api/content";
 import { formatDate } from "@/lib/i18n/formatDate";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
@@ -37,28 +38,28 @@ export const labels = {
 	},
 } as const;
 
-export type CmsPageMetadata = {
+export type ContentPageMetadata = {
 	title: string;
 };
 
 export interface PostsPageProps {
 	labels: (typeof labels)[SiteLocale];
-	page: CmsPage<CmsPageMetadata>;
+	page: ContentPage<ContentPageMetadata>;
 	data: {
-		posts: Array<CmsPostBase>;
+		posts: Array<ContentPostBase>;
 	};
 }
 
 /**
- * Make page contents from CMS and localised labels available to client.
+ * Make page contents from local files and localised labels available to client.
  */
 export async function getStaticProps(
 	context: GetStaticPropsContext,
 ): Promise<GetStaticPropsResult<PostsPageProps>> {
 	const locale = getCurrentLocale(context.locale);
 
-	const page = await getCmsPage<CmsPageMetadata>("news", locale);
-	const posts = await getCmsPostsOverview(locale);
+	const page = await getContentPage<ContentPageMetadata>("news", locale);
+	const posts = await getContentPostsOverview(locale);
 
 	return {
 		props: {
@@ -102,7 +103,7 @@ export default function PostsPage(props: PostsPageProps): JSX.Element {
 	);
 }
 
-function Post({ post, t }: { post: CmsPostBase; t: (typeof labels)[SiteLocale]["data"] }) {
+function Post({ post, t }: { post: ContentPostBase; t: (typeof labels)[SiteLocale]["data"] }) {
 	const locale = useCurrentLocale();
 
 	return (
