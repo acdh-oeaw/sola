@@ -601,7 +601,7 @@ function VisualizationPanel({
 			<div className="flex flex-col justify-between px-6 pt-6 pb-4 space-y-4 md:space-y-0 md:flex-row md:space-x-4">
 				<div className="flex items-center space-x-2">
 					<h1 className="text-2xl font-bold">{t.h1}</h1>
-					{filteredSolaPassages.isPending ? (
+					{filteredSolaPassages.isLoading ? (
 						<Spinner className="w-6 h-6" />
 					) : (
 						<div className="w-6 h-6" />
@@ -937,9 +937,9 @@ function DetailsPanel({
 	);
 
 	if (
-		selectedSolaEntity.status === "pending" ||
-		solaEntityTexts.status === "pending" ||
-		solaEntityBibliography.status === "pending"
+		selectedSolaEntity.isLoading ||
+		solaEntityTexts.isLoading ||
+		solaEntityBibliography.isLoading
 	) {
 		return (
 			<div className="flex flex-col items-center justify-center text-yellow-400">
@@ -1251,7 +1251,7 @@ function Authors({
 }) {
 	const t = useLabels() as (typeof labels)[SiteLocale];
 
-	if (authors.status === "pending")
+	if (authors.isLoading)
 		return (
 			<div className="py-1">
 				<Spinner className="w-4 h-4 text-gray-700" />
@@ -1507,7 +1507,7 @@ function BiblePassages({
 }) {
 	const t = useLabels() as (typeof labels)[SiteLocale];
 
-	if (passages.status === "pending") return <span>Loading&hellip;</span>;
+	if (passages.isLoading) return <span>Loading&hellip;</span>;
 	if (passages.data === undefined || count(passages.data) === 0) return null;
 
 	return (
