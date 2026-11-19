@@ -15,6 +15,7 @@
 		}
 	},
 	"scripts": {
+		"analyze": "next analyze",
 		"build": "next build",
 		"dev": "next dev",
 		"format:check": "oxfmt --check .",
@@ -24,8 +25,7 @@
 		"start": "next start",
 		"styles:check": "stylelint \"./**/*.css\" --cache --ignore-path ./.gitignore",
 		"styles:fix": "pnpm run styles:check --fix",
-		"types:check": "tsc --noEmit",
-		"validate": "pnpm run --no-bail \"/^(format|lint|styles|types):check$/\""
+		"types:check": "tsc --noEmit"
 	},
 	"dependencies": {
 		"@acdh-oeaw/lib": "^0.2.2",
