@@ -1,7 +1,6 @@
 import { useContext } from "react";
 
-import type { SiteMetadata } from "@/modules/metadata/SiteMetadataContext";
-import { SiteMetadataContext } from "@/modules/metadata/SiteMetadataContext";
+import { type SiteMetadata, SiteMetadataContext } from "@/modules/metadata/SiteMetadataContext";
 
 /**
  * Returns site metadata for the currently active locale.

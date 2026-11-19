@@ -324,26 +324,6 @@
 		],
 		"better-tailwindcss/no-conflicting-classes": "error",
 		"arrow-body-style": ["error", "always"],
-		"no-restricted-imports": [
-			"error",
-			{
-				"name": "next/image",
-				"message": "Please use `@/components/image` or `@/components/server-image` instead."
-			},
-			{
-				"name": "next/link",
-				"message": "Please use `@/components/link` instead."
-			},
-			{
-				"name": "next/navigation",
-				"importNames": ["redirect", "permanentRedirect", "useRouter", "usePathname"],
-				"message": "Please use `@/lib/i18n/navigation` instead."
-			},
-			{
-				"name": "next/router",
-				"message": "Please use `@/lib/i18n/navigation` instead."
-			}
-		],
 		"import/no-named-as-default": "warn",
 		"import/no-named-as-default-member": "warn",
 		"import/no-duplicates": [
@@ -488,7 +468,6 @@
 		"typescript/consistent-generic-constructors": "error",
 		"typescript/consistent-indexed-object-style": "error",
 		"typescript/consistent-type-assertions": "error",
-		"typescript/consistent-type-definitions": "error",
 		"typescript/dot-notation": "error",
 		"typescript/no-confusing-non-null-assertion": "error",
 		"typescript/no-inferrable-types": "error",

@@ -3,13 +3,11 @@ import { useHover } from "@react-aria/interactions";
 import { useListBox, useListBoxSection, useOption } from "@react-aria/listbox";
 import { useSeparator } from "@react-aria/separator";
 import { mergeProps } from "@react-aria/utils";
-import type { ListState } from "@react-stately/list";
-import { useListState } from "@react-stately/list";
+import { type ListState, useListState } from "@react-stately/list";
 import type { AriaListBoxProps } from "@react-types/listbox";
 import type { Node } from "@react-types/shared";
 import cx from "clsx";
-import type { JSX, ReactNode } from "react";
-import { Fragment, useRef } from "react";
+import { type JSX, type ReactNode, Fragment, useRef } from "react";
 
 import { CheckMark } from "@/modules/icons/CheckMark";
 import { Label } from "@/modules/ui/Label";
@@ -53,13 +51,9 @@ interface OptionProps<T> {
 /** @private */
 function Option<T>({ item, state }: OptionProps<T>) {
 	const ref = useRef<HTMLLIElement>(null);
-	const isDisabled = state.disabledKeys.has(item.key);
-	const isSelected = state.selectionManager.isSelected(item.key);
-	const { optionProps } = useOption(
+	const { optionProps, isSelected } = useOption(
 		{
 			key: item.key,
-			isDisabled,
-			isSelected,
 		},
 		state,
 		ref,
@@ -112,7 +106,7 @@ function Section<T>({ section, state }: SectionProps<T>) {
 					</span>
 				)}
 				<ul {...groupProps}>
-					{[...section.childNodes].map((node) => {
+					{[...(state.collection.getChildren?.(section.key) ?? [])].map((node) => {
 						return <Option key={node.key} item={node} state={state} />;
 					})}
 				</ul>

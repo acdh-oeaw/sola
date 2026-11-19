@@ -121,15 +121,15 @@ export function Timelines({
 		const yAxisRight = axisRight(yScale);
 
 		select<SVGGElement, unknown>("g.x-axis-top")
-			.attr("transform", `translate(0,${config.canvasMarginY})`)
+			.attr("transform", `translate(0,${String(config.canvasMarginY)})`)
 			.classed("text-gray-400", true)
 			.call(xAxisTop);
 		select<SVGGElement, unknown>("g.x-axis-bottom")
-			.attr("transform", `translate(0,${height - config.canvasMarginY})`)
+			.attr("transform", `translate(0,${String(height - config.canvasMarginY)})`)
 			.classed("text-gray-400", true)
 			.call(xAxisBottom);
 		select<SVGGElement, unknown>("g.y-axis-left")
-			.attr("transform", `translate(${config.canvasMarginX},0)`)
+			.attr("transform", `translate(${String(config.canvasMarginX)},0)`)
 			.classed("text-gray-400", true)
 			.call(yAxisLeft)
 			// rotate axis labels
@@ -139,7 +139,7 @@ export function Timelines({
 			.attr("x", 0)
 			.attr("y", -15);
 		select<SVGGElement, unknown>("g.y-axis-right")
-			.attr("transform", `translate(${width - config.canvasMarginX},0)`)
+			.attr("transform", `translate(${String(width - config.canvasMarginX)},0)`)
 			.classed("text-gray-400", true)
 			.call(yAxisRight)
 			// rotate axis labels
@@ -277,7 +277,7 @@ export function Timelines({
 					<clipPath id={CLIPPATH_ID}>
 						{dimensions ? (
 							<rect
-								transform={`translate(${config.canvasMarginX},${config.canvasMarginY})`}
+								transform={`translate(${String(config.canvasMarginX)},${String(config.canvasMarginY)})`}
 								width={dimensions.width - 2 * config.canvasMarginX}
 								height={dimensions.height - 2 * config.canvasMarginY}
 								fill="none"

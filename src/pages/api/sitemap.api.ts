@@ -50,7 +50,7 @@ export default async function handler(
 
 		/** Pages for SOLA entities. */
 		/** Only fetch for one locale, since ids and type are the same for all locales. */
-		const locale = locales[0] as SiteLocale;
+		const locale = locales[0]!;
 
 		const data = await getSolaEntities({ query, locale });
 

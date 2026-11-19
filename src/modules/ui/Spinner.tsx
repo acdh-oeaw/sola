@@ -1,5 +1,5 @@
 import { useProgressBar } from "@react-aria/progress";
-import type { JSX, SVGProps } from "react";
+import type { JSX } from "react";
 
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 
@@ -32,7 +32,7 @@ export function Spinner({ className }: SpinnerProps): JSX.Element {
 
 	return (
 		<svg
-			{...(progressBarProps as SVGProps<SVGSVGElement>)}
+			{...progressBarProps}
 			width="1em"
 			height="1em"
 			viewBox="0 0 32 32"

@@ -1,3 +1,5 @@
+import type { QueryParams } from "@/lib/url/addQueryParams";
+
 /**
  * HTTP Error.
  */
@@ -17,7 +19,7 @@ export class HttpError extends Error {
  * Note: we don't reuse `@/lib/url/addQueryParams`, because the SOLA
  * backend defaults to `?key_in=1,2` instead of `?key=1&key=2`.
  */
-function addQueryParams(url: URL, query?: Record<string, unknown>) {
+function addQueryParams(url: URL, query?: QueryParams) {
 	if (query === undefined) return url;
 	Object.entries(query).forEach(([key, value]) => {
 		if (Array.isArray(value)) {
@@ -41,7 +43,7 @@ function addQueryParams(url: URL, query?: Record<string, unknown>) {
 export interface RequestConfig {
 	path: string;
 	baseUrl: string;
-	query?: Record<string, unknown>;
+	query?: QueryParams;
 	options?: RequestInit;
 }
 
@@ -58,7 +60,7 @@ export async function request<T>({ path, baseUrl, query, options }: RequestConfi
 		throw new HttpError(response);
 	}
 
-	const data: T = await response.json();
+	const data = (await response.json()) as T;
 
 	return data;
 }

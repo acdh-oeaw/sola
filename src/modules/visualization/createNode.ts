@@ -10,7 +10,7 @@ export interface Node extends SimulationNodeDatum {
 	color: string;
 }
 
-export function createNode<T extends SolaListEntity>(entity: T, color: string): Node {
+export function createNode(entity: SolaListEntity, color: string): Node {
 	return {
 		id: entity.id,
 		label: entity.name,

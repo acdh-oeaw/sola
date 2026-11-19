@@ -225,13 +225,13 @@ export function useSolaSelectedEntity() {
 		function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
 			if (entity !== null) {
 				const { id, type } = entity;
-				router.push({ query: { ...router.query, id, type } }, undefined, {
+				void router.push({ query: { ...router.query, id, type } }, undefined, {
 					shallow: true,
 				});
 			} else {
 				const { id, type, ...query } = router.query;
 				if (id !== undefined || type !== undefined) {
-					router.push({ query }, undefined, { shallow: true });
+					void router.push({ query }, undefined, { shallow: true });
 				}
 			}
 		},
@@ -324,9 +324,8 @@ export function useSolaPassagesFilterOptionsTree(
 	passageTypes: Record<number, SolaVocabulary> | undefined,
 	translation: string,
 ) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const getParentId = useCallback((entity: any) => {
-		return entity.parent_class?.id;
+	const getParentId = useCallback((entity: SolaVocabulary) => {
+		return entity.parent_class?.id ?? null;
 	}, []);
 	const _passageTopics = useHierarchicalData(passageTopics, getParentId);
 	const _passageTypes = useHierarchicalData(passageTypes, getParentId);
@@ -579,18 +578,21 @@ export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
 	const locale = useCurrentLocale();
 
 	const id = entity?.id;
-	const query = {
-		attribute: "include",
-		contenttype: entity?.type as SolaEntityType,
-	};
+	const type = entity?.type;
 
 	const bibliography = useQuery({
-		queryKey: ["getSolaEntityBibliographyById", locale, id, query],
+		queryKey: [
+			"getSolaEntityBibliographyById",
+			locale,
+			id,
+			{ attribute: "include", contenttype: type },
+		],
 		queryFn: () => {
+			const query = { attribute: "include", contenttype: type! };
 			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			return getSolaEntityBibliographyById({ id: id!, query, locale });
 		},
-		enabled: id !== undefined,
+		enabled: id !== undefined && type !== undefined,
 	});
 
 	return bibliography;

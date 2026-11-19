@@ -5,13 +5,10 @@ import type {
 	GetStaticPropsResult,
 } from "next";
 import Image from "next/image";
-import type { JSX } from "react";
-import { Fragment } from "react";
+import { type JSX, Fragment } from "react";
 
-import type { ContentPost } from "@/api/content";
-import { getContentPostById, getContentPostIds } from "@/api/content";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
+import { type ContentPost, getContentPostById, getContentPostIds } from "@/api/content";
+import { type SiteLocale, getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { Metadata } from "@/modules/metadata/Metadata";
 import { useAlternateUrls } from "@/modules/metadata/useAlternateUrls";
 import { useCanonicalUrl } from "@/modules/metadata/useCanonicalUrl";

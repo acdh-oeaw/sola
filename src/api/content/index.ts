@@ -99,7 +99,7 @@ export async function getContentTeamMembers(locale: SiteLocale): Promise<Array<C
 		folderContents.map(async (file) => {
 			const filePath = path.join(folderPath, file);
 			const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
-			const processed = YAML.parse(fileContents);
+			const processed = YAML.parse(fileContents) as Omit<ContentTeamMember, "id">;
 			return { id: file.slice(0, -dataExtension.length), ...processed };
 		}),
 	);
@@ -111,11 +111,11 @@ export async function getContentTeamMembers(locale: SiteLocale): Promise<Array<C
 	return data;
 }
 
-export interface ContentPostBaseMetadata {
+export type ContentPostBaseMetadata = {
 	title: string;
 	date: string;
 	abstract: string;
-}
+};
 
 export interface ContentPostBase {
 	id: string;
@@ -157,14 +157,14 @@ export async function getContentPostsOverview(locale: SiteLocale): Promise<Array
 	return data;
 }
 
-export interface ContentPostMetadata {
+export type ContentPostMetadata = {
 	title: string;
 	shortTitle?: string;
 	date: string;
 	abstract?: string;
 	attachments?: Array<{ label: string; file: string }>;
 	gallery?: Array<{ alt?: string; image: string }>;
-}
+};
 
 export interface ContentPost {
 	id: string;

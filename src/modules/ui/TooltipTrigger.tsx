@@ -1,21 +1,19 @@
 import { useInteractionModality } from "@react-aria/interactions";
 import { useTooltip, useTooltipTrigger } from "@react-aria/tooltip";
 import { mergeProps } from "@react-aria/utils";
-import type { TooltipTriggerState } from "@react-stately/tooltip";
-import { useTooltipTriggerState } from "@react-stately/tooltip";
+import { type TooltipTriggerState, useTooltipTriggerState } from "@react-stately/tooltip";
 import type {
 	AriaTooltipProps,
 	TooltipTriggerProps as AriaTooltipTriggerProps,
 } from "@react-types/tooltip";
-import type { JSX, ReactNode } from "react";
-import { cloneElement, Fragment, isValidElement, useRef } from "react";
+import { type JSX, type ReactNode, cloneElement, isValidElement, useRef } from "react";
 
 export interface TooltipTriggerProps extends AriaTooltipTriggerProps {
 	tooltip: string;
 	children: ReactNode;
 }
 
-export function TooltipTrigger(props: TooltipTriggerProps): JSX.Element {
+export function TooltipTrigger(props: TooltipTriggerProps): ReactNode {
 	const state = useTooltipTriggerState(props);
 	const ref = useRef<HTMLButtonElement>(null);
 	const { triggerProps, tooltipProps } = useTooltipTrigger(props, state, ref);
@@ -25,7 +23,7 @@ export function TooltipTrigger(props: TooltipTriggerProps): JSX.Element {
 	useInteractionModality();
 
 	if (!isValidElement(props.children)) {
-		return <Fragment>{props.children}</Fragment>;
+		return props.children;
 	}
 
 	return (

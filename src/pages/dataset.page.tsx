@@ -2,7 +2,7 @@ import type { QueryObserverResult } from "@tanstack/react-query";
 import cx from "clsx";
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { useRouter } from "next/router";
-import { type FormEvent, type JSX, Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { type JSX, type SubmitEvent, Fragment, useEffect, useMemo, useRef, useState } from "react";
 
 import type {
 	SolaBibsonomyReference,
@@ -229,7 +229,7 @@ function FilterPanel({
 
 	const { authors, passageTopics, passageTypes, publications } = useSolaFilterOptions();
 
-	function onSubmit(event: FormEvent<HTMLFormElement>) {
+	function onSubmit(event: SubmitEvent<HTMLFormElement>) {
 		event.preventDefault();
 	}
 
@@ -389,7 +389,11 @@ function FilterPanel({
 							// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 							if (item.children !== undefined && item.children.size > 0) {
 								return (
-									<Section key={`section-${item.id}`} title={item.name} items={item.children}>
+									<Section
+										key={`section-${String(item.id)}`}
+										title={item.name}
+										items={item.children}
+									>
 										{(item) => {
 											return <Item>{item.name}</Item>;
 										}}
@@ -419,8 +423,8 @@ function FilterPanel({
 
 function createListboxLabel(label: string, total?: number, selected?: number) {
 	if (total === undefined || total === 0) return label;
-	if (selected === undefined || selected === 0) return `${label} (${total})`;
-	return `${label} (${selected}/${total})`;
+	if (selected === undefined || selected === 0) return `${label} (${String(total)})`;
+	return `${label} (${String(selected)}/${String(total)})`;
 }
 
 function PassageTopicListBox({
@@ -456,7 +460,7 @@ function PassageTopicListBox({
 
 	if (topic.children.size === 0) return null;
 
-	const id = `passage-topic-${topic.id}-filter`;
+	const id = `passage-topic-${String(topic.id)}-filter`;
 
 	return (
 		<Fragment>
@@ -745,7 +749,9 @@ function ActiveFilterList({
 										return (
 											<li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
 												<Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-													<TooltipTrigger tooltip={`${t.filteredBy} ${t.authors[0]}: ${name}`}>
+													<TooltipTrigger
+														tooltip={`${t.filteredBy} ${t.authors[0]}: ${name ?? ""}`}
+													>
 														<button
 															type="button"
 															className="font-medium truncate rounded-sm cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
@@ -787,7 +793,7 @@ function ActiveFilterList({
 											<li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
 												<Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
 													<TooltipTrigger
-														tooltip={`${t.filteredBy} ${t.entityType.Publication[0]}: ${name}`}
+														tooltip={`${t.filteredBy} ${t.entityType.Publication[0]}: ${name ?? ""}`}
 													>
 														<button
 															type="button"
@@ -830,7 +836,7 @@ function ActiveFilterList({
 										return (
 											<li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
 												<Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-													<TooltipTrigger tooltip={`${t.filteredBy} ${t.topics[0]}: ${name}`}>
+													<TooltipTrigger tooltip={`${t.filteredBy} ${t.topics[0]}: ${name ?? ""}`}>
 														<button
 															type="button"
 															className="font-medium truncate rounded-sm cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
@@ -871,7 +877,7 @@ function ActiveFilterList({
 										return (
 											<li className="flex min-w-0 mb-1 mr-1 md:mr-0" key={id}>
 												<Badge className="min-w-0 space-x-1 text-gray-100 bg-gray-900 cursor-default select-none">
-													<TooltipTrigger tooltip={`${t.filteredBy} ${t.types[0]}: ${name}`}>
+													<TooltipTrigger tooltip={`${t.filteredBy} ${t.types[0]}: ${name ?? ""}`}>
 														<button
 															type="button"
 															className="font-medium truncate rounded-sm cursor-default focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
@@ -1042,7 +1048,7 @@ function CopyLinkButton() {
 			className="inline-flex items-center px-2 py-1 space-x-1 text-xs font-medium text-gray-700 transition bg-gray-200 rounded-sm hover:bg-gray-300 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-gray-900"
 			onClick={() => {
 				const url = new URL(router.asPath, baseUrl);
-				navigator.clipboard.writeText(String(url));
+				void navigator.clipboard.writeText(String(url));
 			}}
 			type="button"
 		>
@@ -1319,12 +1325,11 @@ function Properties({
 }) {
 	if (entity === undefined) return null;
 
-	switch (entity.type) {
-		case "Passage":
-			return <PassageProperties entity={entity} setFilter={setFilter} />;
-		default:
-			return null;
+	if (entity.type === "Passage") {
+		return <PassageProperties entity={entity} setFilter={setFilter} />;
 	}
+
+	return null;
 }
 
 function PassageProperties({

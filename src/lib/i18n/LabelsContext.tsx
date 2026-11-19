@@ -1,5 +1,4 @@
-import type { JSX, ReactNode } from "react";
-import { createContext, useContext } from "react";
+import { type JSX, type ReactNode, createContext, useContext } from "react";
 
 type Labels = Record<string, unknown>;
 

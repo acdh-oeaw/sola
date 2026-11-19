@@ -1,18 +1,15 @@
 import { useButton } from "@react-aria/button";
 import { FocusScope } from "@react-aria/focus";
-import type { AriaMenuOptions } from "@react-aria/menu";
-import { useMenu, useMenuItem, useMenuTrigger } from "@react-aria/menu";
+import { type AriaMenuOptions, useMenu, useMenuItem, useMenuTrigger } from "@react-aria/menu";
 import { DismissButton, useOverlay } from "@react-aria/overlays";
 import { mergeProps } from "@react-aria/utils";
 import { useMenuTriggerState } from "@react-stately/menu";
-import type { TreeState } from "@react-stately/tree";
-import { useTreeState } from "@react-stately/tree";
+import { type TreeState, useTreeState } from "@react-stately/tree";
 import type { AriaMenuProps, MenuTriggerProps } from "@react-types/menu";
 import type { CollectionChildren, Key, Node } from "@react-types/shared";
 import cx from "clsx";
-import Link from "next/link";
-import type { JSX, ReactNode, RefObject } from "react";
-import { useRef } from "react";
+import Link, { type LinkProps } from "next/link";
+import { type AriaAttributes, type JSX, type ReactNode, type RefObject, useRef } from "react";
 
 export { Item } from "@react-stately/collections";
 
@@ -56,8 +53,7 @@ export function MenuButton<T extends object>(props: MenuButtonProps<T>): JSX.Ele
 						{...props}
 						aria-label={props.menuLabel}
 						domProps={menuProps}
-						/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */
-						autoFocus={state.focusStrategy || true}
+						autoFocus={state.focusStrategy ?? true}
 						onClose={state.close}
 					/>
 				</Popover>
@@ -86,7 +82,7 @@ function Popover({ isOpen, onClose, children }: PopoverProps) {
 	);
 
 	return (
-		<FocusScope restoreFocus>
+		<FocusScope restoreFocus={true}>
 			<div {...overlayProps} ref={overlayRef} className="absolute z-20 mt-1">
 				<DismissButton onDismiss={onClose} />
 				{children}
@@ -116,40 +112,31 @@ function Menu<T extends object>(props: MenuProps<T>): JSX.Element {
 			className="py-1 bg-white rounded-sm shadow-lg w-max focus:outline-hidden"
 		>
 			{[...state.collection].map((item) => {
-				return (
-					<MenuItem
-						key={item.key}
-						item={item}
-						state={state}
-						onAction={(key) => {
-							props.onAction?.(key, state.collection.getItem(key)!.value!);
-						}}
-						onClose={props.onClose}
-					/>
-				);
+				return <MenuItem key={item.key} item={item} state={state} />;
 			})}
 		</ul>
 	);
 }
 
+/** Props passed to `<Item>`, which `react-aria` types as `any`. */
+interface MenuItemElementProps {
+	elementType?: string;
+	href?: LinkProps["href"];
+	"aria-current"?: AriaAttributes["aria-current"];
+}
+
 interface MenuItemProps<T> {
 	item: Node<T>;
 	state: TreeState<T>;
-	onAction?: (key: Key) => void;
-	onClose?: () => void;
 }
 
 /** @private */
-function MenuItem<T>({ item, state, onAction, onClose }: MenuItemProps<T>) {
+function MenuItem<T>({ item, state }: MenuItemProps<T>) {
 	const ref = useRef<HTMLAnchorElement | HTMLLIElement>(null);
-	const isDisabled = state.disabledKeys.has(item.key);
 	const isFocused = state.selectionManager.focusedKey === item.key;
 	const { menuItemProps } = useMenuItem(
 		{
 			key: item.key,
-			isDisabled,
-			onAction,
-			onClose,
 			/**
 			 * With `closeOnSelect: true` navigation does not work ootb.
 			 * Instead, we listen to `routeChangeStart` router event above and close manually.
@@ -164,18 +151,20 @@ function MenuItem<T>({ item, state, onAction, onClose }: MenuItemProps<T>) {
 		ref,
 	);
 
-	if (item.props.elementType === "a") {
+	const itemProps = item.props as MenuItemElementProps;
+
+	if (itemProps.elementType === "a") {
 		return (
 			<li role="none">
 				<Link
-					href={item.props.href}
+					href={itemProps.href!}
 					{...menuItemProps}
 					ref={ref as RefObject<HTMLAnchorElement>}
 					className={cx(
 						"text-base select-none font-medium block px-4 py-2 focus:outline-hidden cursor-pointer transition",
 						isFocused && "bg-gray-100",
 					)}
-					aria-current={item.props["aria-current"]}
+					aria-current={itemProps["aria-current"]}
 				>
 					{item.rendered}
 				</Link>

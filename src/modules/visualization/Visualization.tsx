@@ -234,6 +234,7 @@ function Alternate({
 					return (
 						<li key={passage.id}>
 							<button
+								type="button"
 								onClick={() => {
 									setSelectedSolaEntity({ id: passage.id, type: passage.type });
 								}}

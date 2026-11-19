@@ -1,10 +1,8 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import type { JSX } from "react";
-import { Fragment } from "react";
+import { type JSX, Fragment } from "react";
 
 import { getImprint } from "@/api/imprint";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
+import { type SiteLocale, getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { Metadata } from "@/modules/metadata/Metadata";
 import { useAlternateUrls } from "@/modules/metadata/useAlternateUrls";
 import { useCanonicalUrl } from "@/modules/metadata/useCanonicalUrl";
@@ -62,8 +60,8 @@ export default function ImprintPage(props: ImprintPageProps): JSX.Element {
 				title={props.labels.page.title}
 				canonicalUrl={canonicalUrl}
 				languageAlternates={alternateUrls}
-				nofollow
-				noindex
+				nofollow={true}
+				noindex={true}
 			/>
 			<Container className="prose" as="main">
 				<h1>{props.labels.page.title}</h1>

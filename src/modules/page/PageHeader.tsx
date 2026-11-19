@@ -84,7 +84,7 @@ function MobileNav({
 		<div className="lg:hidden">
 			<MenuButton
 				onAction={(key) => {
-					router.push(String(key));
+					void router.push(String(key));
 				}}
 				menuLabel={t.navigationMenu}
 				label={

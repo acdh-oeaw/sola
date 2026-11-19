@@ -33,7 +33,7 @@ export function getQueryParam(
 	if (param === undefined) return undefined;
 	if (Array.isArray(param) && param.length === 0) return undefined;
 
-	if (multiple === true) {
+	if (multiple) {
 		const values = ensureArray(param).filter((value) => {
 			return !isEmptyString(value);
 		});
@@ -44,7 +44,7 @@ export function getQueryParam(
 		return transformed.length > 0 ? transformed : undefined;
 	} else {
 		/** Will never return `undefined`, since we check for empty array above. */
-		const value = ensureScalar(param) as string;
+		const value = ensureScalar(param)!;
 		if (isEmptyString(value)) return undefined;
 		if (!transform) return value;
 		return transform(value);
