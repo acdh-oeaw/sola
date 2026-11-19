@@ -1,8 +1,7 @@
-import { I18nProvider } from "@react-aria/i18n";
 import { keepPreviousData, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { type NextRouter, useRouter } from "next/router";
 import type { JSX } from "react";
-import { RouterProvider } from "react-aria-components";
+import { I18nProvider, RouterProvider } from "react-aria-components";
 
 import { SiteMetadataProvider } from "@/modules/metadata/SiteMetadataContext";
 

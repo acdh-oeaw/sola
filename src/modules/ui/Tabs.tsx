@@ -1,96 +1,45 @@
-import { useFocusRing } from "@react-aria/focus";
-import { useHover } from "@react-aria/interactions";
-import { useTab, useTabList, useTabPanel } from "@react-aria/tabs";
-import { mergeProps } from "@react-aria/utils";
-import { type TabListState, useTabListState } from "@react-stately/tabs";
-import type { Node } from "@react-types/shared";
-import type { AriaTabListProps, AriaTabPanelProps, AriaTabProps } from "@react-types/tabs";
-import cx from "clsx";
-import { type JSX, type ReactNode, type Ref, useRef } from "react";
+import type { JSX } from "react";
+import {
+	Tab as AriaTab,
+	TabList as AriaTabList,
+	type TabListProps as AriaTabListProps,
+	TabPanel as AriaTabPanel,
+	type TabPanelProps as AriaTabPanelProps,
+	type TabProps as AriaTabProps,
+	Tabs as AriaTabs,
+	type TabsProps as AriaTabsProps,
+} from "react-aria-components";
 
-export { Item } from "@react-stately/collections";
+export type TabsProps = Omit<AriaTabsProps, "className">;
 
-export type TabsProps<T> = AriaTabListProps<T>;
+export function Tabs(props: TabsProps): JSX.Element {
+	return <AriaTabs {...props} className="space-y-4" />;
+}
 
-export function Tabs<T extends object>(props: TabsProps<T>): JSX.Element {
-	const tablistRef = useRef<HTMLDivElement>(null);
-	const state = useTabListState(props);
-	const { tabListProps } = useTabList(props, state, tablistRef);
+export type TabListProps<T> = Omit<AriaTabListProps<T>, "className">;
 
+export function TabList<T extends object>(props: TabListProps<T>): JSX.Element {
+	return <AriaTabList {...props} className="flex space-x-4 border-b border-gray-200" />;
+}
+
+export type TabProps = Omit<AriaTabProps, "className">;
+
+export function Tab(props: TabProps): JSX.Element {
 	return (
-		<div className="space-y-4">
-			<TabList {...tabListProps} tablistRef={tablistRef} state={state} />
-			<TabPanel key={state.selectedItem?.key} state={state} />
-		</div>
+		<AriaTab
+			{...props}
+			className="pb-2 border-b border-transparent cursor-pointer outline-hidden data-selected:font-semibold data-selected:border-gray-700 data-focus-visible:ring-2 data-focus-visible:ring-yellow-300"
+		/>
 	);
 }
 
-export interface TabPanelProps<T> extends AriaTabPanelProps {
-	state: TabListState<T>;
-}
+export type TabPanelProps = Omit<AriaTabPanelProps, "className">;
 
-function TabPanel<T>(props: TabPanelProps<T>) {
-	const { state, ...rest } = props;
-
-	const ref = useRef<HTMLDivElement>(null);
-	const { tabPanelProps } = useTabPanel(rest, state, ref);
-
+export function TabPanel(props: TabPanelProps): JSX.Element {
 	return (
-		<div
-			className="focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
-			{...tabPanelProps}
-			ref={ref}
-		>
-			{(state.selectedItem?.props as { children?: ReactNode } | undefined)?.children}
-		</div>
-	);
-}
-
-interface TabListProps<T> {
-	state: TabListState<T>;
-	tablistRef: Ref<HTMLDivElement>;
-}
-
-function TabList<T>(props: TabListProps<T>) {
-	const { state, tablistRef, ...rest } = props;
-
-	return (
-		<div {...rest} ref={tablistRef} className="flex space-x-4 border-b border-gray-200">
-			{[...state.collection].map((item) => {
-				return <Tab key={item.key} item={item} state={state} />;
-			})}
-		</div>
-	);
-}
-
-interface TabProps<T> extends AriaTabProps {
-	state: TabListState<T>;
-	item: Node<T>;
-}
-
-function Tab<T>(props: TabProps<T>) {
-	const { item, state } = props;
-	const { key, rendered } = item;
-
-	const ref = useRef<HTMLDivElement>(null);
-	const { tabProps, isSelected } = useTab({ key }, state, ref);
-
-	const { hoverProps, isHovered } = useHover({});
-	const { focusProps, isFocusVisible } = useFocusRing();
-
-	return (
-		<div
-			{...mergeProps(tabProps, focusProps, hoverProps)}
-			ref={ref}
-			className={cx(
-				"cursor-pointer pb-2 border-b",
-				"focus:outline-hidden",
-				isSelected ? "font-semibold border-gray-700" : "border-transparent",
-				isHovered && "",
-				isFocusVisible && "ring-2 ring-yellow-300",
-			)}
-		>
-			{rendered}
-		</div>
+		<AriaTabPanel
+			{...props}
+			className="outline-hidden data-focus-visible:ring-2 data-focus-visible:ring-yellow-400"
+		/>
 	);
 }
