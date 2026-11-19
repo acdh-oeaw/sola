@@ -1,11 +1,8 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import type { JSX } from "react";
-import { Fragment } from "react";
+import { type JSX, Fragment } from "react";
 
-import type { ContentPage } from "@/api/content";
-import { getContentPage } from "@/api/content";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
+import { type ContentPage, getContentPage } from "@/api/content";
+import { type SiteLocale, getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { Metadata } from "@/modules/metadata/Metadata";
 import { useAlternateUrls } from "@/modules/metadata/useAlternateUrls";
 import { useCanonicalUrl } from "@/modules/metadata/useCanonicalUrl";

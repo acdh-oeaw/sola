@@ -6,8 +6,7 @@ import { type TabListState, useTabListState } from "@react-stately/tabs";
 import type { Node } from "@react-types/shared";
 import type { AriaTabListProps, AriaTabPanelProps, AriaTabProps } from "@react-types/tabs";
 import cx from "clsx";
-import type { JSX, Ref } from "react";
-import { useRef } from "react";
+import { type JSX, type ReactNode, type Ref, useRef } from "react";
 
 export { Item } from "@react-stately/collections";
 
@@ -21,7 +20,6 @@ export function Tabs<T extends object>(props: TabsProps<T>): JSX.Element {
 	return (
 		<div className="space-y-4">
 			<TabList {...tabListProps} tablistRef={tablistRef} state={state} />
-			{/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
 			<TabPanel key={state.selectedItem?.key} state={state} />
 		</div>
 	);
@@ -43,8 +41,7 @@ function TabPanel<T>(props: TabPanelProps<T>) {
 			{...tabPanelProps}
 			ref={ref}
 		>
-			{/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
-			{state.selectedItem?.props.children}
+			{(state.selectedItem?.props as { children?: ReactNode } | undefined)?.children}
 		</div>
 	);
 }

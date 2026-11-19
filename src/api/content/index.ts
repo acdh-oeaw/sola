@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
+
 import toHtml from "rehype-stringify";
 import withFrontmatter from "remark-frontmatter";
 import fromMarkdown from "remark-parse";
@@ -98,7 +99,7 @@ export async function getContentTeamMembers(locale: SiteLocale): Promise<Array<C
 		folderContents.map(async (file) => {
 			const filePath = path.join(folderPath, file);
 			const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
-			const processed = YAML.parse(fileContents);
+			const processed = YAML.parse(fileContents) as Omit<ContentTeamMember, "id">;
 			return { id: file.slice(0, -dataExtension.length), ...processed };
 		}),
 	);

@@ -13,7 +13,6 @@ node_modules/
 .env.*.local
 
 # caches
-.eslintcache
 .stylelintcache
 *.tsbuildinfo
 
@@ -32,11 +31,6 @@ out/
 # test
 /coverage/
 
-# playwright
-/blob-report/
-/playwright/.cache/
-/playwright-report/
-/test-results/
 
 
 ## .dockerignore ##
@@ -55,11 +49,6 @@ out/
 # environment variables
 .env
 .env.*
-
-# tests
-playwright.config.ts
-/e2e/
-/test/
 
 # misc
 .editorconfig

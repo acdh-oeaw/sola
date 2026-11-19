@@ -1,6 +1,6 @@
 import { I18nProvider } from "@react-aria/i18n";
 import { OverlayProvider } from "@react-aria/overlays";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { keepPreviousData, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import type { JSX } from "react";
 
@@ -12,9 +12,9 @@ import { SiteMetadataProvider } from "@/modules/metadata/SiteMetadataContext";
 export const queryClient = new QueryClient({
 	defaultOptions: {
 		queries: {
-			cacheTime: Infinity,
+			gcTime: Infinity,
 			staleTime: Infinity,
-			keepPreviousData: true,
+			placeholderData: keepPreviousData,
 			refetchOnMount: false,
 			refetchOnWindowFocus: false,
 		},

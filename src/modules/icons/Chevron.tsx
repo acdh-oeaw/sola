@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+
 export interface ChevronProps {
 	className?: string;
 }
@@ -11,7 +12,7 @@ export function Chevron({ className }: ChevronProps): JSX.Element {
 			viewBox="0 0 20 20"
 			fill="currentColor"
 			className={className}
-			aria-hidden
+			aria-hidden={true}
 		>
 			<path
 				fillRule="evenodd"

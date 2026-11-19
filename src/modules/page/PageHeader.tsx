@@ -1,14 +1,13 @@
 import { useInteractionModality } from "@react-aria/interactions";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import type { JSX } from "react";
-import { Fragment } from "react";
+import { type JSX, Fragment } from "react";
 
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import { Menu as MenuIcon } from "@/modules/icons/Menu";
 import { Item as MenuItem, MenuButton } from "@/modules/ui/MenuButton";
-import navigation from "~/config/navigation.json" assert { type: "json" };
+import navigation from "~/config/navigation.json" with { type: "json" };
 
 const labels = {
 	en: {
@@ -85,7 +84,7 @@ function MobileNav({
 		<div className="lg:hidden">
 			<MenuButton
 				onAction={(key) => {
-					router.push(String(key));
+					void router.push(String(key));
 				}}
 				menuLabel={t.navigationMenu}
 				label={

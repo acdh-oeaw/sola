@@ -22,11 +22,6 @@
 			"@/*": ["./src/*"],
 			"~/*": ["./*"]
 		},
-		"plugins": [
-			{
-				"name": "next"
-			}
-		],
 		"skipLibCheck": true,
 		"strict": true,
 		"target": "es2022",
@@ -41,9 +36,5 @@
 		".next/dev/types/**/*.ts",
 		".next/types/**/*.ts"
 	],
-	"exclude": ["node_modules", "out", "public"],
-	"mdx": {
-		"checkMdx": false,
-		"plugins": ["remark-frontmatter", "remark-gfm"]
-	}
+	"exclude": ["node_modules", "out", "public"]
 }

@@ -1,7 +1,11 @@
+export type QueryParamValue = string | number | boolean | null | undefined;
+
+export type QueryParams = Record<string, QueryParamValue | Array<QueryParamValue>>;
+
 /**
  * Adds query params to URL.
  */
-export function addQueryParams(url: URL, query?: Record<string, unknown>): URL {
+export function addQueryParams(url: URL, query?: QueryParams): URL {
 	if (query === undefined) return url;
 
 	Object.entries(query).forEach(([key, value]) => {

@@ -1,11 +1,9 @@
 import "@/styles/globals.css";
-
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps } from "next/app";
 import { Inter } from "next/font/google";
 import Head from "next/head";
-import type { JSX } from "react";
-import { Fragment, useEffect } from "react";
+import { type JSX, Fragment } from "react";
 
 import { useSolaEntities, useSolaFilterOptions } from "@/lib/sola/hooks";
 import { ErrorBoundary } from "@/modules/error/ErrorBoundary";
@@ -17,9 +15,7 @@ const inter = Inter({ subsets: ["latin"], display: "optional" });
 /**
  * Application shell.
  */
-export default function App({ Component, pageProps, router }: AppProps): JSX.Element {
-	const { locale, defaultLocale } = router;
-
+export default function App({ Component, pageProps }: AppProps): JSX.Element {
 	return (
 		<Fragment>
 			<Head>

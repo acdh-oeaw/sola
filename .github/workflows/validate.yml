@@ -23,9 +23,9 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v7
 
-      - uses: dorny/paths-filter@v3
+      - uses: dorny/paths-filter@v4
         id: filter
         with:
           filters: |
@@ -47,13 +47,13 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
 
       - name: Install pnpm
-        uses: pnpm/action-setup@v4
+        uses: pnpm/action-setup@v6
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           node-version: ${{ matrix.node-version }}
           cache: "pnpm"
@@ -64,11 +64,14 @@ jobs:
       - name: Format
         run: pnpm run format:check
 
-      # - name: Lint
-      #   run: pnpm run lint:check
+      - name: Lint
+        run: pnpm run lint:check
 
-      # - name: Typecheck
-      #   run: pnpm run types:check
+      - name: Lint styles
+        run: pnpm run styles:check
+
+      - name: Typecheck
+        run: pnpm run types:check
 
   build-deploy:
     name: Build and deploy

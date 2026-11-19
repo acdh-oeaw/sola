@@ -3,8 +3,7 @@ import { useMemo } from "react";
 /**
  * Returns object values, sorted by specified key.
  */
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-export function useSortedData<T extends Record<string, any>, K extends keyof T>(
+export function useSortedData<K extends string, T extends Record<K, string>>(
 	map: Record<string, T> | undefined,
 	key: K,
 ): Array<T> {
@@ -13,8 +12,7 @@ export function useSortedData<T extends Record<string, any>, K extends keyof T>(
 	}, [map, key]);
 }
 
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-function sort<T extends Record<string, any>, K extends keyof T>(
+function sort<K extends string, T extends Record<K, string>>(
 	map: Record<string, T> | undefined,
 	key: K,
 ) {

@@ -1,13 +1,15 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import Link from "next/link";
-import type { JSX } from "react";
-import { Fragment } from "react";
+import { type JSX, Fragment } from "react";
 
-import type { ContentPage, ContentPostBase } from "@/api/content";
-import { getContentPage, getContentPostsOverview } from "@/api/content";
+import {
+	type ContentPage,
+	type ContentPostBase,
+	getContentPage,
+	getContentPostsOverview,
+} from "@/api/content";
 import { formatDate } from "@/lib/i18n/formatDate";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
+import { type SiteLocale, getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import { Metadata } from "@/modules/metadata/Metadata";
 import { useAlternateUrls } from "@/modules/metadata/useAlternateUrls";

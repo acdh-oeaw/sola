@@ -1,6 +1,5 @@
 import type { LinkProps } from "next/link";
-import type { NextRouter } from "next/router";
-import { useRouter } from "next/router";
+import { type NextRouter, useRouter } from "next/router";
 
 import { createUrlFromPath } from "@/lib/url/createUrlFromPath";
 import { removeTrailingSlash } from "@/lib/url/removeTrailingSlash";

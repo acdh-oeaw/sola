@@ -1,8 +1,7 @@
 import { useTextField } from "@react-aria/textfield";
 import type { AriaTextFieldProps } from "@react-types/textfield";
 import cx from "clsx";
-import type { InputHTMLAttributes, JSX, ReactNode } from "react";
-import { useRef } from "react";
+import { type JSX, type ReactNode, useRef } from "react";
 
 import { Label } from "@/modules/ui/Label";
 
@@ -22,7 +21,7 @@ export function TextField({ className, ...props }: TextFieldProps): JSX.Element 
 			<input
 				type="text"
 				className={cx("px-2 py-1 text-sm rounded-sm bg-white", className)}
-				{...(inputProps as InputHTMLAttributes<HTMLInputElement>)}
+				{...inputProps}
 				ref={ref}
 				autoComplete="off"
 				autoCorrect="off"

@@ -5,14 +5,10 @@
 		"vscode": {
 			"extensions": [
 				"bradlc.vscode-tailwindcss",
-				"dbaeumer.vscode-eslint",
 				"editorconfig.editorconfig",
 				"oxc.oxc-vscode",
-				"lokalise.i18n-ally",
 				"mikestead.dotenv",
-				"ms-playwright.playwright",
-				"stylelint.vscode-stylelint",
-				"unifiedjs.vscode-mdx"
+				"stylelint.vscode-stylelint"
 			]
 		}
 	}

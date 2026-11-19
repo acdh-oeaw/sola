@@ -1,6 +1,5 @@
 import type { QueryObserverResult } from "@tanstack/react-query";
-import type { JSX } from "react";
-import { Fragment, useCallback, useMemo } from "react";
+import { type JSX, Fragment, useCallback, useMemo } from "react";
 
 import type {
 	SolaEntityDetails,
@@ -10,10 +9,9 @@ import type {
 } from "@/api/sola/client";
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import type { SolaSelectedEntity } from "@/lib/sola/types";
-import type { Node } from "@/modules/visualization/createNode";
-import { createNode } from "@/modules/visualization/createNode";
+import { type Node, createNode } from "@/modules/visualization/createNode";
 import { Timelines } from "@/modules/visualization/Timelines";
-import sola from "~/config/sola.json" assert { type: "json" };
+import sola from "~/config/sola.json" with { type: "json" };
 
 const { colors } = sola;
 
@@ -236,6 +234,7 @@ function Alternate({
 					return (
 						<li key={passage.id}>
 							<button
+								type="button"
 								onClick={() => {
 									setSelectedSolaEntity({ id: passage.id, type: passage.type });
 								}}

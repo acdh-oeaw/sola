@@ -1,8 +1,7 @@
 import { axisTop } from "d3-axis";
 import { scaleTime } from "d3-scale";
 import { select } from "d3-selection";
-import type { JSX } from "react";
-import { useEffect, useRef } from "react";
+import { type JSX, useEffect, useRef } from "react";
 
 import type { SolaEntityDetails } from "@/api/sola/client";
 import { useDimensions } from "@/lib/visualization/useDimensions";
@@ -34,7 +33,7 @@ export function DurationTimeline({ entity }: { entity: SolaEntityDetails }): JSX
 		});
 
 		select<SVGGElement, unknown>("g.timeline-x-axis-top")
-			.attr("transform", `translate(0,${config.canvasMarginY})`)
+			.attr("transform", `translate(0,${String(config.canvasMarginY)})`)
 			.classed("text-gray-400", true)
 			.call(xAxisBottom);
 

@@ -6,8 +6,6 @@ import type { JSX } from "react";
  */
 export default class Document extends NextDocument {
 	render(): JSX.Element {
-		const { locale, defaultLocale } = this.props.__NEXT_DATA__;
-
 		return (
 			<Html>
 				<Head>

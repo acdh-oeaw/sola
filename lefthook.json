@@ -1,0 +1,27 @@
+{
+	"$schema": "https://lefthook.dev/schema.json",
+	"glob_matcher": "doublestar",
+	"pre-commit": {
+		"parallel": false,
+		"jobs": [
+			{
+				"name": "lint-code",
+				"glob": "**/*.{js,ts,tsx}",
+				"run": "pnpm exec oxlint --fix --report-unused-disable-directives --no-error-on-unmatched-pattern {staged_files}",
+				"stage_fixed": true
+			},
+			{
+				"name": "lint-styles",
+				"glob": "**/*.css",
+				"run": "pnpm exec stylelint --cache --fix {staged_files}",
+				"stage_fixed": true
+			},
+			{
+				"name": "format",
+				"exclude": ["content/**", "public/**", "pnpm-lock.yaml"],
+				"run": "pnpm exec oxfmt --write --no-error-on-unmatched-pattern {staged_files}",
+				"stage_fixed": true
+			}
+		]
+	}
+}

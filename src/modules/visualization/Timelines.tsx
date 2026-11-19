@@ -5,14 +5,22 @@ import { axisBottom, axisLeft, axisRight, axisTop } from "d3-axis";
 import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
 import { scaleBand, scaleTime } from "d3-scale";
 import { select } from "d3-selection";
-import type { ZoomTransform } from "d3-zoom";
-import { zoom, zoomTransform } from "d3-zoom";
-import type { ComponentPropsWithoutRef, Dispatch, JSX, ReactNode, SetStateAction } from "react";
-import { useEffect, useRef, useState } from "react";
+import { type ZoomTransform, zoom, zoomTransform } from "d3-zoom";
+import {
+	type ComponentPropsWithoutRef,
+	type Dispatch,
+	type JSX,
+	type ReactNode,
+	type SetStateAction,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
 import { useDimensions } from "@/lib/visualization/useDimensions";
 import { config } from "@/modules/visualization/config";
 import type { Node } from "@/modules/visualization/createNode";
+
 import styles from "@/modules/visualization/Timelines.module.css";
 
 const TOOLTIP_ID = "tooltip";
@@ -73,7 +81,6 @@ export function Timelines({
 				})
 				.flat(),
 		) as [Date, Date];
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (min === undefined || max === undefined) return;
 		const minDate = new Date(min.getFullYear() - config.timelinePadding, 0);
 		const maxDate = new Date(max.getFullYear() + config.timelinePadding, 0);
@@ -113,15 +120,15 @@ export function Timelines({
 		const yAxisRight = axisRight(yScale);
 
 		select<SVGGElement, unknown>("g.x-axis-top")
-			.attr("transform", `translate(0,${config.canvasMarginY})`)
+			.attr("transform", `translate(0,${String(config.canvasMarginY)})`)
 			.classed("text-gray-400", true)
 			.call(xAxisTop);
 		select<SVGGElement, unknown>("g.x-axis-bottom")
-			.attr("transform", `translate(0,${height - config.canvasMarginY})`)
+			.attr("transform", `translate(0,${String(height - config.canvasMarginY)})`)
 			.classed("text-gray-400", true)
 			.call(xAxisBottom);
 		select<SVGGElement, unknown>("g.y-axis-left")
-			.attr("transform", `translate(${config.canvasMarginX},0)`)
+			.attr("transform", `translate(${String(config.canvasMarginX)},0)`)
 			.classed("text-gray-400", true)
 			.call(yAxisLeft)
 			// rotate axis labels
@@ -131,7 +138,7 @@ export function Timelines({
 			.attr("x", 0)
 			.attr("y", -15);
 		select<SVGGElement, unknown>("g.y-axis-right")
-			.attr("transform", `translate(${width - config.canvasMarginX},0)`)
+			.attr("transform", `translate(${String(width - config.canvasMarginX)},0)`)
 			.classed("text-gray-400", true)
 			.call(yAxisRight)
 			// rotate axis labels
@@ -159,9 +166,7 @@ export function Timelines({
 		const simulationData = data.flatMap((series) => {
 			return series.data.map((d) => {
 				// ensure initial node position for simulation is the actual datapoint, not [0,0]
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				d.x = d.x ?? xScale(d.date) ?? null;
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-non-null-assertion
 				d.y = d.y ?? yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2;
 				return d;
 			});
@@ -191,7 +196,6 @@ export function Timelines({
 			.force(
 				"y",
 				forceY<Node>((d) => {
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					return yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2;
 				}).strength(config.yStrength),
 			);
@@ -263,13 +267,13 @@ export function Timelines({
 	}, [svgRef, width, height, data, isNodeSelected, isNodeHighlighted, onNodeClick, zoomState]);
 
 	return (
-		<div aria-hidden ref={wrapperRef} className="absolute inset-0">
+		<div aria-hidden={true} ref={wrapperRef} className="absolute inset-0">
 			<svg ref={svgRef} className="w-full h-full overflow-visible">
 				<defs>
 					<clipPath id={CLIPPATH_ID}>
 						{dimensions ? (
 							<rect
-								transform={`translate(${config.canvasMarginX},${config.canvasMarginY})`}
+								transform={`translate(${String(config.canvasMarginX)},${String(config.canvasMarginY)})`}
 								width={dimensions.width - 2 * config.canvasMarginX}
 								height={dimensions.height - 2 * config.canvasMarginY}
 								fill="none"
@@ -323,7 +327,7 @@ const Tooltip = function Tooltip({
 			id={TOOLTIP_ID}
 			role="tooltip"
 			className={cx(
-				styles["tooltip"],
+				styles.tooltip,
 				"p-2 text-xs transition-opacity duration-150 rounded-sm shadow-lg bg-gray-50 pointer-events-none z-30",
 				isVisible ? "opacity-100" : "opacity-0",
 			)}
@@ -340,5 +344,5 @@ function TooltipArrow({
 }: ComponentPropsWithoutRef<"div"> & {
 	setTooltipArrow: Dispatch<SetStateAction<HTMLDivElement | null>>;
 }) {
-	return <div ref={setTooltipArrow} className={styles["arrow"]} {...props} />;
+	return <div ref={setTooltipArrow} className={styles.arrow} {...props} />;
 }

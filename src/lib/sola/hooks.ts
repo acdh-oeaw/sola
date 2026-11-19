@@ -1,23 +1,19 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import { groupBy, keyBy } from "@acdh-oeaw/lib";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 
-import type {
-	Results,
-	SolaEntity,
-	SolaEntityDetails,
-	SolaEntityRelation,
-	SolaEntityType,
-	SolaListEntity,
-	SolaPassageDetails,
-	SolaTextDetails,
-	SolaUser,
-	SolaVocabulary,
-} from "@/api/sola/client";
 import {
+	type Results,
+	type SolaEntity,
+	type SolaEntityDetails,
+	type SolaEntityRelation,
+	type SolaEntityType,
+	type SolaListEntity,
+	type SolaPassageDetails,
+	type SolaTextDetails,
+	type SolaUser,
+	type SolaVocabulary,
 	getSolaEntities,
 	getSolaEntityBibliographyById,
 	getSolaEventById,
@@ -39,7 +35,7 @@ import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import type { SolaPassagesFilter, SolaSelectedEntity } from "@/lib/sola/types";
 import { getQueryParam } from "@/lib/url/getQueryParam";
 import { capitalize } from "@/lib/util/capitalize";
-import bibleBooks from "~/config/bible.json" assert { type: "json" };
+import bibleBooks from "~/config/bible.json" with { type: "json" };
 
 /** Fetch everything from the list endpoint in one request. */
 const defaultQuery = { limit: 10_000 };
@@ -50,41 +46,38 @@ const defaultQuery = { limit: 10_000 };
 export function useSolaEntities() {
 	const locale = useCurrentLocale();
 
-	return useQuery(["getSolaEntities", locale, {}], async () => {
-		const data = await getSolaEntities({ query: defaultQuery, locale });
+	return useQuery({
+		queryKey: ["getSolaEntities", locale, {}],
+		queryFn: async () => {
+			const data = await getSolaEntities({ query: defaultQuery, locale });
 
-		const grouped = groupBy(data.results, (result) => {
-			return result.type;
-		});
+			const grouped = groupBy(data.results, (result) => {
+				return result.type;
+			});
 
-		const results = {
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			events: keyBy(grouped.Event ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			institutions: keyBy(grouped.Institution ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			passages: keyBy(grouped.Passage ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			persons: keyBy(grouped.Person ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			places: keyBy(grouped.Place ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			publications: keyBy(grouped.Publication ?? [], (entry) => {
-				return entry.id;
-			}),
-		};
+			const results = {
+				events: keyBy(grouped.Event ?? [], (entry) => {
+					return entry.id;
+				}),
+				institutions: keyBy(grouped.Institution ?? [], (entry) => {
+					return entry.id;
+				}),
+				passages: keyBy(grouped.Passage ?? [], (entry) => {
+					return entry.id;
+				}),
+				persons: keyBy(grouped.Person ?? [], (entry) => {
+					return entry.id;
+				}),
+				places: keyBy(grouped.Place ?? [], (entry) => {
+					return entry.id;
+				}),
+				publications: keyBy(grouped.Publication ?? [], (entry) => {
+					return entry.id;
+				}),
+			};
 
-		return results;
+			return results;
+		},
 	});
 }
 
@@ -157,41 +150,38 @@ export function useSolaFilteredPassages(
 		});
 	}, [filter, searchTerm, passage]);
 
-	return useQuery(["getSolaEntities", locale, query], async () => {
-		const data = await getSolaEntities({ query: { ...defaultQuery, ...query }, locale });
+	return useQuery({
+		queryKey: ["getSolaEntities", locale, query],
+		queryFn: async () => {
+			const data = await getSolaEntities({ query: { ...defaultQuery, ...query }, locale });
 
-		const grouped = groupBy(data.results, (result) => {
-			return result.type;
-		});
+			const grouped = groupBy(data.results, (result) => {
+				return result.type;
+			});
 
-		const results = {
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			events: keyBy(grouped.Event ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			institutions: keyBy(grouped.Institution ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			passages: keyBy(grouped.Passage ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			persons: keyBy(grouped.Person ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			places: keyBy(grouped.Place ?? [], (entry) => {
-				return entry.id;
-			}),
-			// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-			publications: keyBy(grouped.Publication ?? [], (entry) => {
-				return entry.id;
-			}),
-		};
+			const results = {
+				events: keyBy(grouped.Event ?? [], (entry) => {
+					return entry.id;
+				}),
+				institutions: keyBy(grouped.Institution ?? [], (entry) => {
+					return entry.id;
+				}),
+				passages: keyBy(grouped.Passage ?? [], (entry) => {
+					return entry.id;
+				}),
+				persons: keyBy(grouped.Person ?? [], (entry) => {
+					return entry.id;
+				}),
+				places: keyBy(grouped.Place ?? [], (entry) => {
+					return entry.id;
+				}),
+				publications: keyBy(grouped.Publication ?? [], (entry) => {
+					return entry.id;
+				}),
+			};
 
-		return results;
+			return results;
+		},
 	});
 }
 
@@ -221,13 +211,13 @@ export function useSolaSelectedEntity() {
 		function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
 			if (entity !== null) {
 				const { id, type } = entity;
-				router.push({ query: { ...router.query, id, type } }, undefined, {
+				void router.push({ query: { ...router.query, id, type } }, undefined, {
 					shallow: true,
 				});
 			} else {
 				const { id, type, ...query } = router.query;
 				if (id !== undefined || type !== undefined) {
-					router.push({ query }, undefined, { shallow: true });
+					void router.push({ query }, undefined, { shallow: true });
 				}
 			}
 		},
@@ -237,9 +227,9 @@ export function useSolaSelectedEntity() {
 	const selected: SolaSelectedEntity | null = useMemo(() => {
 		if (router.isReady) {
 			const { query } = router;
-			const id = getQueryParam(query["id"], false, Number);
+			const id = getQueryParam(query.id, false, Number);
 			if (id !== undefined && id > 0) {
-				const type = getQueryParam(query["type"], false, capitalize);
+				const type = getQueryParam(query.type, false, capitalize);
 				if (type !== undefined && isSolaEntityType(type)) {
 					return { id, type };
 				}
@@ -249,10 +239,9 @@ export function useSolaSelectedEntity() {
 		return null;
 	}, [router]);
 
-	const selectedSolaEntity = useQuery<SolaEntityDetails>(
-		["getSolaEntityById", locale, selected, {}],
-		() => {
-			/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
+	const selectedSolaEntity = useQuery<SolaEntityDetails>({
+		queryKey: ["getSolaEntityById", locale, selected, {}],
+		queryFn: () => {
 			const { id, type } = selected!;
 			switch (type) {
 				case "Event":
@@ -269,8 +258,8 @@ export function useSolaSelectedEntity() {
 					return getSolaPublicationById({ id, locale });
 			}
 		},
-		{ enabled: selected !== null },
-	);
+		enabled: selected !== null,
+	});
 
 	return {
 		selectedSolaEntity,
@@ -284,20 +273,20 @@ export function useSolaSelectedEntity() {
 export function useSolaFilterOptions() {
 	const locale = useCurrentLocale();
 
-	const passageTopics = useQuery(
-		["getSolaPassageTopics", locale, {}],
-		() => {
+	const passageTopics = useQuery({
+		queryKey: ["getSolaPassageTopics", locale, {}],
+		queryFn: () => {
 			return getSolaPassageTopics({ query: defaultQuery, locale });
 		},
-		{ select: mapResultsById },
-	);
-	const passageTypes = useQuery(
-		["getSolaPassageTypes", locale, {}],
-		() => {
+		select: mapResultsById,
+	});
+	const passageTypes = useQuery({
+		queryKey: ["getSolaPassageTypes", locale, {}],
+		queryFn: () => {
 			return getSolaPassageTypes({ query: defaultQuery, locale });
 		},
-		{ select: mapResultsById },
-	);
+		select: mapResultsById,
+	});
 
 	const { data } = useSolaEntities();
 	const publications = data?.publications;
@@ -320,9 +309,8 @@ export function useSolaPassagesFilterOptionsTree(
 	passageTypes: Record<number, SolaVocabulary> | undefined,
 	translation: string,
 ) {
-	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const getParentId = useCallback((entity: any) => {
-		return entity.parent_class?.id;
+	const getParentId = useCallback((entity: SolaVocabulary) => {
+		return entity.parent_class?.id ?? null;
 	}, []);
 	const _passageTopics = useHierarchicalData(passageTopics, getParentId);
 	const _passageTypes = useHierarchicalData(passageTypes, getParentId);
@@ -452,33 +440,28 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
 	const q = useSolaEntities();
 	const persons = q.data?.persons;
 
-	const authors = useQuery(
-		["getPublicationById", locale, publicationId, {}],
-
-		() => {
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const authors = useQuery({
+		queryKey: ["getPublicationById", locale, publicationId, {}],
+		queryFn: () => {
 			return getSolaPublicationById({ id: publicationId!, locale });
 		},
-		{
-			enabled: publicationId !== undefined && persons !== undefined,
-			select: (results) => {
-				const isAuthorOfRelations = results.relations.filter((relation) => {
-					return (
-						relation.related_entity.type === "Person" &&
-						relation.relation_type.id === relationTypes.person.isAuthorOf
-					);
-				});
-				const authorIds = isAuthorOfRelations.map((relation) => {
-					return relation.related_entity.id;
-				});
+		enabled: publicationId !== undefined && persons !== undefined,
+		select: (results) => {
+			const isAuthorOfRelations = results.relations.filter((relation) => {
+				return (
+					relation.related_entity.type === "Person" &&
+					relation.relation_type.id === relationTypes.person.isAuthorOf
+				);
+			});
+			const authorIds = isAuthorOfRelations.map((relation) => {
+				return relation.related_entity.id;
+			});
 
-				return authorIds.map((id) => {
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-					return persons![id]!;
-				});
-			},
+			return authorIds.map((id) => {
+				return persons![id]!;
+			});
 		},
-	);
+	});
 
 	/**
 	 * Fetch relations to bible and corresponding bible passages.
@@ -502,49 +485,46 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
 			return relation.id;
 		}) ?? [];
 	const query = { id__in: bibleRelationIds };
-	const biblePassages = useQuery(
-		["getSolaPassagePublicationRelations", locale, query],
-		() => {
+	const biblePassages = useQuery({
+		queryKey: ["getSolaPassagePublicationRelations", locale, query],
+		queryFn: () => {
 			return getSolaPassagePublicationRelations({ query, locale });
 		},
-		{
-			enabled: bibleRelationIds.length > 0,
-			select: (results) => {
-				const map: Record<string, string> = {};
-				results.results.forEach((result) => {
-					if (
-						result.bible_book_ref == null &&
-						result.bible_chapter_ref == null &&
-						result.bible_verse_ref == null
-					) {
-						return;
-					}
-					const label = [
-						/**
-						 * The backend lowercases bible book ref, but we want to display correctly capitalized
-						 * bible book names. Instead of a string lookup on the frontend, the backend just should
-						 * not touch capitalization at all!
-						 */
-						// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-						(bibleBooks as Record<string, string>)[result.bible_book_ref!] ?? result.bible_book_ref,
-						[result.bible_chapter_ref, result.bible_verse_ref].filter(Boolean).join(":"),
-					]
-						.filter(Boolean)
-						.join(" ");
-					const reference = [
-						result.bible_book_ref,
-						[result.bible_chapter_ref, result.bible_verse_ref].filter(Boolean).join(":"),
-					]
-						.filter(Boolean)
-						.join(".");
-					const url = new URL("https://stepbible.org");
-					url.searchParams.set("q", `reference=${reference}`);
-					map[label] = String(url);
-				});
-				return map;
-			},
+		enabled: bibleRelationIds.length > 0,
+		select: (results) => {
+			const map: Record<string, string> = {};
+			results.results.forEach((result) => {
+				if (
+					result.bible_book_ref == null &&
+					result.bible_chapter_ref == null &&
+					result.bible_verse_ref == null
+				) {
+					return;
+				}
+				const label = [
+					/**
+					 * The backend lowercases bible book ref, but we want to display correctly capitalized
+					 * bible book names. Instead of a string lookup on the frontend, the backend just should
+					 * not touch capitalization at all!
+					 */
+					(bibleBooks as Record<string, string>)[result.bible_book_ref!] ?? result.bible_book_ref,
+					[result.bible_chapter_ref, result.bible_verse_ref].filter(Boolean).join(":"),
+				]
+					.filter(Boolean)
+					.join(" ");
+				const reference = [
+					result.bible_book_ref,
+					[result.bible_chapter_ref, result.bible_verse_ref].filter(Boolean).join(":"),
+				]
+					.filter(Boolean)
+					.join(".");
+				const url = new URL("https://stepbible.org");
+				url.searchParams.set("q", `reference=${reference}`);
+				map[label] = String(url);
+			});
+			return map;
 		},
-	);
+	});
 
 	return {
 		authors,
@@ -580,19 +560,21 @@ export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
 	const locale = useCurrentLocale();
 
 	const id = entity?.id;
-	const query = {
-		attribute: "include",
-		contenttype: entity?.type as SolaEntityType,
-	};
+	const type = entity?.type;
 
-	const bibliography = useQuery(
-		["getSolaEntityBibliographyById", locale, id, query],
-		() => {
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+	const bibliography = useQuery({
+		queryKey: [
+			"getSolaEntityBibliographyById",
+			locale,
+			id,
+			{ attribute: "include", contenttype: type },
+		],
+		queryFn: () => {
+			const query = { attribute: "include", contenttype: type! };
 			return getSolaEntityBibliographyById({ id: id!, query, locale });
 		},
-		{ enabled: id !== undefined },
-	);
+		enabled: id !== undefined && type !== undefined,
+	});
 
 	return bibliography;
 }
@@ -635,13 +617,13 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 	 * Fetch all text types so we can get the localised text type label, because
 	 * labels on `text.kind.label` are not localised.
 	 */
-	const textTypes = useQuery(
-		["getTextTypes", locale, {}],
-		() => {
+	const textTypes = useQuery({
+		queryKey: ["getTextTypes", locale, {}],
+		queryFn: () => {
 			return getSolaTextTypes({ locale, query: defaultQuery });
 		},
-		{ select: mapResultsById },
-	);
+		select: mapResultsById,
+	});
 
 	/** Include annotations and inline HTML `<mark>` elements. */
 	const query = { highlight: true, inline_annotations: true };
@@ -653,48 +635,44 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 
 	const textTypesByLocale = useSolaTextTypes();
 
-	const texts = useQuery(
-		["getSolaTextsByIds", locale, ids, query],
-		() => {
+	const texts = useQuery({
+		queryKey: ["getSolaTextsByIds", locale, ids, query],
+		queryFn: () => {
 			return Promise.all(
 				ids.map((id) => {
 					return getSolaTextById({ id, query, locale });
 				}),
 			);
 		},
-		{
-			enabled: entity !== undefined && ids.length > 0 && textTypes.data !== undefined,
-			select: (results) => {
-				const map: Record<number, SolaTextDetails> = {};
-				results.forEach((text) => {
-					map[text.kind.id] = text;
-				});
+		enabled: entity !== undefined && ids.length > 0 && textTypes.data !== undefined,
+		select: (results) => {
+			const map: Record<number, SolaTextDetails> = {};
+			results.forEach((text) => {
+				map[text.kind.id] = text;
+			});
 
-				const textsForCurrentLocale: Array<SolaTextDetails> = [];
-				/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-				textTypesByLocale[entity!.type][locale].forEach((textTypeId) => {
-					const text = map[textTypeId];
-					if (text) {
-						textsForCurrentLocale.push(text);
-					}
-				});
+			const textsForCurrentLocale: Array<SolaTextDetails> = [];
+			textTypesByLocale[entity!.type][locale].forEach((textTypeId) => {
+				const text = map[textTypeId];
+				if (text) {
+					textsForCurrentLocale.push(text);
+				}
+			});
 
-				/** Use localised label and cut off trailing "(DE)" and "(EN)". */
-				const textsWithLocalisedLabel = textsForCurrentLocale.map((text) => {
-					return {
-						...text,
-						kind: {
-							...text.kind,
-							/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
-							label: textTypes.data![text.kind.id]!.name.replace(/\s\((DE|EN)\)$/, ""),
-						},
-					};
-				});
+			/** Use localised label and cut off trailing "(DE)" and "(EN)". */
+			const textsWithLocalisedLabel = textsForCurrentLocale.map((text) => {
+				return {
+					...text,
+					kind: {
+						...text.kind,
+						label: textTypes.data![text.kind.id]!.name.replace(/\s\((DE|EN)\)$/, ""),
+					},
+				};
+			});
 
-				return textsWithLocalisedLabel;
-			},
+			return textsWithLocalisedLabel;
 		},
-	);
+	});
 
 	return texts;
 }
@@ -705,23 +683,21 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 export function useSolaUsers() {
 	const locale = useCurrentLocale();
 
-	const users = useQuery(
-		["users"],
-		() => {
+	const users = useQuery({
+		queryKey: ["users"],
+		queryFn: () => {
 			return getSolaUsers({ locale });
 		},
-		{
-			select(data) {
-				const map: Record<string, SolaUser> = {};
+		select(data) {
+			const map: Record<string, SolaUser> = {};
 
-				data.results.forEach((user) => {
-					map[user.username] = user;
-				});
+			data.results.forEach((user) => {
+				map[user.username] = user;
+			});
 
-				return map;
-			},
+			return map;
 		},
-	);
+	});
 
 	return users;
 }

@@ -1,7 +1,7 @@
-import { groupBy } from "@acdh-oeaw/lib";
-import { log } from "@acdh-oeaw/lib";
-import type { NextApiRequest, NextApiResponse } from "next";
 import path from "path/posix";
+
+import { groupBy, log } from "@acdh-oeaw/lib";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 import { getContentPostIds } from "@/api/content";
 import { type SolaListEntity, getSolaEntities } from "@/api/sola/client";
@@ -50,7 +50,7 @@ export default async function handler(
 
 		/** Pages for SOLA entities. */
 		/** Only fetch for one locale, since ids and type are the same for all locales. */
-		const locale = locales[0] as SiteLocale;
+		const locale = locales[0]!;
 
 		const data = await getSolaEntities({ query, locale });
 
@@ -58,7 +58,6 @@ export default async function handler(
 			return result.type;
 		});
 
-		/* eslint-disable-next-line no-inner-declarations */
 		function createLinksForEntities(entities: Array<SolaListEntity> = []) {
 			return locales
 				.map((locale) => {

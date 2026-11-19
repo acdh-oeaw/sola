@@ -1,5 +1,4 @@
-import type { NextRouter } from "next/router";
-import { useRouter } from "next/router";
+import { type NextRouter, useRouter } from "next/router";
 import { useMemo } from "react";
 
 import { addQueryParams } from "@/lib/url/addQueryParams";

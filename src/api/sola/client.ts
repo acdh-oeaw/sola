@@ -1,6 +1,7 @@
 import { request } from "@/api/sola/runtime";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import site from "~/config/site.json" assert { type: "json" };
+import type { QueryParams } from "@/lib/url/addQueryParams";
+import site from "~/config/site.json" with { type: "json" };
 
 const { api: baseUrl } = site;
 
@@ -167,18 +168,14 @@ interface RequestConfig {
 	locale: SiteLocale;
 }
 
-interface GetAllRequestConfig<
-	T extends Record<string, unknown> = Record<string, unknown>,
-> extends RequestConfig {
+interface GetAllRequestConfig<T extends QueryParams = QueryParams> extends RequestConfig {
 	query?: T & {
 		limit?: number;
 		offset?: number;
 	};
 }
 
-interface GetByIdRequestConfig<
-	T extends Record<string, unknown> = Record<string, unknown>,
-> extends RequestConfig {
+interface GetByIdRequestConfig<T extends QueryParams = QueryParams> extends RequestConfig {
 	id: number;
 	query?: T;
 }
@@ -371,7 +368,7 @@ export async function getSolaEventById({
 }: GetByIdRequestConfig): Promise<SolaEventDetails> {
 	const type = "Event";
 	const data = await request<SolaEventDetails>({
-		path: `/apis/api/entities/event/${id}/`,
+		path: `/apis/api/entities/event/${String(id)}/`,
 		baseUrl,
 		query,
 		options,
@@ -386,7 +383,7 @@ export async function getSolaInstitutionById({
 }: GetByIdRequestConfig): Promise<SolaInstitutionDetails> {
 	const type = "Institution";
 	const data = await request<SolaInstitutionDetails>({
-		path: `/apis/api/entities/institution/${id}/`,
+		path: `/apis/api/entities/institution/${String(id)}/`,
 		baseUrl,
 		query,
 		options,
@@ -401,7 +398,7 @@ export async function getSolaPassageById({
 }: GetByIdRequestConfig): Promise<SolaPassageDetails> {
 	const type = "Passage";
 	const data = await request<SolaPassageDetails>({
-		path: `/apis/api/entities/passage/${id}/`,
+		path: `/apis/api/entities/passage/${String(id)}/`,
 		baseUrl,
 		query,
 		options,
@@ -416,7 +413,7 @@ export async function getSolaPersonById({
 }: GetByIdRequestConfig): Promise<SolaPersonDetails> {
 	const type = "Person";
 	const data = await request<SolaPersonDetails>({
-		path: `/apis/api/entities/person/${id}/`,
+		path: `/apis/api/entities/person/${String(id)}/`,
 		baseUrl,
 		query,
 		options,
@@ -437,7 +434,7 @@ export async function getSolaPlaceById({
 }: GetByIdRequestConfig): Promise<SolaPlaceDetails> {
 	const type = "Place";
 	const data = await request<SolaPlaceDetails>({
-		path: `/apis/api/entities/place/${id}/`,
+		path: `/apis/api/entities/place/${String(id)}/`,
 		baseUrl,
 		query,
 		options,
@@ -452,7 +449,7 @@ export async function getSolaPublicationById({
 }: GetByIdRequestConfig): Promise<SolaPublicationDetails> {
 	const type = "Publication";
 	const data = await request<SolaPublicationDetails>({
-		path: `/apis/api/entities/publication/${id}/`,
+		path: `/apis/api/entities/publication/${String(id)}/`,
 		baseUrl,
 		query,
 		options,
@@ -536,7 +533,7 @@ export async function getSolaTextById({
 	options,
 }: GetSolaTextById): Promise<SolaTextDetails> {
 	const data = await request<SolaTextDetails>({
-		path: `/apis/api/metainfo/text/${id}/`,
+		path: `/apis/api/metainfo/text/${String(id)}/`,
 		baseUrl,
 		query,
 		options,
@@ -591,7 +588,7 @@ type GetSolaEntityBibliographyById = GetByIdRequestConfig<{
 	 * When `?attribute=[key: string]`, will return all bibsonomy references on
 	 * this specific attribute.
 	 */
-	attribute?: string | "all" | "include";
+	attribute?: string;
 	contenttype: SolaEntityType;
 }>;
 export async function getSolaEntityBibliographyById({

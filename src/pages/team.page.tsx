@@ -1,11 +1,13 @@
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import type { JSX } from "react";
-import { Fragment, useMemo } from "react";
+import { type JSX, Fragment, useMemo } from "react";
 
-import type { ContentPage, ContentTeamMember } from "@/api/content";
-import { getContentPage, getContentTeamMembers } from "@/api/content";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
+import {
+	type ContentPage,
+	type ContentTeamMember,
+	getContentPage,
+	getContentTeamMembers,
+} from "@/api/content";
+import { type SiteLocale, getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { Email } from "@/modules/icons/Email";
 import { Globe } from "@/modules/icons/Globe";
 import { Phone } from "@/modules/icons/Phone";
@@ -93,10 +95,7 @@ export default function TeamPage(props: TeamPageProps): JSX.Element {
 		const map: Record<string, Array<ContentTeamMember>> = {};
 
 		props.data.team.forEach((member) => {
-			if (map[member.group] === undefined) {
-				map[member.group] = [];
-			}
-			map[member.group]?.push(member);
+			(map[member.group] ??= []).push(member);
 		});
 
 		return map;
@@ -154,8 +153,9 @@ function TeamMember({
 	t: (typeof labels)[SiteLocale]["data"];
 }) {
 	const hasWebsite = teamMember.website !== undefined && teamMember.website.length > 0;
-	const hasEmail = teamMember.email !== undefined && teamMember.email.length > 0;
-	const hasPhone = teamMember.phone !== undefined && teamMember.phone.length > 0;
+	const { email, phone } = teamMember;
+	const hasEmail = email !== undefined && email.length > 0;
+	const hasPhone = phone !== undefined && phone.length > 0;
 	const hasInfo = hasWebsite || hasEmail || hasPhone;
 
 	return (
@@ -189,11 +189,11 @@ function TeamMember({
 								<Email />
 								<a
 									className="transition hover:text-gray-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
-									href={`mailto:${teamMember.email}`}
+									href={`mailto:${email}`}
 									rel="noopener noreferrer"
 									target="_blank"
 								>
-									{teamMember.email}
+									{email}
 								</a>
 							</dd>
 						</div>
@@ -205,11 +205,11 @@ function TeamMember({
 								<Phone />
 								<a
 									className="transition hover:text-gray-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
-									href={`tel:${teamMember.phone}`}
+									href={`tel:${phone}`}
 									rel="noopener noreferrer"
 									target="_blank"
 								>
-									{teamMember.phone}
+									{phone}
 								</a>
 							</dd>
 						</div>

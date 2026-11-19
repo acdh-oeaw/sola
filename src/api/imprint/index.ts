@@ -1,5 +1,5 @@
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import acdh from "~/config/acdh.json" assert { type: "json" };
+import acdh from "~/config/acdh.json" with { type: "json" };
 
 const { imprintUrl, serviceId } = acdh;
 

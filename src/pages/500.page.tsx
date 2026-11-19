@@ -1,5 +1,4 @@
-import type { JSX } from "react";
-import { Fragment } from "react";
+import { type JSX, Fragment } from "react";
 
 import { Error } from "@/modules/error/Error";
 import { Metadata } from "@/modules/metadata/Metadata";
@@ -10,7 +9,7 @@ import { Metadata } from "@/modules/metadata/Metadata";
 export default function InternalErrorPage(): JSX.Element {
 	return (
 		<Fragment>
-			<Metadata noindex nofollow title="Unexpected error" />
+			<Metadata noindex={true} nofollow={true} title="Unexpected error" />
 			<main className="flex flex-col items-center justify-center">
 				<Error message="An unexpected error has occurred." statusCode={500} />
 			</main>

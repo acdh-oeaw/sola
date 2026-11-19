@@ -1,6 +1,5 @@
 import cx from "clsx";
-import type { JSX, ReactNode } from "react";
-import { useState } from "react";
+import { type JSX, type ReactNode, useState } from "react";
 
 import { Chevron } from "@/modules/icons/Chevron";
 import { Label } from "@/modules/ui/Label";

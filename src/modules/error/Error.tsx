@@ -1,4 +1,5 @@
 import type { JSX } from "react";
+
 export interface ErrorProps {
 	message?: string;
 	statusCode?: number;
