@@ -1,9 +1,8 @@
-import type { JSX } from "react";
-import { createContext, useMemo } from "react";
+import { type JSX, createContext, useMemo } from "react";
 
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
-import metadata from "~/config/metadata.json" assert { type: "json" };
+import metadata from "~/config/metadata.json" with { type: "json" };
 
 export type SiteMetadata = (typeof metadata)[SiteLocale];
 

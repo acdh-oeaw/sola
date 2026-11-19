@@ -1,6 +1,6 @@
 import { request } from "@/api/sola/runtime";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import site from "~/config/site.json" assert { type: "json" };
+import site from "~/config/site.json" with { type: "json" };
 
 const { api: baseUrl } = site;
 
@@ -332,7 +332,7 @@ export type SolaListEntity = Pick<
 	| "type"
 >;
 
-type GetSolaEntitiesQuery = {
+interface GetSolaEntitiesQuery {
 	search?: string;
 	name__icontains?: string;
 	kind__id__in?: Array<number>;
@@ -340,7 +340,7 @@ type GetSolaEntitiesQuery = {
 	publication_set__id__in?: Array<number>;
 	publication_set__person_set__id__in?: Array<number>;
 	publication_relationtype_set__id?: number;
-};
+}
 
 type SolaListEntitiesResponse = Results<SolaListEntity>;
 

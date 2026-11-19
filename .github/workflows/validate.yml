@@ -23,7 +23,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4
+        uses: actions/checkout@v6
 
       - uses: dorny/paths-filter@v3
         id: filter
@@ -67,8 +67,8 @@ jobs:
       # - name: Lint
       #   run: pnpm run lint:check
 
-      # - name: Typecheck
-      #   run: pnpm run types:check
+      - name: Typecheck
+        run: pnpm run types:check
 
   build-deploy:
     name: Build and deploy

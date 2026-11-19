@@ -1,4 +1,4 @@
-import site from "~/config/site.json" assert { type: "json" };
+import site from "~/config/site.json" with { type: "json" };
 
 const { defaultLocale, locales } = site;
 

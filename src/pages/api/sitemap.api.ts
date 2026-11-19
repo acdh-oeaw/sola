@@ -1,7 +1,7 @@
-import { groupBy } from "@acdh-oeaw/lib";
-import { log } from "@acdh-oeaw/lib";
-import type { NextApiRequest, NextApiResponse } from "next";
 import path from "path/posix";
+
+import { groupBy, log } from "@acdh-oeaw/lib";
+import type { NextApiRequest, NextApiResponse } from "next";
 
 import { getContentPostIds } from "@/api/content";
 import { type SolaListEntity, getSolaEntities } from "@/api/sola/client";

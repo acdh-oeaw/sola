@@ -2,7 +2,7 @@ import type { Element } from "xast";
 import { x } from "xastscript";
 
 import { addQueryParams } from "@/lib/url/addQueryParams";
-import site from "~/config/site.json" assert { type: "json" };
+import site from "~/config/site.json" with { type: "json" };
 
 const { url: baseUrl } = site;
 

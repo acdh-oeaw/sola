@@ -2,8 +2,7 @@ import type { QueryObserverResult } from "@tanstack/react-query";
 import cx from "clsx";
 import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
 import { useRouter } from "next/router";
-import type { FormEvent, JSX } from "react";
-import { Fragment, useEffect, useMemo, useRef, useState } from "react";
+import { type FormEvent, type JSX, Fragment, useEffect, useMemo, useRef, useState } from "react";
 
 import type {
 	SolaBibsonomyReference,
@@ -18,8 +17,7 @@ import type {
 import { useDebouncedData } from "@/lib/data/useDebouncedData";
 import type { Node } from "@/lib/data/useHierarchicalData";
 import { useSortedData } from "@/lib/data/useSortedData";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
+import { type SiteLocale, getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 import { LabelsProvider, useLabels } from "@/lib/i18n/LabelsContext";
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import {
@@ -55,9 +53,10 @@ import { TextField } from "@/modules/ui/TextField";
 import { TooltipTrigger } from "@/modules/ui/TooltipTrigger";
 import { DurationTimeline } from "@/modules/visualization/DurationTimeline";
 import { Visualization } from "@/modules/visualization/Visualization";
+import site from "~/config/site.json" with { type: "json" };
+import sola from "~/config/sola.json" with { type: "json" };
+
 import styles from "@/styles/dataset.module.css";
-import site from "~/config/site.json" assert { type: "json" };
-import sola from "~/config/sola.json" assert { type: "json" };
 
 const { url: baseUrl } = site;
 const { colors } = sola;
@@ -512,7 +511,7 @@ function ContentPanel({
 		// eslint-disable-next-line react-hooks/exhaustive-deps
 	}, [filter]);
 
-	const isLoadingInitialData = solaEntities.status === "loading";
+	const isLoadingInitialData = solaEntities.status === "pending";
 
 	if (isLoadingInitialData) {
 		return (
@@ -599,7 +598,7 @@ function VisualizationPanel({
 			<div className="flex flex-col justify-between px-6 pt-6 pb-4 space-y-4 md:space-y-0 md:flex-row md:space-x-4">
 				<div className="flex items-center space-x-2">
 					<h1 className="text-2xl font-bold">{t.h1}</h1>
-					{filteredSolaPassages.isLoading ? (
+					{filteredSolaPassages.isPending ? (
 						<Spinner className="w-6 h-6" />
 					) : (
 						<div className="w-6 h-6" />
@@ -608,39 +607,39 @@ function VisualizationPanel({
 				<div className="flex flex-col space-y-1">
 					<ul className="flex flex-wrap text-xs text-gray-500 md:justify-end md:gap-x-2">
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
-							<div className={cx("w-3 h-3 transition", colors.bg["Event"])} />
+							<div className={cx("w-3 h-3 transition", colors.bg.Event)} />
 							<span>
-								{countedSolaEvents} {t.entityType["Event"][1]}
+								{countedSolaEvents} {t.entityType.Event[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
-							<div className={cx("w-3 h-3 transition", colors.bg["Institution"])} />
+							<div className={cx("w-3 h-3 transition", colors.bg.Institution)} />
 							<span>
-								{countedSolaInstitutions} {t.entityType["Institution"][1]}
+								{countedSolaInstitutions} {t.entityType.Institution[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
-							<div className={cx("w-3 h-3 transition", colors.bg["Passage"])} />
+							<div className={cx("w-3 h-3 transition", colors.bg.Passage)} />
 							<span>
-								{countedSolaPassages} {t.entityType["Passage"][1]}
+								{countedSolaPassages} {t.entityType.Passage[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
-							<div className={cx("w-3 h-3 transition", colors.bg["Person"])} />
+							<div className={cx("w-3 h-3 transition", colors.bg.Person)} />
 							<span>
-								{countedSolaPersons} {t.entityType["Person"][1]}
+								{countedSolaPersons} {t.entityType.Person[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
-							<div className={cx("w-3 h-3 transition", colors.bg["Place"])} />
+							<div className={cx("w-3 h-3 transition", colors.bg.Place)} />
 							<span>
-								{countedSolaPlaces} {t.entityType["Place"][1]}
+								{countedSolaPlaces} {t.entityType.Place[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
-							<div className={cx("w-3 h-3 transition", colors.bg["Publication"])} />
+							<div className={cx("w-3 h-3 transition", colors.bg.Publication)} />
 							<span>
-								{countedSolaPublications} {t.entityType["Publication"][1]}
+								{countedSolaPublications} {t.entityType.Publication[1]}
 							</span>
 						</li>
 					</ul>
@@ -933,9 +932,9 @@ function DetailsPanel({
 	);
 
 	if (
-		selectedSolaEntity.status === "loading" ||
-		solaEntityTexts.status === "loading" ||
-		solaEntityBibliography.status === "loading"
+		selectedSolaEntity.status === "pending" ||
+		solaEntityTexts.status === "pending" ||
+		solaEntityBibliography.status === "pending"
 	) {
 		return (
 			<div className="flex flex-col items-center justify-center text-yellow-400">
@@ -1247,7 +1246,7 @@ function Authors({
 }) {
 	const t = useLabels() as (typeof labels)[SiteLocale];
 
-	if (authors.status === "loading")
+	if (authors.status === "pending")
 		return (
 			<div className="py-1">
 				<Spinner className="w-4 h-4 text-gray-700" />
@@ -1364,7 +1363,7 @@ function PassageProperties({
 												<button
 													className="rounded-sm px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 													onClick={() => {
-														return setFilter({
+														setFilter({
 															topics: [topic.id],
 														});
 													}}
@@ -1395,7 +1394,7 @@ function PassageProperties({
 												<button
 													className="rounded-sm px-2 py-0.5 inline-block font-medium truncate cursor-pointer focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 													onClick={() => {
-														return setFilter({
+														setFilter({
 															types: [kind.id],
 														});
 													}}
@@ -1504,7 +1503,7 @@ function BiblePassages({
 }) {
 	const t = useLabels() as (typeof labels)[SiteLocale];
 
-	if (passages.status === "loading") return <span>Loading&hellip;</span>;
+	if (passages.status === "pending") return <span>Loading&hellip;</span>;
 	if (passages.data === undefined || count(passages.data) === 0) return null;
 
 	return (
@@ -1594,7 +1593,7 @@ function Texts({
 	return (
 		<div
 			className={cx(
-				styles["texts"],
+				styles.texts,
 				"grid grid-cols-2 gap-6 p-6 text-sm bg-white rounded-sm shadow-sm",
 			)}
 		>
@@ -1648,13 +1647,13 @@ function BibliographicReference({ reference }: { reference: SolaBibsonomyReferen
 		const text = [];
 
 		// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
-		if (reference.author) text.push(reference.author + ":");
-		if (reference.title) text.push(reference.title + ".");
-		if (reference.address) text.push(reference.address + ":");
+		if (reference.author) text.push(`${reference.author}:`);
+		if (reference.title) text.push(`${reference.title}.`);
+		if (reference.address) text.push(`${reference.address}:`);
 		if (reference.publisher) text.push(reference.publisher);
 		if (reference.year) {
 			if (reference.pages_start) {
-				text.push(reference.year + ",");
+				text.push(`${reference.year},`);
 				const pages = [];
 				if (reference.pages_start) pages.push(reference.pages_start);
 				if (reference.pages_end) pages.push(reference.pages_end);
@@ -1664,7 +1663,7 @@ function BibliographicReference({ reference }: { reference: SolaBibsonomyReferen
 			}
 		}
 
-		return text.join(" ") + ".";
+		return `${text.join(" ")}.`;
 	}, [reference]);
 
 	return <div>{entry}</div>;

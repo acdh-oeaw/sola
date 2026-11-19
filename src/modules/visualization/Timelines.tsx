@@ -5,14 +5,22 @@ import { axisBottom, axisLeft, axisRight, axisTop } from "d3-axis";
 import { forceCollide, forceSimulation, forceX, forceY } from "d3-force";
 import { scaleBand, scaleTime } from "d3-scale";
 import { select } from "d3-selection";
-import type { ZoomTransform } from "d3-zoom";
-import { zoom, zoomTransform } from "d3-zoom";
-import type { ComponentPropsWithoutRef, Dispatch, JSX, ReactNode, SetStateAction } from "react";
-import { useEffect, useRef, useState } from "react";
+import { type ZoomTransform, zoom, zoomTransform } from "d3-zoom";
+import {
+	type ComponentPropsWithoutRef,
+	type Dispatch,
+	type JSX,
+	type ReactNode,
+	type SetStateAction,
+	useEffect,
+	useRef,
+	useState,
+} from "react";
 
 import { useDimensions } from "@/lib/visualization/useDimensions";
 import { config } from "@/modules/visualization/config";
 import type { Node } from "@/modules/visualization/createNode";
+
 import styles from "@/modules/visualization/Timelines.module.css";
 
 const TOOLTIP_ID = "tooltip";
@@ -263,7 +271,7 @@ export function Timelines({
 	}, [svgRef, width, height, data, isNodeSelected, isNodeHighlighted, onNodeClick, zoomState]);
 
 	return (
-		<div aria-hidden ref={wrapperRef} className="absolute inset-0">
+		<div aria-hidden={true} ref={wrapperRef} className="absolute inset-0">
 			<svg ref={svgRef} className="w-full h-full overflow-visible">
 				<defs>
 					<clipPath id={CLIPPATH_ID}>
@@ -323,7 +331,7 @@ const Tooltip = function Tooltip({
 			id={TOOLTIP_ID}
 			role="tooltip"
 			className={cx(
-				styles["tooltip"],
+				styles.tooltip,
 				"p-2 text-xs transition-opacity duration-150 rounded-sm shadow-lg bg-gray-50 pointer-events-none z-30",
 				isVisible ? "opacity-100" : "opacity-0",
 			)}
@@ -340,5 +348,5 @@ function TooltipArrow({
 }: ComponentPropsWithoutRef<"div"> & {
 	setTooltipArrow: Dispatch<SetStateAction<HTMLDivElement | null>>;
 }) {
-	return <div ref={setTooltipArrow} className={styles["arrow"]} {...props} />;
+	return <div ref={setTooltipArrow} className={styles.arrow} {...props} />;
 }

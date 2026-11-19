@@ -5,7 +5,7 @@ import metadata from "~/config/metadata.json";
 const locales = Object.keys(metadata);
 const defaultLocale = locales[0]!;
 
-const nextConfig: NextConfig = {
+const config: NextConfig = {
 	i18n: {
 		locales,
 		defaultLocale,
@@ -17,13 +17,16 @@ const nextConfig: NextConfig = {
 	rewrites() {
 		return Promise.resolve([{ source: "/sitemap.xml", destination: "/api/sitemap" }]);
 	},
+	turbopack: {
+		rules: {
+			"*.css": {
+				loaders: ["@tailwindcss/turbopack"],
+			},
+		},
+	},
 	typescript: {
 		ignoreBuildErrors: true,
 	},
 };
 
-const plugins: Array<(config: NextConfig) => NextConfig> = [];
-
-export default plugins.reduce((acc, plugin) => {
-	return plugin(acc);
-}, nextConfig);
+export default config;

@@ -1,5 +1,6 @@
 import { promises as fs } from "fs";
 import path from "path";
+
 import toHtml from "rehype-stringify";
 import withFrontmatter from "remark-frontmatter";
 import fromMarkdown from "remark-parse";
@@ -110,11 +111,11 @@ export async function getContentTeamMembers(locale: SiteLocale): Promise<Array<C
 	return data;
 }
 
-export type ContentPostBaseMetadata = {
+export interface ContentPostBaseMetadata {
 	title: string;
 	date: string;
 	abstract: string;
-};
+}
 
 export interface ContentPostBase {
 	id: string;
@@ -156,14 +157,14 @@ export async function getContentPostsOverview(locale: SiteLocale): Promise<Array
 	return data;
 }
 
-export type ContentPostMetadata = {
+export interface ContentPostMetadata {
 	title: string;
 	shortTitle?: string;
 	date: string;
 	abstract?: string;
 	attachments?: Array<{ label: string; file: string }>;
 	gallery?: Array<{ alt?: string; image: string }>;
-};
+}
 
 export interface ContentPost {
 	id: string;
