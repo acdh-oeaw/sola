@@ -1,31 +1,31 @@
-import { useTextField } from "@react-aria/textfield";
-import type { AriaTextFieldProps } from "@react-types/textfield";
 import cx from "clsx";
-import { type JSX, type ReactNode, useRef } from "react";
+import type { JSX, ReactNode } from "react";
+import {
+	Input,
+	Label,
+	TextField as AriaTextField,
+	type TextFieldProps as AriaTextFieldProps,
+} from "react-aria-components";
 
-import { Label } from "@/modules/ui/Label";
-
-export interface TextFieldProps extends AriaTextFieldProps {
+export interface TextFieldProps extends Omit<AriaTextFieldProps, "children" | "className"> {
 	label: ReactNode;
+	/** Applied to the input element. */
 	className?: string;
 }
 
-export function TextField({ className, ...props }: TextFieldProps): JSX.Element {
-	const { label } = props;
-	const ref = useRef<HTMLInputElement>(null);
-	const { labelProps, inputProps } = useTextField(props, ref);
+export function TextField(props: TextFieldProps): JSX.Element {
+	const { className, label, ...fieldProps } = props;
 
 	return (
-		<div className="flex flex-col space-y-1">
-			<Label {...labelProps}>{label}</Label>
-			<input
-				type="text"
+		<AriaTextField {...fieldProps} className="flex flex-col space-y-1">
+			<Label className="inline-block text-xs font-semibold leading-4 tracking-wide text-gray-300">
+				{label}
+			</Label>
+			<Input
 				className={cx("px-2 py-1 text-sm rounded-sm bg-white", className)}
-				{...inputProps}
-				ref={ref}
 				autoComplete="off"
 				autoCorrect="off"
 			/>
-		</div>
+		</AriaTextField>
 	);
 }

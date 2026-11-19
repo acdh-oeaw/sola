@@ -1,59 +1,32 @@
-import { useInteractionModality } from "@react-aria/interactions";
-import { useTooltip, useTooltipTrigger } from "@react-aria/tooltip";
-import { mergeProps } from "@react-aria/utils";
-import { type TooltipTriggerState, useTooltipTriggerState } from "@react-stately/tooltip";
-import type {
-	AriaTooltipProps,
-	TooltipTriggerProps as AriaTooltipTriggerProps,
-} from "@react-types/tooltip";
-import { type JSX, type ReactNode, cloneElement, isValidElement, useRef } from "react";
+import type { DOMAttributes, JSX, ReactElement } from "react";
+import {
+	Focusable,
+	Tooltip,
+	TooltipTrigger as AriaTooltipTrigger,
+	type TooltipTriggerComponentProps,
+} from "react-aria-components";
 
-export interface TooltipTriggerProps extends AriaTooltipTriggerProps {
+export interface TooltipTriggerProps extends Omit<TooltipTriggerComponentProps, "children"> {
 	tooltip: string;
-	children: ReactNode;
+	/** A single focusable element which forwards its `ref` and DOM props, e.g. a native `<button>`. */
+	children: ReactElement<DOMAttributes<HTMLElement>, string>;
 }
 
-export function TooltipTrigger(props: TooltipTriggerProps): ReactNode {
-	const state = useTooltipTriggerState(props);
-	const ref = useRef<HTMLButtonElement>(null);
-	const { triggerProps, tooltipProps } = useTooltipTrigger(props, state, ref);
-
-	// FIXME: required to set uo global focus handlers once
-	// @see https://github.com/adobe/react-spectrum/issues/1378
-	useInteractionModality();
-
-	if (!isValidElement(props.children)) {
-		return props.children;
-	}
+export function TooltipTrigger(props: TooltipTriggerProps): JSX.Element {
+	const { children, tooltip, ...triggerProps } = props;
 
 	return (
-		<span className="relative inline-flex min-w-0">
-			{/* @ts-expect-error Fix types later. */}
-			{cloneElement(props.children, { ref, ...triggerProps })}
-
-			{state.isOpen ? (
-				<Tooltip state={state} {...tooltipProps}>
-					{props.tooltip}
+		<span className="inline-flex min-w-0">
+			<AriaTooltipTrigger {...triggerProps}>
+				<Focusable>{children}</Focusable>
+				<Tooltip
+					offset={4}
+					placement="bottom end"
+					className="z-30 px-2 py-0.5 text-xs font-medium text-gray-100 bg-gray-900 rounded-sm w-max"
+				>
+					{tooltip}
 				</Tooltip>
-			) : null}
-		</span>
-	);
-}
-
-interface TooltipProps extends AriaTooltipProps {
-	state: TooltipTriggerState;
-	children: ReactNode;
-}
-
-function Tooltip({ state, ...props }: TooltipProps): JSX.Element {
-	const { tooltipProps } = useTooltip(props, state);
-
-	return (
-		<span
-			className="absolute right-0 z-30 px-2 py-0.5 mt-1 text-xs font-medium text-gray-100 bg-gray-900 rounded-sm w-max top-full"
-			{...mergeProps(props, tooltipProps)}
-		>
-			{props.children}
+			</AriaTooltipTrigger>
 		</span>
 	);
 }

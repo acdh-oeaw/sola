@@ -46,9 +46,9 @@ import { useCanonicalUrl } from "@/modules/metadata/useCanonicalUrl";
 import { Badge } from "@/modules/ui/Badge";
 import { ClearButton } from "@/modules/ui/ClearButton";
 import { Disclosure } from "@/modules/ui/Disclosure";
-import { Item, ListBox, Section } from "@/modules/ui/ListBox";
+import { ListBox, ListBoxItem, ListBoxSection } from "@/modules/ui/ListBox";
 import { Spinner } from "@/modules/ui/Spinner";
-import { Item as TabItem, Tabs } from "@/modules/ui/Tabs";
+import { Tab, TabList, TabPanel, Tabs } from "@/modules/ui/Tabs";
 import { TextField } from "@/modules/ui/TextField";
 import { TooltipTrigger } from "@/modules/ui/TooltipTrigger";
 import { DurationTimeline } from "@/modules/visualization/DurationTimeline";
@@ -338,7 +338,7 @@ function FilterPanel({
 						}}
 					>
 						{(item) => {
-							return <Item>{item.name}</Item>;
+							return <ListBoxItem>{item.name}</ListBoxItem>;
 						}}
 					</ListBox>
 				</Disclosure>
@@ -364,7 +364,7 @@ function FilterPanel({
 						}}
 					>
 						{(item) => {
-							return <Item>{item.name}</Item>;
+							return <ListBoxItem>{item.name}</ListBoxItem>;
 						}}
 					</ListBox>
 				</Disclosure>
@@ -388,18 +388,18 @@ function FilterPanel({
 						{(item) => {
 							if (item.children !== undefined && item.children.size > 0) {
 								return (
-									<Section
-										key={`section-${String(item.id)}`}
+									<ListBoxSection
+										id={`section-${String(item.id)}`}
 										title={item.name}
 										items={item.children}
 									>
 										{(item) => {
-											return <Item>{item.name}</Item>;
+											return <ListBoxItem>{item.name}</ListBoxItem>;
 										}}
-									</Section>
+									</ListBoxSection>
 								);
 							} else {
-								return <Item>{item.name}</Item>;
+								return <ListBoxItem>{item.name}</ListBoxItem>;
 							}
 						}}
 					</ListBox>
@@ -481,7 +481,7 @@ function PassageTopicListBox({
 					}}
 				>
 					{(item) => {
-						return <Item>{item.name}</Item>;
+						return <ListBoxItem>{item.name}</ListBoxItem>;
 					}}
 				</ListBox>
 			</Disclosure>
@@ -1613,10 +1613,19 @@ function Texts({
 				</div>
 			) : null}
 			{hasAdditionalTexts ? (
-				<Tabs aria-label={t.additionalTexts} items={tabs}>
-					{(item: (typeof tabs)[number]) => {
-						return <TabItem title={item.title}>{item.children}</TabItem>;
-					}}
+				<Tabs>
+					<TabList aria-label={t.additionalTexts} items={tabs}>
+						{(item) => {
+							return <Tab>{item.title}</Tab>;
+						}}
+					</TabList>
+					{tabs.map((item) => {
+						return (
+							<TabPanel key={item.id} id={item.id}>
+								{item.children}
+							</TabPanel>
+						);
+					})}
 				</Tabs>
 			) : null}
 		</div>

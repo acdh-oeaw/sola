@@ -1,8 +1,7 @@
-import { I18nProvider } from "@react-aria/i18n";
-import { OverlayProvider } from "@react-aria/overlays";
 import { keepPreviousData, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import type { JSX } from "react";
+import { I18nProvider } from "react-aria-components";
 
 import { SiteMetadataProvider } from "@/modules/metadata/SiteMetadataContext";
 
@@ -34,9 +33,7 @@ export function Providers(props: ProvidersProps): JSX.Element {
 	return (
 		<SiteMetadataProvider>
 			<QueryClientProvider client={queryClient}>
-				<I18nProvider locale={locale}>
-					<OverlayProvider>{props.children}</OverlayProvider>
-				</I18nProvider>
+				<I18nProvider locale={locale}>{props.children}</I18nProvider>
 			</QueryClientProvider>
 		</SiteMetadataProvider>
 	);
