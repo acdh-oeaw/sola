@@ -81,18 +81,6 @@
 		"stylelint": "^17.16.0",
 		"typescript": "^7.0.2"
 	},
-	"browserslist": {
-		"development": [
-			"last 1 chrome version",
-			"last 1 firefox version",
-			"last 1 safari version"
-		],
-		"production": [
-			">=0.75%",
-			"not dead",
-			"not op_mini all"
-		]
-	},
 	"stylelint": {
 		"extends": "@acdh-oeaw/stylelint-config",
 		"rules": {
