@@ -14,7 +14,6 @@ export function createNode(entity: SolaListEntity, color: string): Node {
 	return {
 		id: entity.id,
 		label: entity.name,
-		// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 		date: new Date(entity.primary_date!),
 		type: entity.type,
 		color,

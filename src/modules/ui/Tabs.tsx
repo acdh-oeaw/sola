@@ -20,7 +20,6 @@ export function Tabs<T extends object>(props: TabsProps<T>): JSX.Element {
 	return (
 		<div className="space-y-4">
 			<TabList {...tabListProps} tablistRef={tablistRef} state={state} />
-			{/* eslint-disable-next-line @typescript-eslint/no-unnecessary-condition */}
 			<TabPanel key={state.selectedItem?.key} state={state} />
 		</div>
 	);

@@ -81,7 +81,6 @@ export function Timelines({
 				})
 				.flat(),
 		) as [Date, Date];
-		// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 		if (min === undefined || max === undefined) return;
 		const minDate = new Date(min.getFullYear() - config.timelinePadding, 0);
 		const maxDate = new Date(max.getFullYear() + config.timelinePadding, 0);
@@ -167,9 +166,7 @@ export function Timelines({
 		const simulationData = data.flatMap((series) => {
 			return series.data.map((d) => {
 				// ensure initial node position for simulation is the actual datapoint, not [0,0]
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				d.x = d.x ?? xScale(d.date) ?? null;
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition, @typescript-eslint/no-non-null-assertion
 				d.y = d.y ?? yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2;
 				return d;
 			});
@@ -199,7 +196,6 @@ export function Timelines({
 			.force(
 				"y",
 				forceY<Node>((d) => {
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					return yScale(getTimelineForNodeType(d.type))! + yScale.bandwidth() / 2;
 				}).strength(config.yStrength),
 			);

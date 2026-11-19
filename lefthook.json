@@ -7,7 +7,7 @@
 			{
 				"name": "lint-code",
 				"glob": "**/*.{js,ts,tsx}",
-				"run": "pnpm exec oxlint --fix --no-error-on-unmatched-pattern {staged_files}",
+				"run": "pnpm exec oxlint --fix --report-unused-disable-directives --no-error-on-unmatched-pattern {staged_files}",
 				"stage_fixed": true
 			},
 			{

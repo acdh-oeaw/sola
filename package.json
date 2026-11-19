@@ -20,7 +20,7 @@
 		"dev": "next dev",
 		"format:check": "oxfmt --check .",
 		"format:fix": "oxfmt --write .",
-		"lint:check": "oxlint",
+		"lint:check": "oxlint --report-unused-disable-directives",
 		"lint:fix": "pnpm run lint:check --fix",
 		"start": "next start",
 		"styles:check": "stylelint \"./**/*.css\" --cache --ignore-path ./.gitignore",

@@ -58,7 +58,6 @@ export default async function handler(
 			return result.type;
 		});
 
-		/* eslint-disable-next-line no-inner-declarations */
 		function createLinksForEntities(entities: Array<SolaListEntity> = []) {
 			return locales
 				.map((locale) => {

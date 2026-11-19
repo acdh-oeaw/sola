@@ -17,7 +17,6 @@ export function printHtml(html: string): void {
 	}
 
 	function setPrint() {
-		/* eslint-disable @typescript-eslint/no-non-null-assertion */
 		iframe.contentWindow!.onbeforeunload = closePrint;
 		iframe.contentWindow!.onafterprint = closePrint;
 		iframe.contentWindow!.focus(); /** Required for IE. */

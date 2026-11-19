@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
-
 import { groupBy, keyBy } from "@acdh-oeaw/lib";
 import { useQuery } from "@tanstack/react-query";
 import { useRouter } from "next/router";
@@ -58,27 +56,21 @@ export function useSolaEntities() {
 			});
 
 			const results = {
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				events: keyBy(grouped.Event ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				institutions: keyBy(grouped.Institution ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				passages: keyBy(grouped.Passage ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				persons: keyBy(grouped.Person ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				places: keyBy(grouped.Place ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				publications: keyBy(grouped.Publication ?? [], (entry) => {
 					return entry.id;
 				}),
@@ -168,27 +160,21 @@ export function useSolaFilteredPassages(
 			});
 
 			const results = {
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				events: keyBy(grouped.Event ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				institutions: keyBy(grouped.Institution ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				passages: keyBy(grouped.Passage ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				persons: keyBy(grouped.Person ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				places: keyBy(grouped.Place ?? [], (entry) => {
 					return entry.id;
 				}),
-				// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 				publications: keyBy(grouped.Publication ?? [], (entry) => {
 					return entry.id;
 				}),
@@ -256,7 +242,6 @@ export function useSolaSelectedEntity() {
 	const selectedSolaEntity = useQuery<SolaEntityDetails>({
 		queryKey: ["getSolaEntityById", locale, selected, {}],
 		queryFn: () => {
-			/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
 			const { id, type } = selected!;
 			switch (type) {
 				case "Event":
@@ -458,7 +443,6 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
 	const authors = useQuery({
 		queryKey: ["getPublicationById", locale, publicationId, {}],
 		queryFn: () => {
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			return getSolaPublicationById({ id: publicationId!, locale });
 		},
 		enabled: publicationId !== undefined && persons !== undefined,
@@ -474,7 +458,6 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
 			});
 
 			return authorIds.map((id) => {
-				// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 				return persons![id]!;
 			});
 		},
@@ -524,7 +507,6 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
 					 * bible book names. Instead of a string lookup on the frontend, the backend just should
 					 * not touch capitalization at all!
 					 */
-					// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 					(bibleBooks as Record<string, string>)[result.bible_book_ref!] ?? result.bible_book_ref,
 					[result.bible_chapter_ref, result.bible_verse_ref].filter(Boolean).join(":"),
 				]
@@ -589,7 +571,6 @@ export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
 		],
 		queryFn: () => {
 			const query = { attribute: "include", contenttype: type! };
-			// eslint-disable-next-line @typescript-eslint/no-non-null-assertion
 			return getSolaEntityBibliographyById({ id: id!, query, locale });
 		},
 		enabled: id !== undefined && type !== undefined,
@@ -671,7 +652,6 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 			});
 
 			const textsForCurrentLocale: Array<SolaTextDetails> = [];
-			/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
 			textTypesByLocale[entity!.type][locale].forEach((textTypeId) => {
 				const text = map[textTypeId];
 				if (text) {
@@ -685,7 +665,6 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 					...text,
 					kind: {
 						...text.kind,
-						/* eslint-disable-next-line @typescript-eslint/no-non-null-assertion */
 						label: textTypes.data![text.kind.id]!.name.replace(/\s\((DE|EN)\)$/, ""),
 					},
 				};

@@ -386,7 +386,6 @@ function FilterPanel({
 						}}
 					>
 						{(item) => {
-							// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 							if (item.children !== undefined && item.children.size > 0) {
 								return (
 									<Section
@@ -1609,7 +1608,6 @@ function Texts({
 					</div>
 					<div
 						className="leading-6 whitespace-pre-wrap"
-						// eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
 						dangerouslySetInnerHTML={{ __html: primary.text ?? "" }}
 					/>
 				</div>
@@ -1651,7 +1649,6 @@ function BibliographicReference({ reference }: { reference: SolaBibsonomyReferen
 	const entry = useMemo(() => {
 		const text = [];
 
-		// eslint-disable-next-line @typescript-eslint/strict-boolean-expressions
 		if (reference.author) text.push(`${reference.author}:`);
 		if (reference.title) text.push(`${reference.title}.`);
 		if (reference.address) text.push(`${reference.address}:`);
