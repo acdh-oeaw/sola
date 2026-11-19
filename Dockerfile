@@ -23,19 +23,8 @@ RUN pnpm fetch
 
 COPY --chown=node:node ./ ./
 
-ARG NEXT_PUBLIC_APP_BASE_URL
-ARG NEXT_PUBLIC_BOTS
-ARG NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION
-ARG NEXT_PUBLIC_MATOMO_BASE_URL
-ARG NEXT_PUBLIC_MATOMO_ID
-ARG NEXT_PUBLIC_REDMINE_ID
-
-# disable validation for runtime environment variables
-ENV ENV_VALIDATION=public
-
 RUN pnpm install --frozen-lockfile --offline
 
-ENV BUILD_MODE=standalone
 ENV NODE_ENV=production
 ENV NEXT_TELEMETRY_DISABLED=1
 
@@ -51,7 +40,6 @@ WORKDIR /app
 
 USER node
 
-COPY --from=build --chown=node:node /app/next.config.ts ./
 COPY --from=build --chown=node:node /app/.next/standalone ./
 COPY --from=build --chown=node:node /app/.next/static ./.next/static
 # exclude assets which should have been optimized with `next/image`.
