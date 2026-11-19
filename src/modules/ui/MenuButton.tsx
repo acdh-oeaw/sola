@@ -1,187 +1,63 @@
-import { useButton } from "@react-aria/button";
-import { FocusScope } from "@react-aria/focus";
-import { type AriaMenuOptions, useMenu, useMenuItem, useMenuTrigger } from "@react-aria/menu";
-import { DismissButton, useOverlay } from "@react-aria/overlays";
-import { mergeProps } from "@react-aria/utils";
-import { useMenuTriggerState } from "@react-stately/menu";
-import { type TreeState, useTreeState } from "@react-stately/tree";
-import type { AriaMenuProps, MenuTriggerProps } from "@react-types/menu";
-import type { CollectionChildren, Key, Node } from "@react-types/shared";
-import cx from "clsx";
-import Link, { type LinkProps } from "next/link";
-import { type AriaAttributes, type JSX, type ReactNode, type RefObject, useRef } from "react";
+import type { JSX, ReactNode } from "react";
+import {
+	Button,
+	Menu,
+	MenuItem as AriaMenuItem,
+	type MenuItemProps as AriaMenuItemProps,
+	type MenuProps,
+	MenuTrigger,
+	type MenuTriggerProps,
+	Popover,
+} from "react-aria-components";
 
-export { Item } from "@react-stately/collections";
-
-export interface MenuButtonProps<T> extends MenuTriggerProps {
-	label?: ReactNode;
-	menuLabel?: string;
-	children: CollectionChildren<T>;
-	onAction?: (key: Key) => void;
+export interface MenuButtonProps<T> extends Omit<MenuTriggerProps, "children">, MenuProps<T> {
+	label: ReactNode;
+	menuLabel: string;
 }
 
 export function MenuButton<T extends object>(props: MenuButtonProps<T>): JSX.Element {
-	const state = useMenuTriggerState(props);
-	const ref = useRef<HTMLButtonElement>(null);
-	const { menuTriggerProps, menuProps } = useMenuTrigger({}, state, ref);
-	const { buttonProps } = useButton(menuTriggerProps, ref);
-
-	// const router = useRouter()
-	// useEffect(() => {
-	//   router.events.on('routeChangeStart', state.close)
-	//   return () => {
-	//     router.events.off('routeChangeStart', state.close)
-	//   }
-	// }, [router, state.close])
+	const { defaultOpen, isOpen, label, menuLabel, onOpenChange, trigger, ...menuProps } = props;
 
 	return (
-		<div className="relative inline-block">
-			<button
-				{...buttonProps}
-				ref={ref}
-				className={cx(
-					"flex items-center justify-between px-4 py-2 space-x-1 transition rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-gray-100",
-					state.isOpen && "bg-gray-100",
-				)}
-				type="button"
-			>
-				{props.label}
-			</button>
-			{state.isOpen ? (
-				<Popover isOpen={state.isOpen} onClose={state.close}>
-					<Menu
-						{...props}
-						aria-label={props.menuLabel}
-						domProps={menuProps}
-						autoFocus={state.focusStrategy ?? true}
-						onClose={state.close}
-					/>
-				</Popover>
-			) : null}
-		</div>
-	);
-}
-
-interface PopoverProps {
-	isOpen: boolean;
-	onClose: () => void;
-	children: ReactNode;
-}
-
-/** @private */
-function Popover({ isOpen, onClose, children }: PopoverProps) {
-	const overlayRef = useRef(null);
-	const { overlayProps } = useOverlay(
-		{
-			onClose,
-			shouldCloseOnBlur: true,
-			isOpen,
-			isDismissable: true,
-		},
-		overlayRef,
-	);
-
-	return (
-		<FocusScope restoreFocus={true}>
-			<div {...overlayProps} ref={overlayRef} className="absolute z-20 mt-1">
-				<DismissButton onDismiss={onClose} />
-				{children}
-				<DismissButton onDismiss={onClose} />
-			</div>
-		</FocusScope>
-	);
-}
-
-interface MenuProps<T> extends AriaMenuProps<T> {
-	domProps: AriaMenuOptions<unknown>;
-	onClose?: () => void;
-}
-
-/** @private */
-
-function Menu<T extends object>(props: MenuProps<T>): JSX.Element {
-	const state = useTreeState<T>({ ...props, selectionMode: "none" });
-	const ref = useRef<HTMLUListElement>(null);
-	const { menuProps } = useMenu<T>(props, state, ref);
-	const { autoFocus: _autoFocus, ...domProps } = props.domProps;
-
-	return (
-		<ul
-			{...mergeProps(menuProps, domProps)}
-			ref={ref}
-			className="py-1 bg-white rounded-sm shadow-lg w-max focus:outline-hidden"
+		<MenuTrigger
+			defaultOpen={defaultOpen}
+			isOpen={isOpen}
+			onOpenChange={onOpenChange}
+			trigger={trigger}
 		>
-			{[...state.collection].map((item) => {
-				return <MenuItem key={item.key} item={item} state={state} />;
-			})}
-		</ul>
+			<Button className="flex items-center justify-between px-4 py-2 space-x-1 transition rounded-sm outline-hidden data-focus-visible:ring-2 data-focus-visible:ring-yellow-400 data-hovered:bg-gray-100 data-pressed:bg-gray-100">
+				{label}
+			</Button>
+			<Popover offset={4} placement="bottom end">
+				<Menu
+					{...menuProps}
+					aria-label={menuLabel}
+					className="py-1 bg-white rounded-sm shadow-lg w-max outline-hidden"
+				/>
+			</Popover>
+		</MenuTrigger>
 	);
 }
 
-/** Props passed to `<Item>`, which `react-aria` types as `any`. */
-interface MenuItemElementProps {
-	elementType?: string;
-	href?: LinkProps["href"];
-	"aria-current"?: AriaAttributes["aria-current"];
+export interface MenuItemProps<T> extends Omit<AriaMenuItemProps<T>, "className"> {
+	/** Marks the item as the current page. */
+	isCurrent?: boolean;
 }
 
-interface MenuItemProps<T> {
-	item: Node<T>;
-	state: TreeState<T>;
-}
+export function MenuItem<T extends object>(props: MenuItemProps<T>): JSX.Element {
+	const { isCurrent = false, ...itemProps } = props;
 
-/** @private */
-function MenuItem<T>({ item, state }: MenuItemProps<T>) {
-	const ref = useRef<HTMLAnchorElement | HTMLLIElement>(null);
-	const isFocused = state.selectionManager.focusedKey === item.key;
-	const { menuItemProps } = useMenuItem(
-		{
-			key: item.key,
+	return (
+		<AriaMenuItem
+			{...itemProps}
 			/**
-			 * With `closeOnSelect: true` navigation does not work ootb.
-			 * Instead, we listen to `routeChangeStart` router event above and close manually.
-			 * Alternatively, just programmatically transition with `router.push` in `onAction`.
-			 *
-			 * The reason seems to be that `state.isOpen: false` (which is set in a `pointerup` event)
-			 * removes the menu before the `next/link` `onClick` handler can fire.
+			 * `react-aria-components` does not forward `aria-current` to the DOM element.
 			 */
-			// closeOnSelect: false,
-		},
-		state,
-		ref,
-	);
-
-	const itemProps = item.props as MenuItemElementProps;
-
-	if (itemProps.elementType === "a") {
-		return (
-			<li role="none">
-				<Link
-					href={itemProps.href!}
-					{...menuItemProps}
-					ref={ref as RefObject<HTMLAnchorElement>}
-					className={cx(
-						"text-base select-none font-medium block px-4 py-2 focus:outline-hidden cursor-pointer transition",
-						isFocused && "bg-gray-100",
-					)}
-					aria-current={itemProps["aria-current"]}
-				>
-					{item.rendered}
-				</Link>
-			</li>
-		);
-	}
-
-	return (
-		<li
-			{...menuItemProps}
-			ref={ref as RefObject<HTMLLIElement>}
-			className={cx(
-				"text-base select-none font-medium block px-4 py-2 focus:outline-hidden cursor-pointer transition",
-				isFocused && "bg-gray-100",
-			)}
-		>
-			{item.rendered}
-		</li>
+			ref={(element) => {
+				if (isCurrent) element?.setAttribute("aria-current", "page");
+				else element?.removeAttribute("aria-current");
+			}}
+			className="block px-4 py-2 text-base font-medium transition cursor-pointer select-none outline-hidden data-focused:bg-gray-100"
+		/>
 	);
 }

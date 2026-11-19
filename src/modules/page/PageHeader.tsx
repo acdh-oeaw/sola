@@ -1,4 +1,3 @@
-import { useInteractionModality } from "@react-aria/interactions";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import { type JSX, Fragment } from "react";
@@ -6,7 +5,7 @@ import { type JSX, Fragment } from "react";
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import { Menu as MenuIcon } from "@/modules/icons/Menu";
-import { Item as MenuItem, MenuButton } from "@/modules/ui/MenuButton";
+import { MenuButton, MenuItem } from "@/modules/ui/MenuButton";
 import navigation from "~/config/navigation.json" with { type: "json" };
 
 const labels = {
@@ -76,16 +75,9 @@ function MobileNav({
 }) {
 	const router = useRouter();
 
-	// FIXME: required to set uo global focus handlers once
-	// @see https://github.com/adobe/react-spectrum/issues/1378
-	useInteractionModality();
-
 	return (
 		<div className="lg:hidden">
 			<MenuButton
-				onAction={(key) => {
-					void router.push(String(key));
-				}}
 				menuLabel={t.navigationMenu}
 				label={
 					<Fragment>
@@ -95,14 +87,8 @@ function MobileNav({
 				}
 			>
 				{links.map(({ path, label }) => {
-					const isCurrent = router.pathname === path;
-					const props = {
-						elementType: "a",
-						href: path,
-						"aria-current": isCurrent ? "page" : undefined,
-					};
 					return (
-						<MenuItem key={path} {...props}>
+						<MenuItem key={path} id={path} href={path} isCurrent={router.pathname === path}>
 							{label}
 						</MenuItem>
 					);
