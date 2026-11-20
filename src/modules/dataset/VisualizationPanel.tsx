@@ -1,11 +1,12 @@
 import cx from "clsx";
+import { useExtracted } from "next-intl";
 
 import type { SolaEntityRelation, SolaEntityType } from "@/api/sola/client";
 import { useSolaFilteredPassages } from "@/lib/sola/hooks";
 import type { SolaPassagesFilter, SolaSelectedEntity } from "@/lib/sola/types";
 import { count } from "@/lib/util/count";
 import { ActiveFilterList } from "@/modules/dataset/ActiveFilterList";
-import { useDatasetLabels } from "@/modules/dataset/labels";
+import { useEntityTypeLabels } from "@/modules/dataset/useEntityTypeLabels";
 import { Spinner } from "@/modules/ui/Spinner";
 import { type VisualizationProps, Visualization } from "@/modules/visualization/Visualization";
 import sola from "~/config/sola.json" with { type: "json" };
@@ -35,7 +36,8 @@ export function VisualizationPanel({
 	setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void;
 	selectedSolaEntityRelations: Record<SolaEntityType, Array<SolaEntityRelation>>;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
+	const entityTypeLabels = useEntityTypeLabels();
 
 	const filteredSolaPassages = useSolaFilteredPassages(filter, searchTerm);
 
@@ -53,7 +55,7 @@ export function VisualizationPanel({
 		>
 			<div className="flex flex-col justify-between px-6 pt-6 pb-4 space-y-4 md:space-y-0 md:flex-row md:space-x-4">
 				<div className="flex items-center space-x-2">
-					<h1 className="text-2xl font-bold">{t.h1}</h1>
+					<h1 className="text-2xl font-bold">{t("Passages")}</h1>
 					{filteredSolaPassages.isLoading ? (
 						<Spinner className="w-6 h-6" />
 					) : (
@@ -65,37 +67,37 @@ export function VisualizationPanel({
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
 							<div className={cx("w-3 h-3 transition", colors.bg.Event)} />
 							<span>
-								{countedSolaEvents} {t.entityType.Event[1]}
+								{countedSolaEvents} {entityTypeLabels.Event[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
 							<div className={cx("w-3 h-3 transition", colors.bg.Institution)} />
 							<span>
-								{countedSolaInstitutions} {t.entityType.Institution[1]}
+								{countedSolaInstitutions} {entityTypeLabels.Institution[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
 							<div className={cx("w-3 h-3 transition", colors.bg.Passage)} />
 							<span>
-								{countedSolaPassages} {t.entityType.Passage[1]}
+								{countedSolaPassages} {entityTypeLabels.Passage[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
 							<div className={cx("w-3 h-3 transition", colors.bg.Person)} />
 							<span>
-								{countedSolaPersons} {t.entityType.Person[1]}
+								{countedSolaPersons} {entityTypeLabels.Person[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
 							<div className={cx("w-3 h-3 transition", colors.bg.Place)} />
 							<span>
-								{countedSolaPlaces} {t.entityType.Place[1]}
+								{countedSolaPlaces} {entityTypeLabels.Place[1]}
 							</span>
 						</li>
 						<li className="flex items-center mb-1 mr-2 space-x-1 md:mr-0">
 							<div className={cx("w-3 h-3 transition", colors.bg.Publication)} />
 							<span>
-								{countedSolaPublications} {t.entityType.Publication[1]}
+								{countedSolaPublications} {entityTypeLabels.Publication[1]}
 							</span>
 						</li>
 					</ul>
@@ -114,7 +116,7 @@ export function VisualizationPanel({
 					selectedSolaEntity={selectedSolaEntity}
 					setSelectedSolaEntity={setSelectedSolaEntity}
 					selectedSolaEntityRelations={selectedSolaEntityRelations}
-					entityTypeLabels={t.entityType}
+					entityTypeLabels={entityTypeLabels}
 				/>
 			</div>
 		</section>

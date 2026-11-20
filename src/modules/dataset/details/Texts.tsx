@@ -1,8 +1,8 @@
 import cx from "clsx";
+import { useExtracted } from "next-intl";
 
 import type { SolaBibsonomyReference, SolaTextDetails } from "@/api/sola/client";
 import { Bibliography } from "@/modules/dataset/details/Bibliography";
-import { useDatasetLabels } from "@/modules/dataset/labels";
 import { Tab, TabList, TabPanel, Tabs } from "@/modules/ui/Tabs";
 
 import styles from "@/modules/dataset/details/Texts.module.css";
@@ -16,7 +16,7 @@ export function Texts({
 	texts: Array<SolaTextDetails>;
 	bibliography?: Array<SolaBibsonomyReference>;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
 
 	const hasPrimaryText = primary !== undefined;
 	const hasAdditionalTexts =
@@ -39,7 +39,7 @@ export function Texts({
 	if (bibliography !== undefined && bibliography.length > 0) {
 		tabs.push({
 			id: 0,
-			title: t.bibliography,
+			title: t("Bibliography"),
 			children: <Bibliography bibliography={bibliography} />,
 		});
 	}
@@ -64,7 +64,7 @@ export function Texts({
 			) : null}
 			{hasAdditionalTexts ? (
 				<Tabs>
-					<TabList aria-label={t.additionalTexts} items={tabs}>
+					<TabList aria-label={t("Additional texts")} items={tabs}>
 						{(item) => {
 							return <Tab>{item.title}</Tab>;
 						}}

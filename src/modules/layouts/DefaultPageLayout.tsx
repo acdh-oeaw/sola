@@ -1,10 +1,12 @@
-import type { JSX } from "react";
+import type { Locale } from "next-intl";
+import type { JSX, ReactNode } from "react";
 
 import { PageFooter } from "@/modules/page/PageFooter";
 import { PageHeader } from "@/modules/page/PageHeader";
 
 export interface DefaultPageLayoutProps {
-	children: JSX.Element;
+	children: ReactNode;
+	locale: Locale;
 }
 
 /**
@@ -22,7 +24,7 @@ export function DefaultPageLayout(props: DefaultPageLayoutProps): JSX.Element {
 		>
 			<PageHeader />
 			{props.children}
-			<PageFooter />
+			<PageFooter locale={props.locale} />
 		</div>
 	);
 }

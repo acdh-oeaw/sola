@@ -1,21 +1,33 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
 
 import site from "~/config/site.json" with { type: "json" };
 
-const { defaultLocale, locales } = site;
+const withNextIntl = createNextIntlPlugin({
+	experimental: {
+		/** Extract messages from `useExtracted` and `getExtracted` calls during dev and build. */
+		extract: true,
+		messages: {
+			path: "./messages",
+			format: "po",
+			locales: site.locales,
+			sourceLocale: "en",
+		},
+		srcPath: "./src",
+	},
+});
 
 const config: NextConfig = {
-	i18n: {
-		locales,
-		defaultLocale,
+	experimental: {
+		/**
+		 * Render 404s for unmatched URLs with `app/global-not-found.tsx`. Not-found pages nested in
+		 * the `[locale]` root layout are only rendered on the client.
+		 */
+		globalNotFound: true,
 	},
 	output: "standalone",
-	pageExtensions: ["api.ts", "page.tsx"],
 	poweredByHeader: false,
 	reactStrictMode: true,
-	rewrites() {
-		return Promise.resolve([{ source: "/sitemap.xml", destination: "/api/sitemap" }]);
-	},
 	turbopack: {
 		rules: {
 			"*.css": {
@@ -28,4 +40,4 @@ const config: NextConfig = {
 	},
 };
 
-export default config;
+export default withNextIntl(config);

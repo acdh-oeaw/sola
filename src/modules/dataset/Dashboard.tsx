@@ -1,7 +1,9 @@
-import type { JSX } from "react";
+"use client";
+
+import { type JSX, Suspense } from "react";
 
 import { useSolaPassagesFilter, useSolaPassagesSearchTerm } from "@/lib/sola/hooks";
-import { ContentPanel } from "@/modules/dataset/ContentPanel";
+import { ContentPanel, ContentPanelLoading } from "@/modules/dataset/ContentPanel";
 import { FilterPanel } from "@/modules/dataset/FilterPanel";
 
 /**
@@ -19,12 +21,15 @@ export function Dashboard(): JSX.Element {
 				searchTerm={searchTerm}
 				setSearchTerm={setSearchTerm}
 			/>
-			<ContentPanel
-				filter={solaPassagesFilter}
-				setFilter={setSolaPassagesFilter}
-				searchTerm={searchTerm}
-				setSearchTerm={setSearchTerm}
-			/>
+			{/* Reads the selected entity from search params, which requires a Suspense boundary. */}
+			<Suspense fallback={<ContentPanelLoading />}>
+				<ContentPanel
+					filter={solaPassagesFilter}
+					setFilter={setSolaPassagesFilter}
+					searchTerm={searchTerm}
+					setSearchTerm={setSearchTerm}
+				/>
+			</Suspense>
 		</main>
 	);
 }

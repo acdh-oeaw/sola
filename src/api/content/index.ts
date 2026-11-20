@@ -1,6 +1,7 @@
 import { promises as fs } from "fs";
 import path from "path";
 
+import type { Locale } from "next-intl";
 import toHtml from "rehype-stringify";
 import withFrontmatter from "remark-frontmatter";
 import fromMarkdown from "remark-parse";
@@ -12,7 +13,6 @@ import YAML from "yaml";
 
 import { excerptMarkdown } from "@/lib/content/remark-excerpt";
 import { parseYamlFrontmatter } from "@/lib/content/remark-frontmatter";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 
 const basePath = path.resolve("content");
 const dataBasePath = path.join(basePath, "data");
@@ -59,7 +59,7 @@ export interface ContentPage<T extends Record<string, unknown>> {
  */
 export async function getContentPage<T extends Record<string, unknown>>(
 	id: string,
-	locale: SiteLocale,
+	locale: Locale,
 ): Promise<ContentPage<T>> {
 	const filePath = path.join(pageBasePath, locale, id + pageExtension);
 	const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
@@ -91,7 +91,7 @@ export interface ContentTeamMember {
 /**
  * Returns team member data as JSON.
  */
-export async function getContentTeamMembers(locale: SiteLocale): Promise<Array<ContentTeamMember>> {
+export async function getContentTeamMembers(locale: Locale): Promise<Array<ContentTeamMember>> {
 	const folderPath = path.join(dataBasePath, "team", locale);
 	const folderContents = await fs.readdir(folderPath);
 
@@ -125,7 +125,7 @@ export interface ContentPostBase {
 /**
  * Returns list of posts with abstracts.
  */
-export async function getContentPostsOverview(locale: SiteLocale): Promise<Array<ContentPostBase>> {
+export async function getContentPostsOverview(locale: Locale): Promise<Array<ContentPostBase>> {
 	const folderPath = path.join(postBasePath, locale);
 	const folderContents = await fs.readdir(folderPath);
 
@@ -175,7 +175,7 @@ export interface ContentPost {
 /**
  * Returns list of posts with abstracts.
  */
-export async function getContentPostById(id: string, locale: SiteLocale): Promise<ContentPost> {
+export async function getContentPostById(id: string, locale: Locale): Promise<ContentPost> {
 	const filePath = path.join(postBasePath, locale, id + postExtension);
 	const fileContents = await fs.readFile(filePath, { encoding: "utf-8" });
 	const processed = await md.process(fileContents);
@@ -191,7 +191,7 @@ export async function getContentPostById(id: string, locale: SiteLocale): Promis
 /**
  * Returns all post ids.
  */
-export async function getContentPostIds(locale: SiteLocale): Promise<Array<string>> {
+export async function getContentPostIds(locale: Locale): Promise<Array<string>> {
 	const folderPath = path.join(postBasePath, locale);
 	const folderContents = await fs.readdir(folderPath);
 	return folderContents.map((file) => {

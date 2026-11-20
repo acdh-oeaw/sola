@@ -1,32 +1,28 @@
-import Link from "next/link";
-import { useRouter } from "next/router";
-import { type FocusEvent, type JSX, type KeyboardEvent, useEffect, useRef, useState } from "react";
+"use client";
+
+import { useExtracted, useLocale } from "next-intl";
+import { useSearchParams } from "next/navigation";
+import { type FocusEvent, type JSX, type KeyboardEvent, Suspense, useRef, useState } from "react";
 import { Button, Disclosure, DisclosurePanel } from "react-aria-components";
 
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
+import { Link, usePathname } from "@/i18n/navigation";
 import { Menu as MenuIcon } from "@/modules/icons/Menu";
-import navigation from "~/config/navigation.json" with { type: "json" };
-
-const labels = {
-	en: {
-		menu: "Menu",
-		navigationMenu: "Navigation menu",
-	},
-	de: {
-		menu: "Menü",
-		navigationMenu: "Navigationsmenü",
-	},
-};
 
 /**
  * Page header.
  */
 export function PageHeader(): JSX.Element {
-	const router = useRouter();
-	const locale = useCurrentLocale();
+	const t = useExtracted();
+	/** Pathname without locale prefix. */
+	const pathname = usePathname();
 
-	const links = (navigation as Record<SiteLocale, Array<{ path: string; label: string }>>)[locale];
+	const links = [
+		{ path: "/", label: t("Home") },
+		{ path: "/dataset", label: t("Passages") },
+		{ path: "/about", label: t("About the project") },
+		{ path: "/team", label: t("Team") },
+		{ path: "/posts", label: t("News") },
+	];
 
 	return (
 		<header className="relative flex bg-white" style={{ gridArea: "header" }}>
@@ -36,7 +32,7 @@ export function PageHeader(): JSX.Element {
 			>
 				<Link
 					href="/"
-					aria-current={router.pathname === "/" ? "page" : undefined}
+					aria-current={pathname === "/" ? "page" : undefined}
 					className="z-20 flex items-center px-6 text-2xl font-extrabold tracking-wide text-white transition bg-yellow-400 hover:bg-yellow-500 focus:outline-hidden focus-visible:bg-yellow-500"
 				>
 					SOLA
@@ -44,7 +40,7 @@ export function PageHeader(): JSX.Element {
 				<div className="z-10 flex items-center justify-end px-6 space-x-4 shadow-sm xs:space-x-6">
 					<ul className="hidden space-x-4 lg:flex lg:items-center">
 						{links.map(({ path, label }) => {
-							const isCurrent = router.pathname === path;
+							const isCurrent = pathname === path;
 							return (
 								<li key={path}>
 									<Link
@@ -58,8 +54,10 @@ export function PageHeader(): JSX.Element {
 							);
 						})}
 					</ul>
-					<MobileNav links={links} t={labels[locale]} />
-					<LanguageToggle />
+					<MobileNav links={links} pathname={pathname} />
+					<Suspense fallback={<LanguageToggleLink pathname={pathname} />}>
+						<LanguageToggle pathname={pathname} />
+					</Suspense>
 				</div>
 			</nav>
 		</header>
@@ -73,27 +71,22 @@ export function PageHeader(): JSX.Element {
  */
 function MobileNav({
 	links,
-	t,
+	pathname,
 }: {
 	links: Array<{ path: string; label: string }>;
-	t: (typeof labels)[SiteLocale];
+	pathname: string;
 }) {
-	const router = useRouter();
+	const t = useExtracted();
 	const [isExpanded, setExpanded] = useState(false);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
-	useEffect(() => {
-		function close() {
-			setExpanded(false);
-		}
-
-		router.events.on("routeChangeStart", close);
-
-		return () => {
-			router.events.off("routeChangeStart", close);
-		};
-	}, [router.events]);
+	/** Close after navigating to another page. */
+	const [previousPathname, setPreviousPathname] = useState(pathname);
+	if (pathname !== previousPathname) {
+		setPreviousPathname(pathname);
+		setExpanded(false);
+	}
 
 	/** Close on Escape and return focus to the toggle button. */
 	function onKeyDown(event: KeyboardEvent) {
@@ -121,10 +114,10 @@ function MobileNav({
 					className="flex items-center justify-between px-4 py-2 space-x-1 transition rounded-sm outline-hidden data-focus-visible:ring-2 data-focus-visible:ring-yellow-400 data-hovered:bg-gray-100 data-pressed:bg-gray-100 aria-expanded:bg-gray-100"
 				>
 					<MenuIcon />
-					<span className="text-sm font-medium">{t.menu}</span>
+					<span className="text-sm font-medium">{t("Menu")}</span>
 				</Button>
 				<DisclosurePanel
-					aria-label={t.navigationMenu}
+					aria-label={t("Navigation menu")}
 					className="absolute inset-x-0 z-20 bg-white border-t border-gray-200 shadow-lg top-full"
 				>
 					<ul className="py-2">
@@ -133,7 +126,7 @@ function MobileNav({
 								<li key={path}>
 									<Link
 										href={path}
-										aria-current={router.pathname === path ? "page" : undefined}
+										aria-current={pathname === path ? "page" : undefined}
 										onKeyDown={onKeyDown}
 										onBlur={onBlur}
 										className="block px-6 py-3 text-base font-medium transition hover:bg-gray-100 focus:outline-hidden focus-visible:bg-gray-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400 aria-[current=page]:font-bold"
@@ -150,15 +143,29 @@ function MobileNav({
 	);
 }
 
-function LanguageToggle() {
-	const router = useRouter();
-	const locale = useCurrentLocale();
+/**
+ * Links to the current page in the other locale, keeping search params (e.g. the selected entity
+ * on the dataset page). The middleware remembers the choice in the `NEXT_LOCALE` cookie.
+ */
+function LanguageToggle({ pathname }: { pathname: string }) {
+	const searchParams = useSearchParams();
 
+	return <LanguageToggleLink pathname={pathname} query={Object.fromEntries(searchParams)} />;
+}
+
+function LanguageToggleLink({
+	pathname,
+	query,
+}: {
+	pathname: string;
+	query?: Record<string, string>;
+}) {
+	const locale = useLocale();
 	const otherLocale = locale === "de" ? "en" : "de";
 
 	return (
 		<Link
-			href={router.asPath}
+			href={{ pathname, query }}
 			locale={otherLocale}
 			className="p-2 text-sm font-medium transition bg-yellow-400 rounded-sm hover:bg-yellow-500 focus:outline-hidden focus-visible:bg-yellow-500"
 		>

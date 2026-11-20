@@ -1,6 +1,7 @@
+import { useExtracted } from "next-intl";
+
 import type { SolaEntityDetails, SolaPassageDetails } from "@/api/sola/client";
 import type { SolaPassagesFilter } from "@/lib/sola/types";
-import { useDatasetLabels } from "@/modules/dataset/labels";
 import { Badge } from "@/modules/ui/Badge";
 
 export function Properties({
@@ -26,7 +27,7 @@ function PassageProperties({
 	entity: SolaPassageDetails;
 	setFilter: (filter: SolaPassagesFilter) => void;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
 
 	const hasPassageTopics = entity.topic.length > 0;
 	const hasPassageTypes = entity.kind.length > 0;
@@ -36,13 +37,13 @@ function PassageProperties({
 	return (
 		<div className="space-y-1">
 			<h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
-				{t.properties}
+				{t("Properties")}
 			</h3>
 
 			<dl className="space-y-1 text-xs text-gray-700">
 				{hasPassageTopics ? (
 					<div>
-						<dt className="sr-only">{t.topics[1]}</dt>
+						<dt className="sr-only">{t("Topics")}</dt>
 						<dd>
 							<ul className="flex flex-wrap items-center">
 								{entity.topic.map((topic) => {
@@ -73,7 +74,7 @@ function PassageProperties({
 				) : null}
 				{hasPassageTypes ? (
 					<div>
-						<dt className="sr-only">{t.types[1]}</dt>
+						<dt className="sr-only">{t("Types")}</dt>
 						<dd>
 							<ul className="flex flex-wrap items-center">
 								{entity.kind.map((kind) => {

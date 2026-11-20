@@ -1,24 +1,14 @@
 import cx from "clsx";
+import { useExtracted } from "next-intl";
 import type { JSX } from "react";
 import { ProgressBar } from "react-aria-components";
-
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
-
-const labels = {
-	en: {
-		loading: "Loading...",
-	},
-	de: {
-		loading: "Laden...",
-	},
-};
 
 export interface SpinnerProps {
 	className?: string;
 }
 
 export function Spinner({ className }: SpinnerProps): JSX.Element {
-	const locale = useCurrentLocale();
+	const t = useExtracted();
 
 	const center = 16;
 	const strokeWidth = 4;
@@ -29,7 +19,7 @@ export function Spinner({ className }: SpinnerProps): JSX.Element {
 	return (
 		<ProgressBar
 			isIndeterminate={true}
-			aria-label={labels[locale].loading}
+			aria-label={t("Loading…")}
 			className={cx("inline-flex", className)}
 		>
 			<svg

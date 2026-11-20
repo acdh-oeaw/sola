@@ -1,29 +1,14 @@
-import Link from "next/link";
+import type { Locale } from "next-intl";
+import { getExtracted } from "next-intl/server";
 import type { JSX } from "react";
 
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
-
-const labels = {
-	en: {
-		imprint: "Imprint",
-		fwf: "Austrian Science Fund",
-		univie: "University of Vienna",
-		acdh: "Austrian Centre for Digital Humanities and Cultural Heritage",
-	},
-	de: {
-		imprint: "Impressum",
-		fwf: "Fonds zur Förderung der wissenschaftlichen Forschung",
-		univie: "Universität Wien",
-		acdh: "Austrian Centre for Digital Humanities and Cultural Heritage",
-	},
-};
+import { Link } from "@/i18n/navigation";
 
 /**
  * Page footer.
  */
-export function PageFooter(): JSX.Element {
-	const locale = useCurrentLocale();
-
+export async function PageFooter({ locale }: { locale: Locale }): Promise<JSX.Element> {
+	const t = await getExtracted({ locale });
 	return (
 		<footer
 			className="px-6 py-6 space-y-4 bg-white border-t border-gray-200 2xl:space-y-12 2xl:py-12"
@@ -41,7 +26,7 @@ export function PageFooter(): JSX.Element {
 						<img
 							className="h-8 2xl:h-10"
 							src="/assets/images/uni-vienna-logo.svg"
-							alt={labels[locale].univie}
+							alt={t("University of Vienna")}
 							loading="lazy"
 						/>
 					</a>
@@ -57,7 +42,7 @@ export function PageFooter(): JSX.Element {
 						<img
 							className="h-8 2xl:h-10"
 							src="/assets/images/fwf-logo.svg"
-							alt={labels[locale].fwf}
+							alt={t("Austrian Science Fund")}
 							loading="lazy"
 						/>
 					</a>
@@ -73,7 +58,7 @@ export function PageFooter(): JSX.Element {
 						<img
 							className="h-8 2xl:h-10"
 							src="/assets/images/acdh-logo.svg"
-							alt={labels[locale].acdh}
+							alt={t("Austrian Centre for Digital Humanities and Cultural Heritage")}
 							loading="lazy"
 						/>
 					</a>
@@ -83,9 +68,10 @@ export function PageFooter(): JSX.Element {
 				<span>&copy; {new Date().getFullYear()} | </span>
 				<Link
 					href="/imprint"
+					locale={locale}
 					className="p-1 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 				>
-					{labels[locale].imprint}
+					{t("Imprint")}
 				</Link>
 			</div>
 		</footer>

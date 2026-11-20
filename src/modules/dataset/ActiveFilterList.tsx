@@ -1,6 +1,7 @@
+import { useExtracted } from "next-intl";
+
 import { useSolaFilterOptions } from "@/lib/sola/hooks";
 import type { SolaPassagesFilter } from "@/lib/sola/types";
-import { useDatasetLabels } from "@/modules/dataset/labels";
 import { Badge } from "@/modules/ui/Badge";
 import { ClearButton } from "@/modules/ui/ClearButton";
 import { TooltipTrigger } from "@/modules/ui/TooltipTrigger";
@@ -25,7 +26,7 @@ export function ActiveFilterList({
 	searchTerm: string | undefined;
 	setSearchTerm: (searchTerm: string | undefined) => void;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
 
 	const options = useSolaFilterOptions();
 
@@ -42,24 +43,36 @@ export function ActiveFilterList({
 	const hasNameFilter = name !== undefined && name.length > 0;
 
 	const groups: Array<IdsFilterGroup> = [
-		{ key: "authors", label: t.authors, ids: filter.authors ?? [], names: options.authors },
+		{
+			key: "authors",
+			label: [t("Author"), t("Authors")],
+			ids: filter.authors ?? [],
+			names: options.authors,
+		},
 		{
 			key: "publications",
-			label: t.entityType.Publication,
+			label: [t("Work"), t("Works")],
 			ids: filter.publications ?? [],
 			names: options.publications,
 		},
 		{
 			key: "topics",
-			label: t.topics,
+			label: [t("Topic"), t("Topics")],
 			ids: filter.topics ?? [],
 			names: options.passageTopics.data,
 		},
-		{ key: "types", label: t.types, ids: filter.types ?? [], names: options.passageTypes.data },
+		{
+			key: "types",
+			label: [t("Type"), t("Types")],
+			ids: filter.types ?? [],
+			names: options.passageTypes.data,
+		},
 	];
 	const activeGroups = groups.filter((group) => {
 		return group.ids.length > 0;
 	});
+
+	const filteredBy = t("Filtered by");
 
 	if (!hasNameFilter && activeGroups.length === 0) {
 		return <div className="pb-2 text-xs">&nbsp;</div>;
@@ -67,16 +80,16 @@ export function ActiveFilterList({
 
 	return (
 		<div className="flex flex-wrap items-center text-xs text-gray-500 md:justify-end">
-			<h2 className="sr-only">{t.filteredBy}:</h2>
+			<h2 className="sr-only">{t("Filtered by")}:</h2>
 			<ul className="flex flex-wrap items-center min-w-0 md:justify-end md:space-x-1">
 				{hasNameFilter ? (
 					<li className="flex min-w-0 mb-1 mr-1 md:mr-0">
 						<dl className="flex items-center min-w-0">
-							<dt className="sr-only">{t.title}:</dt>
+							<dt className="sr-only">{t("Title")}:</dt>
 							<dd className="flex min-w-0">
 								<ActiveFilterBadge
 									label={name}
-									tooltip={`${t.filteredBy} ${t.title}: ${name}`}
+									tooltip={`${t("Filtered by")} ${t("Title")}: ${name}`}
 									onRemove={() => {
 										setFilter({ name: undefined });
 									}}
@@ -98,7 +111,7 @@ export function ActiveFilterList({
 												<li key={id} className="flex min-w-0 mb-1 mr-1 md:mr-0">
 													<ActiveFilterBadge
 														label={name}
-														tooltip={`${t.filteredBy} ${label[0]}: ${name ?? ""}`}
+														tooltip={`${filteredBy} ${label[0]}: ${name ?? ""}`}
 														onRemove={() => {
 															const remaining = ids.filter((selectedId) => {
 																return selectedId !== id;

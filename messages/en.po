@@ -1,0 +1,332 @@
+msgid ""
+msgstr ""
+"Language: en\n"
+"Content-Type: text/plain; charset=utf-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: @eloqnt/format-po\n"
+"X-Message-Key: msgctxt\n"
+
+#: src/app/[locale]/about/page.tsx
+#: src/modules/page/PageHeader.tsx
+msgctxt "gwKQ_W"
+msgid "About the project"
+msgstr "About the project"
+
+#: src/app/[locale]/dataset/page.tsx
+#: src/modules/dataset/useEntityTypeLabels.ts
+#: src/modules/dataset/VisualizationPanel.tsx
+#: src/modules/page/PageHeader.tsx
+#: src/modules/visualization/Visualization.tsx
+msgctxt "p8Tctj"
+msgid "Passages"
+msgstr "Passages"
+
+#: src/app/[locale]/imprint/page.tsx
+#: src/modules/page/PageFooter.tsx
+msgctxt "xYJkOZ"
+msgid "Imprint"
+msgstr "Imprint"
+
+#: src/app/[locale]/page.tsx
+#: src/modules/page/PageHeader.tsx
+msgctxt "ejEGdx"
+msgid "Home"
+msgstr "Home"
+
+#: src/app/[locale]/page.tsx
+msgctxt "ciZzmF"
+msgid "Explore the dataset"
+msgstr "Explore the dataset"
+
+#: src/app/[locale]/page.tsx
+msgctxt "C2Knh7"
+msgid "Christus Sol Invictus mosaic, Vatican Necropolis (third century)"
+msgstr "Christus Sol Invictus mosaic, Vatican Necropolis (third century)"
+
+#: src/app/[locale]/posts/[id]/page.tsx
+msgctxt "Vlx13n"
+msgid "Attachments"
+msgstr "Attachments"
+
+#: src/app/[locale]/posts/[id]/page.tsx
+msgctxt "Fip4H8"
+msgid "Images"
+msgstr "Images"
+
+#: src/app/[locale]/posts/page.tsx
+#: src/modules/page/PageHeader.tsx
+msgctxt "NZyhSX"
+msgid "News"
+msgstr "News"
+
+#: src/app/[locale]/posts/page.tsx
+msgctxt "S--WdB"
+msgid "Read more"
+msgstr "Read more"
+
+#: src/app/[locale]/team/page.tsx
+#: src/modules/page/PageHeader.tsx
+msgctxt "wsUmh9"
+msgid "Team"
+msgstr "Team"
+
+#: src/app/[locale]/team/page.tsx
+msgctxt "uPWPWw"
+msgid "Researchers"
+msgstr "Researchers"
+
+#: src/app/[locale]/team/page.tsx
+msgctxt "z68wuN"
+msgid "Former team members"
+msgstr "Former team members"
+
+#: src/app/[locale]/team/page.tsx
+msgctxt "RXGEva"
+msgid "IT-Team"
+msgstr "IT-Team"
+
+#: src/app/[locale]/team/page.tsx
+msgctxt "O95R3Z"
+msgid "Phone"
+msgstr "Phone"
+
+#: src/app/[locale]/team/page.tsx
+msgctxt "sy-pv5"
+msgid "Email"
+msgstr "Email"
+
+#: src/app/[locale]/team/page.tsx
+msgctxt "JkLHGw"
+msgid "Website"
+msgstr "Website"
+
+#: src/app/global-not-found.tsx
+msgctxt "QRccCM"
+msgid "Page not found"
+msgstr "Page not found"
+
+#: src/app/global-not-found.tsx
+msgctxt "osJs96"
+msgid "Page not found."
+msgstr "Page not found."
+
+#: src/modules/dataset/ActiveFilterList.tsx
+msgctxt "tWkQ2J"
+msgid "Author"
+msgstr "Author"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+#: src/modules/dataset/FilterPanel.tsx
+msgctxt "XgdZSb"
+msgid "Authors"
+msgstr "Authors"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "GcPFLS"
+msgid "Work"
+msgstr "Work"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+#: src/modules/dataset/FilterPanel.tsx
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "6D7u_C"
+msgid "Works"
+msgstr "Works"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+#: src/modules/dataset/FilterPanel.tsx
+msgctxt "UdtpV7"
+msgid "Topic"
+msgstr "Topic"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+#: src/modules/dataset/details/PrintButton.tsx
+#: src/modules/dataset/details/Properties.tsx
+msgctxt "kc79d3"
+msgid "Topics"
+msgstr "Topics"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+msgctxt "-U6ozc"
+msgid "Type"
+msgstr "Type"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+#: src/modules/dataset/details/PrintButton.tsx
+#: src/modules/dataset/details/Properties.tsx
+#: src/modules/dataset/FilterPanel.tsx
+msgctxt "kxP9GJ"
+msgid "Types"
+msgstr "Types"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+msgctxt "_6Xnjh"
+msgid "Filtered by"
+msgstr "Filtered by"
+
+#: src/modules/dataset/ActiveFilterList.tsx
+msgctxt "9a9-ww"
+msgid "Title"
+msgstr "Title"
+
+#: src/modules/dataset/details/Authors.tsx
+#: src/modules/dataset/details/PrintButton.tsx
+msgctxt "yRBs3T"
+msgid "{count, plural, one {Author} other {Authors}}"
+msgstr "{count, plural, one {Author} other {Authors}}"
+
+#: src/modules/dataset/details/BiblePassages.tsx
+#: src/modules/ui/Spinner.tsx
+msgctxt "T4VxQN"
+msgid "Loading…"
+msgstr "Loading…"
+
+#: src/modules/dataset/details/BiblePassages.tsx
+#: src/modules/dataset/details/PrintButton.tsx
+msgctxt "pXHYqJ"
+msgid "Bible passages"
+msgstr "Bible passages"
+
+#: src/modules/dataset/details/CopyLinkButton.tsx
+msgctxt "u5aHb4"
+msgid "Copy Link"
+msgstr "Copy Link"
+
+#: src/modules/dataset/details/EditedBy.tsx
+#: src/modules/dataset/details/PrintButton.tsx
+msgctxt "WtQPl7"
+msgid "Edited by"
+msgstr "Edited by"
+
+#: src/modules/dataset/details/PrintButton.tsx
+msgctxt "M2sqvN"
+msgid "Relations to"
+msgstr "Relations to"
+
+#: src/modules/dataset/details/PrintButton.tsx
+#: src/modules/dataset/details/Texts.tsx
+msgctxt "vt5DKm"
+msgid "Bibliography"
+msgstr "Bibliography"
+
+#: src/modules/dataset/details/PrintButton.tsx
+msgctxt "h52-XF"
+msgid "Print Document"
+msgstr "Print Document"
+
+#: src/modules/dataset/details/Properties.tsx
+msgctxt "aI80kg"
+msgid "Properties"
+msgstr "Properties"
+
+#: src/modules/dataset/details/Relations.tsx
+msgctxt "mn5pjI"
+msgid "Relations"
+msgstr "Relations"
+
+#: src/modules/dataset/details/Texts.tsx
+msgctxt "tmSt5N"
+msgid "Additional texts"
+msgstr "Additional texts"
+
+#: src/modules/dataset/DetailsPanel.tsx
+msgctxt "3oDboE"
+msgid "Please select an entity in the timeline above to view details."
+msgstr "Please select an entity in the timeline above to view details."
+
+#: src/modules/dataset/FilterPanel.tsx
+#: src/modules/visualization/Visualization.tsx
+msgctxt "_VnDMl"
+msgid "Other"
+msgstr "Other"
+
+#: src/modules/dataset/FilterPanel.tsx
+msgctxt "JjKmHO"
+msgid "Filter passages"
+msgstr "Filter passages"
+
+#: src/modules/dataset/FilterPanel.tsx
+msgctxt "jm_spn"
+msgid "Reset"
+msgstr "Reset"
+
+#: src/modules/dataset/FilterPanel.tsx
+msgctxt "xmcVZ0"
+msgid "Search"
+msgstr "Search"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "m1czzY"
+msgid "Event"
+msgstr "Event"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "ZvKSfJ"
+msgid "Events"
+msgstr "Events"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "dMwAna"
+msgid "Institution"
+msgstr "Institution"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "_XO6LE"
+msgid "Institutions"
+msgstr "Institutions"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "Yuy6mC"
+msgid "Passage"
+msgstr "Passage"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "1mnmBr"
+msgid "Person"
+msgstr "Person"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "JZnNTW"
+msgid "Persons"
+msgstr "Persons"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "VfktxJ"
+msgid "Place"
+msgstr "Place"
+
+#: src/modules/dataset/useEntityTypeLabels.ts
+msgctxt "QQInFS"
+msgid "Places"
+msgstr "Places"
+
+#: src/modules/page/PageFooter.tsx
+msgctxt "IfCkHZ"
+msgid "University of Vienna"
+msgstr "University of Vienna"
+
+#: src/modules/page/PageFooter.tsx
+msgctxt "OT6YXR"
+msgid "Austrian Science Fund"
+msgstr "Austrian Science Fund"
+
+#: src/modules/page/PageFooter.tsx
+msgctxt "bVgNFS"
+msgid "Austrian Centre for Digital Humanities and Cultural Heritage"
+msgstr "Austrian Centre for Digital Humanities and Cultural Heritage"
+
+#: src/modules/page/PageHeader.tsx
+msgctxt "tKMlOc"
+msgid "Menu"
+msgstr "Menu"
+
+#: src/modules/page/PageHeader.tsx
+msgctxt "Y32uo7"
+msgid "Navigation menu"
+msgstr "Navigation menu"
+
+#: src/modules/ui/ClearButton.tsx
+msgctxt "_GCoTA"
+msgid "Clear"
+msgstr "Clear"

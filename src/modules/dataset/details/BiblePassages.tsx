@@ -1,7 +1,7 @@
 import type { QueryObserverResult } from "@tanstack/react-query";
+import { useExtracted } from "next-intl";
 
 import { count } from "@/lib/util/count";
-import { useDatasetLabels } from "@/modules/dataset/labels";
 import { Badge } from "@/modules/ui/Badge";
 
 export function BiblePassages({
@@ -9,15 +9,15 @@ export function BiblePassages({
 }: {
 	passages: QueryObserverResult<Record<string, string>, unknown>;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
 
-	if (passages.isLoading) return <span>Loading&hellip;</span>;
+	if (passages.isLoading) return <span>{t("Loading…")}</span>;
 	if (passages.data === undefined || count(passages.data) === 0) return null;
 
 	return (
 		<div className="space-y-1">
 			<h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
-				{t.biblePassages}
+				{t("Bible passages")}
 			</h3>
 			<ul className="flex flex-wrap items-center text-xs">
 				{Object.entries(passages.data).map(([reference, url]) => {
