@@ -20,6 +20,7 @@
 		"dev": "next dev",
 		"format:check": "oxfmt --check .",
 		"format:fix": "oxfmt --write .",
+		"prepare": "pnpm run types:generate",
 		"lint:check": "oxlint --report-unused-disable-directives",
 		"lint:fix": "pnpm run lint:check --fix",
 		"start": "next start",
