@@ -1,9 +1,9 @@
 import type { QueryObserverResult } from "@tanstack/react-query";
 import cx from "clsx";
+import { useExtracted } from "next-intl";
 
 import type { SolaListEntity } from "@/api/sola/client";
 import type { SolaSelectedEntity } from "@/lib/sola/types";
-import { useDatasetLabels } from "@/modules/dataset/labels";
 import { Badge } from "@/modules/ui/Badge";
 import { Spinner } from "@/modules/ui/Spinner";
 import sola from "~/config/sola.json" with { type: "json" };
@@ -17,7 +17,7 @@ export function Authors({
 	authors: QueryObserverResult<Array<SolaListEntity>, unknown>;
 	setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
 
 	if (authors.isLoading)
 		return (
@@ -29,7 +29,9 @@ export function Authors({
 
 	return (
 		<dl className="pt-1 text-xs text-gray-700">
-			<dt className="sr-only">{t.authors[authors.data.length === 1 ? 0 : 1]}</dt>
+			<dt className="sr-only">
+				{t("{count, plural, one {Author} other {Authors}}", { count: authors.data.length })}
+			</dt>
 			<dd className="flex items-center space-x-1">
 				{authors.data.map((author) => {
 					return (

@@ -1,43 +1,27 @@
 import type { Metadata } from "next";
+import { getExtracted, getLocale } from "next-intl/server";
 import type { JSX } from "react";
 
 import { getContentPage } from "@/api/content";
-import { getLocale } from "@/lib/i18n/getLocale";
 import { createMetadata } from "@/modules/metadata/createMetadata";
 import { Container } from "@/modules/ui/Container";
-
-const labels = {
-	en: {
-		page: {
-			title: "About the project",
-		},
-	},
-	de: {
-		page: {
-			title: "Über das Projekt",
-		},
-	},
-} as const;
 
 type ContentPageMetadata = {
 	title: string;
 };
 
-interface AboutPageProps {
-	params: Promise<{ locale: string }>;
-}
+export async function generateMetadata(): Promise<Metadata> {
+	const locale = await getLocale();
+	const t = await getExtracted();
 
-export async function generateMetadata(props: AboutPageProps): Promise<Metadata> {
-	const locale = await getLocale(props.params);
-
-	return createMetadata({ locale, title: labels[locale].page.title, path: "/about" });
+	return createMetadata({ locale, title: t("About the project"), path: "/about" });
 }
 
 /**
  * About page.
  */
-export default async function AboutPage(props: AboutPageProps): Promise<JSX.Element> {
-	const locale = await getLocale(props.params);
+export default async function AboutPage(): Promise<JSX.Element> {
+	const locale = await getLocale();
 
 	const page = await getContentPage<ContentPageMetadata>("about", locale);
 

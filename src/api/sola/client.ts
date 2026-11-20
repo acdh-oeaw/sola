@@ -1,5 +1,6 @@
+import type { Locale } from "next-intl";
+
 import { request } from "@/api/sola/runtime";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import type { QueryParams } from "@/lib/url/addQueryParams";
 import site from "~/config/site.json" with { type: "json" };
 
@@ -165,7 +166,7 @@ type URLString = string;
 
 interface RequestConfig {
 	options?: RequestInit;
-	locale: SiteLocale;
+	locale: Locale;
 }
 
 interface GetAllRequestConfig<T extends QueryParams = QueryParams> extends RequestConfig {
@@ -623,7 +624,7 @@ export async function getSolaUsers({
 /**
  * Until the backend implements proper i18n, manually map the `name` field.
  */
-function localise<T extends { name: string }>(entity: T, locale: SiteLocale) {
+function localise<T extends { name: string }>(entity: T, locale: Locale) {
 	if (locale === "de") return entity;
 	const nameEnglish = (entity as { name_english?: string | null }).name_english;
 	if (nameEnglish != null && nameEnglish.length > 0) {
@@ -635,10 +636,6 @@ function localise<T extends { name: string }>(entity: T, locale: SiteLocale) {
 /**
  * Adds entity type and localises entity label.
  */
-function addEntityType<T extends SolaEntityBase>(
-	entity: T,
-	type: SolaEntityType,
-	locale: SiteLocale,
-) {
+function addEntityType<T extends SolaEntityBase>(entity: T, type: SolaEntityType, locale: Locale) {
 	return localise({ ...entity, type }, locale);
 }

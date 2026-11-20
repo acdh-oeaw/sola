@@ -1,16 +1,14 @@
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
+import type { Locale } from "next-intl";
+
+import { getPathname } from "@/i18n/navigation";
 import { type QueryParams, addQueryParams } from "@/lib/url/addQueryParams";
 import site from "~/config/site.json" with { type: "json" };
 
-const { url: siteUrl } = site;
-
 /**
- * Returns the canonical URL for a page path in the given locale.
- *
- * Canonical URLs always include the locale, also for the default locale.
+ * Returns the canonical URL for a page path (without locale prefix) in the given locale.
  */
-export function createCanonicalUrl(locale: SiteLocale, path: string, query?: QueryParams): string {
-	const url = new URL(`${locale}${path}`, siteUrl);
+export function createCanonicalUrl(locale: Locale, path: string, query?: QueryParams): string {
+	const url = new URL(getPathname({ locale, href: path }), site.url);
 
 	if (query !== undefined) {
 		addQueryParams(url, query);

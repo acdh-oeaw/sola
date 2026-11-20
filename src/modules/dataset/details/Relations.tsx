@@ -1,8 +1,9 @@
 import cx from "clsx";
+import { useExtracted } from "next-intl";
 
 import type { SolaEntityRelation, SolaEntityType } from "@/api/sola/client";
 import type { SolaSelectedEntity } from "@/lib/sola/types";
-import { useDatasetLabels } from "@/modules/dataset/labels";
+import { useEntityTypeLabels } from "@/modules/dataset/useEntityTypeLabels";
 import { Badge } from "@/modules/ui/Badge";
 import sola from "~/config/sola.json" with { type: "json" };
 
@@ -15,7 +16,8 @@ export function Relations({
 	relations: Record<SolaEntityType, Array<SolaEntityRelation>>;
 	setSelectedSolaEntity: (entity: SolaSelectedEntity | null) => void;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
+	const entityTypeLabels = useEntityTypeLabels();
 
 	if (
 		relations.Event.length === 0 &&
@@ -31,7 +33,7 @@ export function Relations({
 	return (
 		<div className="space-y-1">
 			<h3 className="text-xs font-semibold tracking-wider text-gray-500 uppercase">
-				{t.relations}
+				{t("Relations")}
 			</h3>
 			<dl className="space-y-1 text-xs text-gray-700">
 				{Object.entries(relations).map(([type, relations]) => {
@@ -46,7 +48,7 @@ export function Relations({
 
 					return (
 						<div key={type}>
-							<dt className="sr-only">{t.entityType[type as SolaEntityType][1]}</dt>
+							<dt className="sr-only">{entityTypeLabels[type as SolaEntityType][1]}</dt>
 							<dd>
 								<ul className="flex flex-wrap items-center">
 									{relations.map((relation) => {

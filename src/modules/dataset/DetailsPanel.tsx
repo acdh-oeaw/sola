@@ -1,5 +1,6 @@
 import type { QueryObserverResult } from "@tanstack/react-query";
 import cx from "clsx";
+import { useExtracted } from "next-intl";
 import { Fragment } from "react";
 
 import type { SolaEntityDetails, SolaEntityRelation, SolaEntityType } from "@/api/sola/client";
@@ -15,7 +16,6 @@ import { PrintButton } from "@/modules/dataset/details/PrintButton";
 import { Properties } from "@/modules/dataset/details/Properties";
 import { Relations } from "@/modules/dataset/details/Relations";
 import { Texts } from "@/modules/dataset/details/Texts";
-import { useDatasetLabels } from "@/modules/dataset/labels";
 import { createSchemaOrg, SchemaOrg } from "@/modules/metadata/SchemaOrg";
 import { Spinner } from "@/modules/ui/Spinner";
 import { DurationTimeline } from "@/modules/visualization/DurationTimeline";
@@ -34,7 +34,7 @@ export function DetailsPanel({
 	selectedSolaEntityRelations: Record<SolaEntityType, Array<SolaEntityRelation>>;
 	setFilter: (filter: SolaPassagesFilter) => void;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
 
 	const solaEntityTexts = useSolaTexts(selectedSolaEntity.data);
 	const solaEntityBibliography = useSolaEntityBibliography(selectedSolaEntity.data);
@@ -60,7 +60,9 @@ export function DetailsPanel({
 	if (selectedSolaEntity.data === undefined) {
 		return (
 			<div className="flex flex-col items-center justify-center text-gray-500">
-				<p className="p-6 text-center">{t.selectEntityForDetails}</p>
+				<p className="p-6 text-center">
+					{t("Please select an entity in the timeline above to view details.")}
+				</p>
 			</div>
 		);
 	}

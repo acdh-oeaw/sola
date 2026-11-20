@@ -1,3 +1,4 @@
+import { useExtracted, useLocale } from "next-intl";
 import { Fragment, useRef } from "react";
 
 import type {
@@ -8,11 +9,10 @@ import type {
 	SolaListEntity,
 	SolaTextDetails,
 } from "@/api/sola/client";
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import { useSolaUsers } from "@/lib/sola/hooks";
 import { printHtml } from "@/lib/util/printHtml";
 import { BibliographicReference } from "@/modules/dataset/details/Bibliography";
-import { useDatasetLabels } from "@/modules/dataset/labels";
+import { useEntityTypeLabels } from "@/modules/dataset/useEntityTypeLabels";
 import { Document as DocumentIcon } from "@/modules/icons/Document";
 import site from "~/config/site.json" with { type: "json" };
 
@@ -38,8 +38,9 @@ export function PrintButton({
 	editorId?: { label: string } | null;
 }) {
 	const containerRef = useRef<HTMLDivElement>(null);
-	const t = useDatasetLabels();
-	const locale = useCurrentLocale();
+	const t = useExtracted();
+	const entityTypeLabels = useEntityTypeLabels();
+	const locale = useLocale();
 
 	const users = useSolaUsers();
 	const userId = editorId?.label;
@@ -79,7 +80,9 @@ export function PrintButton({
 				<dl>
 					{authors && authors.length ? (
 						<Fragment>
-							<dt>{t.authors[authors.length === 1 ? 0 : 1]}:</dt>
+							<dt>
+								{t("{count, plural, one {Author} other {Authors}}", { count: authors.length })}:
+							</dt>
 							<dd>
 								{authors
 									.map((author) => {
@@ -93,7 +96,7 @@ export function PrintButton({
 						<Fragment>
 							{entity.kind.length ? (
 								<Fragment>
-									<dt>{t.types[1]}</dt>
+									<dt>{t("Types")}</dt>
 									<dd>
 										{entity.kind
 											.map((type) => {
@@ -105,7 +108,7 @@ export function PrintButton({
 							) : null}
 							{entity.topic.length ? (
 								<Fragment>
-									<dt>{t.topics[1]}</dt>
+									<dt>{t("Topics")}</dt>
 									<dd>
 										{entity.topic
 											.map((topic) => {
@@ -122,7 +125,7 @@ export function PrintButton({
 						return (
 							<Fragment key={type}>
 								<dt>
-									{t.relationsTo} {t.entityType[type as SolaEntityType][1]}:
+									{t("Relations to")} {entityTypeLabels[type as SolaEntityType][1]}:
 								</dt>
 								<dd>
 									{relations
@@ -136,7 +139,7 @@ export function PrintButton({
 					})}
 					{biblePassages && Object.keys(biblePassages).length ? (
 						<Fragment>
-							<dt>{t.biblePassages}</dt>
+							<dt>{t("Bible passages")}</dt>
 							<dd>{Object.keys(biblePassages).join(", ")}</dd>
 						</Fragment>
 					) : null}
@@ -163,7 +166,7 @@ export function PrintButton({
 				})}
 				{bibliography && bibliography.length > 0 ? (
 					<Fragment>
-						<h2>{t.bibliography}</h2>
+						<h2>{t("Bibliography")}</h2>
 						{bibliography.map((reference) => {
 							return <BibliographicReference key={reference.pk} reference={reference} />;
 						})}
@@ -172,7 +175,7 @@ export function PrintButton({
 				{editor !== undefined ? (
 					<p>
 						<small>
-							{t.editedBy} {[editor.first_name, editor.last_name].join(" ")}
+							{t("Edited by")} {[editor.first_name, editor.last_name].join(" ")}
 						</small>
 					</p>
 				) : null}
@@ -186,7 +189,7 @@ export function PrintButton({
 				type="button"
 			>
 				<DocumentIcon />
-				<span>{t.printDocument}</span>
+				<span>{t("Print Document")}</span>
 			</button>
 		</Fragment>
 	);

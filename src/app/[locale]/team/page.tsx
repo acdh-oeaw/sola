@@ -1,68 +1,38 @@
 import type { Metadata } from "next";
+import { getExtracted, getLocale } from "next-intl/server";
 import { type JSX, Fragment } from "react";
 
 import { type ContentTeamMember, getContentPage, getContentTeamMembers } from "@/api/content";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getLocale } from "@/lib/i18n/getLocale";
 import { Email } from "@/modules/icons/Email";
 import { Globe } from "@/modules/icons/Globe";
 import { Phone } from "@/modules/icons/Phone";
 import { createMetadata } from "@/modules/metadata/createMetadata";
 import { Container } from "@/modules/ui/Container";
 
-const labels = {
-	en: {
-		page: {
-			title: "Team",
-		},
-		data: {
-			phone: "Phone",
-			email: "Email",
-			website: "Website",
-		},
-		group: {
-			current: "Researchers",
-			former: "Former team members",
-			acdh: "IT-Team",
-		},
-	},
-	de: {
-		page: {
-			title: "Team",
-		},
-		data: {
-			phone: "Telefon",
-			email: "Email",
-			website: "Website",
-		},
-		group: {
-			current: "Wissenschaftliche Mitarbeiter*innen",
-			former: "Ehemalige Mitarbeiterinnen",
-			acdh: "IT-Team",
-		},
-	},
-} as const;
-
 type ContentPageMetadata = {
 	title: string;
 };
 
-interface TeamPageProps {
-	params: Promise<{ locale: string }>;
-}
+export async function generateMetadata(): Promise<Metadata> {
+	const locale = await getLocale();
+	const t = await getExtracted();
 
-export async function generateMetadata(props: TeamPageProps): Promise<Metadata> {
-	const locale = await getLocale(props.params);
-
-	return createMetadata({ locale, title: labels[locale].page.title, path: "/team" });
+	return createMetadata({ locale, title: t("Team"), path: "/team" });
 }
 
 /**
  * Team page.
  */
-export default async function TeamPage(props: TeamPageProps): Promise<JSX.Element> {
-	const locale = await getLocale(props.params);
-	const t = labels[locale];
+export default async function TeamPage(): Promise<JSX.Element> {
+	const locale = await getLocale();
+	const t = await getExtracted();
+
+	const groupLabels: Record<string, string> = {
+		current: t("Researchers"),
+		former: t("Former team members"),
+		acdh: t("IT-Team"),
+	};
+	const dataLabels = { phone: t("Phone"), email: t("Email"), website: t("Website") };
 
 	const page = await getContentPage<ContentPageMetadata>("team", locale);
 	const team = await getContentTeamMembers(locale);
@@ -89,14 +59,12 @@ export default async function TeamPage(props: TeamPageProps): Promise<JSX.Elemen
 					});
 					return (
 						<div key={group}>
-							<h2 className="my-4 text-2xl font-bold text-gray-700">
-								{t.group[group as "acdh" | "current" | "former"]}
-							</h2>
+							<h2 className="my-4 text-2xl font-bold text-gray-700">{groupLabels[group]}</h2>
 							<ul className="my-8 space-y-10">
 								{sorted.map((teamMember) => {
 									return (
 										<li key={teamMember.id}>
-											<TeamMember teamMember={teamMember} t={t.data} />
+											<TeamMember teamMember={teamMember} t={dataLabels} />
 										</li>
 									);
 								})}
@@ -114,7 +82,7 @@ function TeamMember({
 	t,
 }: {
 	teamMember: ContentTeamMember;
-	t: (typeof labels)[SiteLocale]["data"];
+	t: { phone: string; email: string; website: string };
 }) {
 	const hasWebsite = teamMember.website !== undefined && teamMember.website.length > 0;
 	const { email, phone } = teamMember;

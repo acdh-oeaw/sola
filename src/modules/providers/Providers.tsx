@@ -7,10 +7,10 @@ import {
 	QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
+import { useLocale } from "next-intl";
 import type { JSX, ReactNode } from "react";
 import { I18nProvider } from "react-aria-components";
 
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { useSolaEntities, useSolaFilterOptions } from "@/lib/sola/hooks";
 
 function createQueryClient() {
@@ -40,18 +40,18 @@ function getQueryClient() {
 
 export interface ProvidersProps {
 	children: ReactNode;
-	locale: SiteLocale;
 }
 
 /**
  * Context providers.
  */
 export function Providers(props: ProvidersProps): JSX.Element {
+	const locale = useLocale();
 	const queryClient = getQueryClient();
 
 	return (
 		<QueryClientProvider client={queryClient}>
-			<I18nProvider locale={props.locale}>{props.children}</I18nProvider>
+			<I18nProvider locale={locale}>{props.children}</I18nProvider>
 			<Prefetch />
 			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>

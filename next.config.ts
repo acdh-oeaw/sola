@@ -1,4 +1,21 @@
 import type { NextConfig } from "next";
+import createNextIntlPlugin from "next-intl/plugin";
+
+import site from "~/config/site.json" with { type: "json" };
+
+const withNextIntl = createNextIntlPlugin({
+	experimental: {
+		/** Extract messages from `useExtracted` and `getExtracted` calls during dev and build. */
+		extract: true,
+		messages: {
+			path: "./messages",
+			format: "po",
+			locales: site.locales,
+			sourceLocale: "en",
+		},
+		srcPath: "./src",
+	},
+});
 
 const config: NextConfig = {
 	experimental: {
@@ -23,4 +40,4 @@ const config: NextConfig = {
 	},
 };
 
-export default config;
+export default withNextIntl(config);

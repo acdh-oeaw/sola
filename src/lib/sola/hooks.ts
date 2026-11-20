@@ -1,5 +1,6 @@
 import { groupBy, keyBy } from "@acdh-oeaw/lib";
 import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import { type Locale, useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 
@@ -30,8 +31,6 @@ import {
 	getSolaUsers,
 } from "@/api/sola/client";
 import { useHierarchicalData } from "@/lib/data/useHierarchicalData";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import type { SolaPassagesFilter, SolaSelectedEntity } from "@/lib/sola/types";
 import { getQueryParam } from "@/lib/url/getQueryParam";
 import { capitalize } from "@/lib/util/capitalize";
@@ -48,7 +47,7 @@ const defaultQuery = { limit: 10_000 };
  * Fetches all SOLA entities and returns entities mapped by id.
  */
 export function useSolaEntities() {
-	const locale = useCurrentLocale();
+	const locale = useLocale();
 
 	return useQuery({
 		queryKey: ["getSolaEntities", locale, {}],
@@ -136,7 +135,7 @@ export function useSolaFilteredPassages(
 	filter: SolaPassagesFilter,
 	searchTerm: string | undefined = "",
 ) {
-	const locale = useCurrentLocale();
+	const locale = useLocale();
 
 	const { passage } = useSolaRelationTypes();
 
@@ -214,7 +213,7 @@ export function isSolaEntityType(type: string): type is SolaEntityType {
  */
 export function useSolaSelectedEntity() {
 	const searchParams = useSearchParams();
-	const locale = useCurrentLocale();
+	const locale = useLocale();
 	const queryClient = useQueryClient();
 
 	/**
@@ -311,7 +310,7 @@ export function useSolaSelectedEntity() {
 function getSolaEntityById(
 	id: number,
 	type: SolaEntityType,
-	locale: SiteLocale,
+	locale: Locale,
 ): Promise<SolaEntityDetails> {
 	switch (type) {
 		case "Event":
@@ -333,7 +332,7 @@ function getSolaEntityById(
  * Fetches possible values for SOLA passage filters.
  */
 export function useSolaFilterOptions() {
-	const locale = useCurrentLocale();
+	const locale = useLocale();
 
 	const passageTopics = useQuery({
 		queryKey: ["getSolaPassageTopics", locale, {}],
@@ -500,7 +499,7 @@ function getSolaBibleRelationIds(passage: SolaPassageDetails | undefined): Array
 	);
 }
 
-function solaPublicationQueryOptions(locale: SiteLocale, id: number | undefined) {
+function solaPublicationQueryOptions(locale: Locale, id: number | undefined) {
 	return queryOptions({
 		queryKey: ["getPublicationById", locale, id, {}],
 		queryFn: () => {
@@ -509,7 +508,7 @@ function solaPublicationQueryOptions(locale: SiteLocale, id: number | undefined)
 	});
 }
 
-function solaPassagePublicationRelationsQueryOptions(locale: SiteLocale, ids: Array<number>) {
+function solaPassagePublicationRelationsQueryOptions(locale: Locale, ids: Array<number>) {
 	const query = { id__in: ids };
 	return queryOptions({
 		queryKey: ["getSolaPassagePublicationRelations", locale, query],
@@ -524,7 +523,7 @@ function solaPassagePublicationRelationsQueryOptions(locale: SiteLocale, ids: Ar
  * publication authors and bible passages.
  */
 export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) {
-	const locale = useCurrentLocale();
+	const locale = useLocale();
 
 	const relationTypes = useSolaRelationTypes();
 
@@ -637,7 +636,7 @@ export function useSolaEntityRelations(entity: SolaEntityDetails | undefined) {
 }
 
 function solaEntityBibliographyQueryOptions(
-	locale: SiteLocale,
+	locale: Locale,
 	id: number | undefined,
 	type: SolaEntityType | undefined,
 ) {
@@ -659,7 +658,7 @@ function solaEntityBibliographyQueryOptions(
  * Fetches bibliography for SOLA entity.
  */
 export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
-	const locale = useCurrentLocale();
+	const locale = useLocale();
 
 	const id = entity?.id;
 	const type = entity?.type;
@@ -683,10 +682,7 @@ export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
  * `{ id: 176: label: 'Inhalt (ist zu übertragen zu publications)' }` is ignored.
  */
 export function useSolaTextTypes() {
-	const textTypesByLocale: Record<
-		SolaEntityType,
-		Record<SiteLocale, Array<number>>
-	> = useMemo(() => {
+	const textTypesByLocale: Record<SolaEntityType, Record<Locale, Array<number>>> = useMemo(() => {
 		return {
 			Event: { de: [253], en: [254] },
 			Institution: { de: [180], en: [181] },
@@ -699,7 +695,7 @@ export function useSolaTextTypes() {
 	return textTypesByLocale;
 }
 
-function solaTextTypesQueryOptions(locale: SiteLocale) {
+function solaTextTypesQueryOptions(locale: Locale) {
 	return queryOptions({
 		queryKey: ["getTextTypes", locale, {}],
 		queryFn: () => {
@@ -711,7 +707,7 @@ function solaTextTypesQueryOptions(locale: SiteLocale) {
 /** Include annotations and inline HTML `<mark>` elements. */
 const solaTextsQuery = { highlight: true, inline_annotations: true };
 
-function solaTextsQueryOptions(locale: SiteLocale, ids: Array<number>) {
+function solaTextsQueryOptions(locale: Locale, ids: Array<number>) {
 	return queryOptions({
 		queryKey: ["getSolaTextsByIds", locale, ids, solaTextsQuery],
 		queryFn: () => {
@@ -739,7 +735,7 @@ function getSolaTextIds(entity: SolaEntityDetails | undefined): Array<number> {
  * in `useSolaTextTypes`.
  */
 export function useSolaTexts(entity: SolaEntityDetails | undefined) {
-	const locale = useCurrentLocale();
+	const locale = useLocale();
 
 	/**
 	 * Fetch all text types so we can get the localised text type label, because
@@ -795,7 +791,7 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
  * Provides full user info, grouped by username.
  */
 export function useSolaUsers() {
-	const locale = useCurrentLocale();
+	const locale = useLocale();
 
 	const users = useQuery({
 		queryKey: ["users"],

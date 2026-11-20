@@ -1,3 +1,4 @@
+import { useExtracted } from "next-intl";
 import { type SubmitEvent, Fragment, useEffect, useMemo, useState } from "react";
 
 import type { SolaVocabulary } from "@/api/sola/client";
@@ -6,7 +7,6 @@ import type { Node } from "@/lib/data/useHierarchicalData";
 import { useSortedData } from "@/lib/data/useSortedData";
 import { useSolaFilterOptions, useSolaPassagesFilterOptionsTree } from "@/lib/sola/hooks";
 import type { SolaPassagesFilter } from "@/lib/sola/types";
-import { type DatasetLabels, useDatasetLabels } from "@/modules/dataset/labels";
 import { ClearButton } from "@/modules/ui/ClearButton";
 import { Disclosure } from "@/modules/ui/Disclosure";
 import { ListBox, ListBoxItem, ListBoxSection } from "@/modules/ui/ListBox";
@@ -27,7 +27,7 @@ export function FilterPanel({
 	searchTerm: string | undefined;
 	setSearchTerm: (searchTerm: string | undefined) => void;
 }) {
-	const t = useDatasetLabels();
+	const t = useExtracted();
 
 	const { authors, passageTopics, passageTypes, publications } = useSolaFilterOptions();
 
@@ -68,7 +68,7 @@ export function FilterPanel({
 	const { passageTopicsTree, passageTypesTree } = useSolaPassagesFilterOptionsTree(
 		passageTopics.data,
 		passageTypes.data,
-		t.other,
+		t("Other"),
 	);
 
 	if (
@@ -94,9 +94,9 @@ export function FilterPanel({
 		>
 			<form className="flex flex-col px-4 py-6 space-y-3" onSubmit={onSubmit}>
 				<div className="flex items-center justify-between">
-					<h2 className="font-semibold text-gray-300">{t.filterPassages}</h2>
+					<h2 className="font-semibold text-gray-300">{t("Filter passages")}</h2>
 					<ClearButton
-						aria-label={t.reset}
+						aria-label={t("Reset")}
 						className="p-2 text-gray-300 transition rounded-sm hover:text-gray-200 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-gray-800"
 						onClick={() => {
 							setFilter({
@@ -111,13 +111,13 @@ export function FilterPanel({
 					/>
 				</div>
 				{/* <TextField
-          label={t.title}
+          label={t("Title")}
           value={title}
           onChange={setTitle}
           className="transition focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
         /> */}
 				<TextField
-					label={t.search}
+					label={t("Search")}
 					value={searchTermInput}
 					onChange={setSearchTermInput}
 					className="transition focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
@@ -127,7 +127,7 @@ export function FilterPanel({
 					id="authors-filter"
 					panelId="authors-filter-panel"
 					className="text-gray-300 transition hover:text-white"
-					title={createListboxLabel(t.authors[1], sortedAuthors.length, filter.authors?.length)}
+					title={createListboxLabel(t("Authors"), sortedAuthors.length, filter.authors?.length)}
 				>
 					<ListBox
 						selectionMode="multiple"
@@ -150,7 +150,7 @@ export function FilterPanel({
 					panelId="publications-filter-panel"
 					className="text-gray-300 transition hover:text-white"
 					title={createListboxLabel(
-						t.entityType.Publication[1],
+						t("Works"),
 						sortedPublications.length,
 						filter.publications?.length,
 					)}
@@ -175,7 +175,7 @@ export function FilterPanel({
 					id="passage-types-filter"
 					panelId="passage-types-filter-panel"
 					className="text-gray-300 transition hover:text-white"
-					title={createListboxLabel(t.types[1], passageTypesTree.length, filter.types?.length)}
+					title={createListboxLabel(t("Types"), passageTypesTree.length, filter.types?.length)}
 				>
 					<ListBox
 						selectionMode="multiple"
@@ -213,7 +213,6 @@ export function FilterPanel({
 							topic={topic}
 							filter={filter.topics}
 							setFilter={setFilter}
-							t={t}
 						/>
 					);
 				})}
@@ -232,13 +231,13 @@ function PassageTopicListBox({
 	topic,
 	filter,
 	setFilter,
-	t,
 }: {
 	topic: Node<SolaVocabulary>;
 	filter: Array<number> | undefined;
 	setFilter: (filter: SolaPassagesFilter) => void;
-	t: DatasetLabels;
 }) {
+	const t = useExtracted();
+
 	const topics = useMemo(() => {
 		if (topic.children.size === 0) return [];
 
@@ -270,7 +269,7 @@ function PassageTopicListBox({
 				id={id}
 				panelId={`${id}-panel`}
 				className="text-gray-300 transition hover:text-white"
-				title={createListboxLabel(`${t.topics[0]}: ${topic.name}`, topics.length, selectedCount)}
+				title={createListboxLabel(`${t("Topic")}: ${topic.name}`, topics.length, selectedCount)}
 			>
 				<ListBox
 					selectionMode="multiple"

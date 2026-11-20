@@ -1,11 +1,12 @@
-import { useDatasetLabels } from "@/modules/dataset/labels";
+import { useExtracted } from "next-intl";
+
 import { Link as LinkIcon } from "@/modules/icons/Link";
 import site from "~/config/site.json" with { type: "json" };
 
 const { url: baseUrl } = site;
 
 export function CopyLinkButton() {
-	const t = useDatasetLabels();
+	const t = useExtracted();
 
 	return (
 		<button
@@ -17,7 +18,7 @@ export function CopyLinkButton() {
 			type="button"
 		>
 			<LinkIcon />
-			<span>{t.copyLink}</span>
+			<span>{t("Copy Link")}</span>
 		</button>
 	);
 }

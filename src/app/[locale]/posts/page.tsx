@@ -1,56 +1,33 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import type { Locale } from "next-intl";
+import { getExtracted, getLocale } from "next-intl/server";
 import { type JSX, Fragment } from "react";
 
 import { type ContentPostBase, getContentPage, getContentPostsOverview } from "@/api/content";
+import { Link } from "@/i18n/navigation";
 import { formatDate } from "@/lib/i18n/formatDate";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getLocale } from "@/lib/i18n/getLocale";
-import { createLocalePath } from "@/lib/i18n/localePath";
 import { createMetadata } from "@/modules/metadata/createMetadata";
 import { Container } from "@/modules/ui/Container";
 
 const MAX_POSTS = 10;
 
-const labels = {
-	en: {
-		page: {
-			title: "News",
-		},
-		data: {
-			readMore: "Read more",
-		},
-	},
-	de: {
-		page: {
-			title: "Neuigkeiten",
-		},
-		data: {
-			readMore: "Weiterlesen",
-		},
-	},
-} as const;
-
 type ContentPageMetadata = {
 	title: string;
 };
 
-interface PostsPageProps {
-	params: Promise<{ locale: string }>;
-}
+export async function generateMetadata(): Promise<Metadata> {
+	const locale = await getLocale();
+	const t = await getExtracted();
 
-export async function generateMetadata(props: PostsPageProps): Promise<Metadata> {
-	const locale = await getLocale(props.params);
-
-	return createMetadata({ locale, title: labels[locale].page.title, path: "/posts" });
+	return createMetadata({ locale, title: t("News"), path: "/posts" });
 }
 
 /**
  * Posts page.
  */
-export default async function PostsPage(props: PostsPageProps): Promise<JSX.Element> {
-	const locale = await getLocale(props.params);
-	const t = labels[locale];
+export default async function PostsPage(): Promise<JSX.Element> {
+	const locale = await getLocale();
+	const t = await getExtracted();
 
 	const page = await getContentPage<ContentPageMetadata>("news", locale);
 	const posts = (await getContentPostsOverview(locale)).slice(0, MAX_POSTS);
@@ -65,7 +42,7 @@ export default async function PostsPage(props: PostsPageProps): Promise<JSX.Elem
 				{posts.map((post) => {
 					return (
 						<li key={post.id}>
-							<Post locale={locale} post={post} t={t.data} />
+							<Post locale={locale} post={post} readMore={t("Read more")} />
 						</li>
 					);
 				})}
@@ -77,13 +54,13 @@ export default async function PostsPage(props: PostsPageProps): Promise<JSX.Elem
 function Post({
 	locale,
 	post,
-	t,
+	readMore,
 }: {
-	locale: SiteLocale;
+	locale: Locale;
 	post: ContentPostBase;
-	t: (typeof labels)[SiteLocale]["data"];
+	readMore: string;
 }) {
-	const href = createLocalePath(locale, `/posts/${post.id}`);
+	const href = `/posts/${post.id}`;
 
 	return (
 		<Fragment>
@@ -101,7 +78,7 @@ function Post({
 				href={href}
 				className="inline-block px-4 py-2 text-sm font-semibold tracking-wider text-gray-700 uppercase transition bg-yellow-400 rounded-sm focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400 hover:bg-yellow-500"
 			>
-				{t.readMore}
+				{readMore}
 			</Link>
 		</Fragment>
 	);

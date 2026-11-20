@@ -1,28 +1,12 @@
 import type { Metadata } from "next";
+import { getExtracted, getLocale } from "next-intl/server";
 import Image from "next/image";
 import type { JSX } from "react";
 
 import { type ContentPost, getContentPostById, getContentPostIds } from "@/api/content";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { getLocale } from "@/lib/i18n/getLocale";
+import { routing } from "@/i18n/routing";
 import { createMetadata } from "@/modules/metadata/createMetadata";
 import { Container } from "@/modules/ui/Container";
-import site from "~/config/site.json" with { type: "json" };
-
-const labels = {
-	en: {
-		data: {
-			attachments: "Attachments",
-			images: "Images",
-		},
-	},
-	de: {
-		data: {
-			attachments: "Anhänge",
-			images: "Bilder",
-		},
-	},
-} as const;
 
 interface PostPageProps {
 	params: Promise<{ locale: string; id: string }>;
@@ -33,7 +17,7 @@ interface PostPageProps {
  */
 export async function generateStaticParams(): Promise<Array<{ locale: string; id: string }>> {
 	const params = await Promise.all(
-		(site.locales as Array<SiteLocale>).map(async (locale) => {
+		routing.locales.map(async (locale) => {
 			const ids = await getContentPostIds(locale);
 			return ids.map((id) => {
 				return { locale, id };
@@ -48,7 +32,7 @@ export async function generateStaticParams(): Promise<Array<{ locale: string; id
 export const dynamicParams = false;
 
 export async function generateMetadata(props: PostPageProps): Promise<Metadata> {
-	const locale = await getLocale(props.params);
+	const locale = await getLocale();
 	const { id } = await props.params;
 
 	const post = await getContentPostById(id, locale);
@@ -60,9 +44,10 @@ export async function generateMetadata(props: PostPageProps): Promise<Metadata> 
  * Post page.
  */
 export default async function PostPage(props: PostPageProps): Promise<JSX.Element> {
-	const locale = await getLocale(props.params);
+	const locale = await getLocale();
 	const { id } = await props.params;
-	const t = labels[locale];
+	const t = await getExtracted();
+	const dataLabels = { attachments: t("Attachments"), images: t("Images") };
 
 	const post = await getContentPostById(id, locale);
 
@@ -71,9 +56,9 @@ export default async function PostPage(props: PostPageProps): Promise<JSX.Elemen
 			<div className="prose">
 				<h1>{post.metadata.title}</h1>
 				<div dangerouslySetInnerHTML={{ __html: post.html }} />
-				<Attachments attachments={post.metadata.attachments} t={t.data} />
+				<Attachments attachments={post.metadata.attachments} t={dataLabels} />
 			</div>
-			<ImageGallery images={post.metadata.gallery} t={t.data} />
+			<ImageGallery images={post.metadata.gallery} t={dataLabels} />
 		</Container>
 	);
 }
@@ -83,7 +68,7 @@ function Attachments({
 	t,
 }: {
 	attachments?: ContentPost["metadata"]["attachments"];
-	t: (typeof labels)[SiteLocale]["data"];
+	t: { attachments: string; images: string };
 }) {
 	if (attachments === undefined || attachments.length === 0) return null;
 
@@ -113,7 +98,7 @@ function ImageGallery({
 	t,
 }: {
 	images?: ContentPost["metadata"]["gallery"];
-	t: (typeof labels)[SiteLocale]["data"];
+	t: { attachments: string; images: string };
 }) {
 	if (images === undefined || images.length === 0) return null;
 

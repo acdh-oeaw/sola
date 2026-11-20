@@ -3,12 +3,10 @@ import type { MetadataRoute } from "next";
 
 import { getContentPostIds } from "@/api/content";
 import { type SolaListEntity, getSolaEntities } from "@/api/sola/client";
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { createLocalePath } from "@/lib/i18n/localePath";
-import { type QueryParams, addQueryParams } from "@/lib/url/addQueryParams";
-import site from "~/config/site.json" with { type: "json" };
+import { routing } from "@/i18n/routing";
+import { createCanonicalUrl } from "@/modules/metadata/createCanonicalUrl";
 
-const locales = site.locales as Array<SiteLocale>;
+const { locales } = routing;
 
 /** Static pages, without imprint and not-found pages. */
 const pages = ["/", "/about", "/dataset", "/posts", "/team"];
@@ -19,18 +17,15 @@ const query = { limit: 10_000 };
 /** Generate on request, so the sitemap includes SOLA entities added after the build. */
 export const dynamic = "force-dynamic";
 
-function createUrl(locale: SiteLocale, path: string, query?: QueryParams): string {
-	const url = new URL(createLocalePath(locale, path), site.url);
-	addQueryParams(url, query);
-	return url.toString();
-}
-
+/**
+ * Lists the canonical URL of every page.
+ */
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	const urls: Array<string> = [];
 
 	for (const locale of locales) {
 		for (const page of pages) {
-			urls.push(createUrl(locale, page));
+			urls.push(createCanonicalUrl(locale, page));
 		}
 	}
 
@@ -38,7 +33,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	for (const locale of locales) {
 		const ids = await getContentPostIds(locale);
 		for (const id of ids) {
-			urls.push(createUrl(locale, `/posts/${id}`));
+			urls.push(createCanonicalUrl(locale, `/posts/${id}`));
 		}
 	}
 
@@ -60,7 +55,7 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
 	for (const locale of locales) {
 		for (const entity of entities) {
-			urls.push(createUrl(locale, "/dataset", { id: entity.id, type: entity.type }));
+			urls.push(createCanonicalUrl(locale, "/dataset", { id: entity.id, type: entity.type }));
 		}
 	}
 
@@ -69,7 +64,12 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 	});
 }
 
-/** Next.js inserts sitemap URLs into the XML as is, so `&` in search params must be escaped. */
+/**
+ * Next.js inserts sitemap URLs into the XML as is, so `&` in search params must be escaped.
+ * Remove once Next.js escapes values itself, otherwise they would be escaped twice.
+ *
+ * @see https://github.com/vercel/next.js/issues/77340
+ */
 function escapeXml(value: string): string {
 	return value
 		.replaceAll("&", "&amp;")

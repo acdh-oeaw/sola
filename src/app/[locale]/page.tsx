@@ -1,49 +1,28 @@
 import type { Metadata } from "next";
-import Link from "next/link";
+import { getExtracted, getLocale } from "next-intl/server";
 import type { JSX } from "react";
 
 import { getContentPage } from "@/api/content";
-import { getLocale } from "@/lib/i18n/getLocale";
-import { createLocalePath } from "@/lib/i18n/localePath";
+import { Link } from "@/i18n/navigation";
 import { createMetadata } from "@/modules/metadata/createMetadata";
-
-const labels = {
-	en: {
-		page: {
-			title: "Home",
-		},
-		button: "Explore the dataset",
-		heroImage: "Christus Sol Invictus mosaic, Vatican Necropolis (third century)",
-	},
-	de: {
-		page: {
-			title: "Startseite",
-		},
-		button: "Zur Datenbank",
-		heroImage: "Christus Sol Invictus Mosaik, Vatikanische Nekropole (drittes Jahrhundert)",
-	},
-} as const;
 
 type ContentPageMetadata = {
 	title: string;
 };
 
-interface IndexPageProps {
-	params: Promise<{ locale: string }>;
-}
+export async function generateMetadata(): Promise<Metadata> {
+	const locale = await getLocale();
+	const t = await getExtracted();
 
-export async function generateMetadata(props: IndexPageProps): Promise<Metadata> {
-	const locale = await getLocale(props.params);
-
-	return createMetadata({ locale, title: labels[locale].page.title, path: "/" });
+	return createMetadata({ locale, title: t("Home"), path: "/" });
 }
 
 /**
  * Index page.
  */
-export default async function IndexPage(props: IndexPageProps): Promise<JSX.Element> {
-	const locale = await getLocale(props.params);
-	const t = labels[locale];
+export default async function IndexPage(): Promise<JSX.Element> {
+	const locale = await getLocale();
+	const t = await getExtracted();
 
 	const page = await getContentPage<ContentPageMetadata>("index", locale);
 
@@ -56,10 +35,10 @@ export default async function IndexPage(props: IndexPageProps): Promise<JSX.Elem
 					</h1>
 					<div className="font-medium leading-7" dangerouslySetInnerHTML={{ __html: page.html }} />
 					<Link
-						href={createLocalePath(locale, "/dataset")}
+						href="/dataset"
 						className="inline-block px-10 py-5 text-sm font-semibold tracking-wider text-gray-800 uppercase transition bg-yellow-400 rounded-sm hover:bg-yellow-500 focus:outline-hidden focus-visible:bg-yellow-500"
 					>
-						{t.button}
+						{t("Explore the dataset")}
 					</Link>
 				</div>
 			</div>
@@ -68,7 +47,7 @@ export default async function IndexPage(props: IndexPageProps): Promise<JSX.Elem
 					{/* eslint-disable-next-line @next/next/no-img-element */}
 					<img
 						src="/assets/images/hero.jpg"
-						alt={t.heroImage}
+						alt={t("Christus Sol Invictus mosaic, Vatican Necropolis (third century)")}
 						className="object-cover object-left-top w-full h-full"
 						decoding="async"
 						width="485"

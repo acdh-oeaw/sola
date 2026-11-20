@@ -1,4 +1,5 @@
 import type { QueryObserverResult } from "@tanstack/react-query";
+import { useExtracted } from "next-intl";
 import { type JSX, Fragment, useCallback, useMemo } from "react";
 
 import type {
@@ -7,24 +8,12 @@ import type {
 	SolaEntityType,
 	SolaListEntity,
 } from "@/api/sola/client";
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
 import type { SolaSelectedEntity } from "@/lib/sola/types";
 import { type Node, createNode } from "@/modules/visualization/createNode";
 import { Timelines } from "@/modules/visualization/Timelines";
 import sola from "~/config/sola.json" with { type: "json" };
 
 const { colors } = sola;
-
-const labels = {
-	en: {
-		passages: "Passages",
-		other: "Other",
-	},
-	de: {
-		passages: "Passagen",
-		other: "Andere",
-	},
-};
 
 export interface VisualizationProps {
 	solaEntities: QueryObserverResult<
@@ -58,7 +47,9 @@ export function Visualization({
 	selectedSolaEntityRelations,
 	entityTypeLabels,
 }: VisualizationProps): JSX.Element {
-	const locale = useCurrentLocale();
+	const t = useExtracted();
+	const passagesLabel = t("Passages");
+	const otherLabel = t("Other");
 
 	const events = useNodes(solaEntities.data?.events);
 	const institutions = useNodes(solaEntities.data?.institutions);
@@ -70,17 +61,17 @@ export function Visualization({
 	const timelines = useMemo(() => {
 		return [
 			{
-				label: labels[locale].passages,
+				label: passagesLabel,
 				type: "Passage",
 				data: passages,
 			},
 			{
-				label: labels[locale].other,
+				label: otherLabel,
 				type: "Other",
 				data: [...events, ...institutions, ...persons, ...places, ...publications],
 			},
 		];
-	}, [events, institutions, passages, persons, places, publications, locale]);
+	}, [events, institutions, passages, persons, places, publications, passagesLabel, otherLabel]);
 
 	const getLabelForNodeType = useCallback(
 		function getLabelForNodeType(type: string) {
@@ -92,11 +83,11 @@ export function Visualization({
 	const getTimelineForNodeType = useCallback(
 		function getTimelineForNodeType(type: string) {
 			if (type === "Passage") {
-				return labels[locale].passages;
+				return passagesLabel;
 			}
-			return labels[locale].other;
+			return otherLabel;
 		},
-		[locale],
+		[passagesLabel, otherLabel],
 	);
 
 	const onNodeClick = useCallback(

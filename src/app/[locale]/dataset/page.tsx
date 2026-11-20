@@ -1,14 +1,11 @@
 import type { Metadata } from "next";
+import { getExtracted, getLocale } from "next-intl/server";
 import type { JSX } from "react";
 
-import { getLocale } from "@/lib/i18n/getLocale";
-import { LabelsProvider } from "@/lib/i18n/LabelsContext";
 import { Dashboard } from "@/modules/dataset/Dashboard";
-import { labels } from "@/modules/dataset/labels";
 import { createMetadata } from "@/modules/metadata/createMetadata";
 
 interface DatasetPageProps {
-	params: Promise<{ locale: string }>;
 	searchParams: Promise<Record<string, Array<string> | string | undefined>>;
 }
 
@@ -17,7 +14,8 @@ interface DatasetPageProps {
  * sitemap is indexed separately. Reading search params renders this page on request.
  */
 export async function generateMetadata(props: DatasetPageProps): Promise<Metadata> {
-	const locale = await getLocale(props.params);
+	const locale = await getLocale();
+	const t = await getExtracted();
 
 	/**
 	 * No need for additional sanity checks for `id` and `type` here, since these are checked in
@@ -27,18 +25,12 @@ export async function generateMetadata(props: DatasetPageProps): Promise<Metadat
 	const { id, type } = await props.searchParams;
 	const query = typeof id === "string" && typeof type === "string" ? { id, type } : undefined;
 
-	return createMetadata({ locale, title: labels[locale].page.title, path: "/dataset", query });
+	return createMetadata({ locale, title: t("Passages"), path: "/dataset", query });
 }
 
 /**
  * Dataset page.
  */
-export default async function DatasetPage(props: DatasetPageProps): Promise<JSX.Element> {
-	const locale = await getLocale(props.params);
-
-	return (
-		<LabelsProvider labels={labels[locale]}>
-			<Dashboard />
-		</LabelsProvider>
-	);
+export default function DatasetPage(): JSX.Element {
+	return <Dashboard />;
 }

@@ -1,17 +1,7 @@
+import { useExtracted } from "next-intl";
 import type { JSX } from "react";
 
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
-
 import { Clear } from "../icons/Clear";
-
-const labels = {
-	en: {
-		clear: "Clear",
-	},
-	de: {
-		clear: "Entfernen",
-	},
-};
 
 export interface ClearButtonProps {
 	"aria-label"?: string;
@@ -20,10 +10,10 @@ export interface ClearButtonProps {
 }
 
 export function ClearButton(props: ClearButtonProps): JSX.Element {
-	const locale = useCurrentLocale();
+	const t = useExtracted();
 
 	return (
-		<button aria-label={labels[locale].clear} type="button" {...props}>
+		<button aria-label={t("Clear")} type="button" {...props}>
 			<Clear />
 		</button>
 	);

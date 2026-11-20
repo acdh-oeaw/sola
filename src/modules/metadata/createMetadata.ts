@@ -1,15 +1,15 @@
 import type { Metadata } from "next";
+import type { Locale } from "next-intl";
 
-import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
+import { routing } from "@/i18n/routing";
 import type { QueryParams } from "@/lib/url/addQueryParams";
 import { createCanonicalUrl } from "@/modules/metadata/createCanonicalUrl";
 import metadata from "~/config/metadata.json" with { type: "json" };
-import site from "~/config/site.json" with { type: "json" };
 
-const locales = site.locales as Array<SiteLocale>;
+const { locales } = routing;
 
 export interface CreateMetadataParams {
-	locale: SiteLocale;
+	locale: Locale;
 	title?: string;
 	description?: string;
 	/** Page path without locale prefix, used for canonical and alternate URLs. */
