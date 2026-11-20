@@ -1,25 +1,16 @@
-import type { GetStaticPropsContext, GetStaticPropsResult } from "next";
-import { type JSX, Fragment, useMemo } from "react";
+import type { Metadata } from "next";
+import { type JSX, Fragment } from "react";
 
-import {
-	type ContentPage,
-	type ContentTeamMember,
-	getContentPage,
-	getContentTeamMembers,
-} from "@/api/content";
-import { type SiteLocale, getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
+import { type ContentTeamMember, getContentPage, getContentTeamMembers } from "@/api/content";
+import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
+import { getLocale } from "@/lib/i18n/getLocale";
 import { Email } from "@/modules/icons/Email";
 import { Globe } from "@/modules/icons/Globe";
 import { Phone } from "@/modules/icons/Phone";
-import { Metadata } from "@/modules/metadata/Metadata";
-import { useAlternateUrls } from "@/modules/metadata/useAlternateUrls";
-import { useCanonicalUrl } from "@/modules/metadata/useCanonicalUrl";
+import { createMetadata } from "@/modules/metadata/createMetadata";
 import { Container } from "@/modules/ui/Container";
 
-/**
- * i18n.
- */
-export const labels = {
+const labels = {
 	en: {
 		page: {
 			title: "Team",
@@ -52,96 +43,69 @@ export const labels = {
 	},
 } as const;
 
-export type ContentPageMetadata = {
+type ContentPageMetadata = {
 	title: string;
 };
 
-export interface TeamPageProps {
-	labels: (typeof labels)[SiteLocale];
-	page: ContentPage<ContentPageMetadata>;
-	data: {
-		team: Array<ContentTeamMember>;
-	};
+interface TeamPageProps {
+	params: Promise<{ locale: string }>;
 }
 
-/**
- * Make page contents from local files and localised labels available to client.
- */
-export async function getStaticProps(
-	context: GetStaticPropsContext,
-): Promise<GetStaticPropsResult<TeamPageProps>> {
-	const locale = getCurrentLocale(context.locale);
+export async function generateMetadata(props: TeamPageProps): Promise<Metadata> {
+	const locale = await getLocale(props.params);
 
-	const page = await getContentPage<ContentPageMetadata>("team", locale);
-	const team = await getContentTeamMembers(locale);
-
-	return {
-		props: {
-			labels: labels[locale],
-			page,
-			data: { team },
-		},
-	};
+	return createMetadata({ locale, title: labels[locale].page.title, path: "/team" });
 }
 
 /**
  * Team page.
  */
-export default function TeamPage(props: TeamPageProps): JSX.Element {
-	const canonicalUrl = useCanonicalUrl();
-	const alternateUrls = useAlternateUrls();
+export default async function TeamPage(props: TeamPageProps): Promise<JSX.Element> {
+	const locale = await getLocale(props.params);
+	const t = labels[locale];
 
-	const groupedTeamMembers = useMemo(() => {
-		const map: Record<string, Array<ContentTeamMember>> = {};
+	const page = await getContentPage<ContentPageMetadata>("team", locale);
+	const team = await getContentTeamMembers(locale);
 
-		props.data.team.forEach((member) => {
-			(map[member.group] ??= []).push(member);
-		});
-
-		return map;
-	}, [props.data.team]);
+	const groupedTeamMembers: Record<string, Array<ContentTeamMember>> = {};
+	team.forEach((member) => {
+		(groupedTeamMembers[member.group] ??= []).push(member);
+	});
 
 	return (
-		<Fragment>
-			<Metadata
-				title={props.labels.page.title}
-				canonicalUrl={canonicalUrl}
-				languageAlternates={alternateUrls}
-			/>
-			<Container as="main">
-				<div className="prose">
-					<h1>{props.page.metadata.title}</h1>
-					<div dangerouslySetInnerHTML={{ __html: props.page.html }} />
-				</div>
-				<div className="space-y-16">
-					{Object.entries(groupedTeamMembers).map(([group, teamMembers]) => {
-						const sorted = teamMembers.sort((a, b) => {
-							return a.boss === true
-								? -1
-								: b.boss === true
-									? 1
-									: a.lastName.localeCompare(b.lastName);
-						});
-						return (
-							<div key={group}>
-								<h2 className="my-4 text-2xl font-bold text-gray-700">
-									{props.labels.group[group as "acdh" | "current" | "former"]}
-								</h2>
-								<ul className="my-8 space-y-10">
-									{sorted.map((teamMember) => {
-										return (
-											<li key={teamMember.id}>
-												<TeamMember teamMember={teamMember} t={props.labels.data} />
-											</li>
-										);
-									})}
-								</ul>
-							</div>
-						);
-					})}
-				</div>
-			</Container>
-		</Fragment>
+		<Container as="main">
+			<div className="prose">
+				<h1>{page.metadata.title}</h1>
+				<div dangerouslySetInnerHTML={{ __html: page.html }} />
+			</div>
+			<div className="space-y-16">
+				{Object.entries(groupedTeamMembers).map(([group, teamMembers]) => {
+					const sorted = teamMembers.sort((a, b) => {
+						return a.boss === true
+							? -1
+							: b.boss === true
+								? 1
+								: a.lastName.localeCompare(b.lastName);
+					});
+					return (
+						<div key={group}>
+							<h2 className="my-4 text-2xl font-bold text-gray-700">
+								{t.group[group as "acdh" | "current" | "former"]}
+							</h2>
+							<ul className="my-8 space-y-10">
+								{sorted.map((teamMember) => {
+									return (
+										<li key={teamMember.id}>
+											<TeamMember teamMember={teamMember} t={t.data} />
+										</li>
+									);
+								})}
+							</ul>
+						</div>
+					);
+				})}
+			</div>
+		</Container>
 	);
 }
 

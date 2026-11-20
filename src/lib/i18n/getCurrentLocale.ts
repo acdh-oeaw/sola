@@ -18,6 +18,6 @@ export function getCurrentLocale(locale: string | undefined): SiteLocale {
 	return locale;
 }
 
-function isSupportedLocale(locale: string): locale is SiteLocale {
+export function isSupportedLocale(locale: string): locale is SiteLocale {
 	return locales.includes(locale);
 }

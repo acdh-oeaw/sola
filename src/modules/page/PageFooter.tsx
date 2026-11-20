@@ -1,7 +1,8 @@
 import Link from "next/link";
 import type { JSX } from "react";
 
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
+import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
+import { createLocalePath } from "@/lib/i18n/localePath";
 
 const labels = {
 	en: {
@@ -21,9 +22,7 @@ const labels = {
 /**
  * Page footer.
  */
-export function PageFooter(): JSX.Element {
-	const locale = useCurrentLocale();
-
+export function PageFooter({ locale }: { locale: SiteLocale }): JSX.Element {
 	return (
 		<footer
 			className="px-6 py-6 space-y-4 bg-white border-t border-gray-200 2xl:space-y-12 2xl:py-12"
@@ -82,7 +81,7 @@ export function PageFooter(): JSX.Element {
 			<div className="text-xs text-center text-gray-500">
 				<span>&copy; {new Date().getFullYear()} | </span>
 				<Link
-					href="/imprint"
+					href={createLocalePath(locale, "/imprint")}
 					className="p-1 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 				>
 					{labels[locale].imprint}

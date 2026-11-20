@@ -25,7 +25,12 @@
 		"skipLibCheck": true,
 		"strict": true,
 		"target": "es2022",
-		"verbatimModuleSyntax": true
+		"verbatimModuleSyntax": true,
+		"plugins": [
+			{
+				"name": "next"
+			}
+		]
 	},
 	"include": [
 		"./next-env.d.ts",

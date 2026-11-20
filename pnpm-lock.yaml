@@ -253,15 +253,6 @@ importers:
       unified:
         specifier: ^11.0.5
         version: 11.0.5
-      unist-builder:
-        specifier: ^4.0.0
-        version: 4.0.0
-      xast-util-to-xml:
-        specifier: ^4.0.0
-        version: 4.0.0
-      xastscript:
-        specifier: ^4.0.1
-        version: 4.0.1
       yaml:
         specifier: ^2.9.1
         version: 2.9.1
@@ -299,9 +290,6 @@ importers:
       '@types/react-dom':
         specifier: ^19
         version: 19.3.0(@types/react@19.3.0)
-      '@types/xast':
-        specifier: ^2.0.4
-        version: 2.0.4
       eslint-plugin-better-tailwindcss:
         specifier: ^4.11.0
         version: 4.11.0(eslint@9.39.5(jiti@2.7.0)(supports-color@7.2.0))(oxlint@1.94.0(oxlint-tsgolint@7.0.2007))(tailwindcss@4.3.5)(typescript@7.0.2)
@@ -1369,9 +1357,6 @@ packages:
 
   '@types/unist@3.0.3':
     resolution: {integrity: sha512-ko/gIFJRv177XgZsZcBwnqJN5x/Gien8qNOn0D5bQU/zAzVf9Zt3BlcUiLqhV9y4ARk0GbT3tnUiPNgnTXzc/Q==}
-
-  '@types/xast@2.0.4':
-    resolution: {integrity: sha512-6Q6HWhHXR5EEKcxgF5YBW5XPAAtCi/GgyCWHx6wR7dZTXF5rv2B2fm0hgpSscJqaVDVm6n1DAVbsM8RSM5PlMw==}
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     resolution: {integrity: sha512-MTKKkWB7p/0E9xi1d1tHtZ5PiLkGEMIq88pK2CubZjOsLtYTLqhgIgi6zepFa+9GHZ6h05NMCkQxGKiPXMxXtQ==}
@@ -2851,9 +2836,6 @@ packages:
   unified@11.0.5:
     resolution: {integrity: sha512-xKvGhPWw3k84Qjh8bI3ZeJjqnyadK+GEFtazSfZv/rKeTkTjOJho6mFqh2SM96iIcZokxiOpg78GazTSg8+KHA==}
 
-  unist-builder@4.0.0:
-    resolution: {integrity: sha512-wmRFnH+BLpZnTKpc5L7O67Kac89s9HMrtELpnNaE6TAobq5DTZZs5YaTQfAZBA9bFPECx2uVAPO31c+GVug8mg==}
-
   unist-util-is@6.0.1:
     resolution: {integrity: sha512-LsiILbtBETkDz8I9p1dQ0uyRUWuaQzd/cuEeS1hoRSyW5E5XGmTzlwY1OrNzzakGowI9Dr/I8HVaw4hTtnxy8g==}
 
@@ -2916,12 +2898,6 @@ packages:
   write-file-atomic@7.0.1:
     resolution: {integrity: sha512-OTIk8iR8/aCRWBqvxrzxR0hgxWpnYBblY1S5hDWBQfk/VFmJwzmJgQFN3WsoUKHISv2eAwe+PpbUzyL1CKTLXg==}
     engines: {node: ^20.17.0 || >=22.9.0}
-
-  xast-util-to-xml@4.0.0:
-    resolution: {integrity: sha512-r1euIWS5yZJUNpfN+ReE4m7Vld2iytaOPJtuXVuRQacRZwqRN1MAb+dv0aGLrdXOZrpGLyvUFf1Upyrb3R5qBg==}
-
-  xastscript@4.0.1:
-    resolution: {integrity: sha512-c7zkuV2UyrHe/7a+yM7HcJVqPz/k49uvuT7C6xuD8ym9FHVD3yYDJ5ooV9SNd6X1aMq14uI2aJs8dD5MqUdt6g==}
 
   yallist@3.1.1:
     resolution: {integrity: sha512-a4UGQaWPH59mOXUYnAG2ewncQS4i4F43Tv3JoAM+s2VDAmS9NsK8GpDMLrCHPksFT7h3K6TOoUNn2pb7RoXx4g==}
@@ -3801,10 +3777,6 @@ snapshots:
       csstype: 3.2.3
 
   '@types/unist@3.0.3': {}
-
-  '@types/xast@2.0.4':
-    dependencies:
-      '@types/unist': 3.0.3
 
   '@typescript/typescript-aix-ppc64@7.0.2':
     optional: true
@@ -5387,10 +5359,6 @@ snapshots:
       trough: 2.2.0
       vfile: 6.0.3
 
-  unist-builder@4.0.0:
-    dependencies:
-      '@types/unist': 3.0.3
-
   unist-util-is@6.0.1:
     dependencies:
       '@types/unist': 3.0.3
@@ -5458,16 +5426,6 @@ snapshots:
   write-file-atomic@7.0.1:
     dependencies:
       signal-exit: 4.1.0
-
-  xast-util-to-xml@4.0.0:
-    dependencies:
-      '@types/xast': 2.0.4
-      ccount: 2.0.1
-      stringify-entities: 4.0.4
-
-  xastscript@4.0.1:
-    dependencies:
-      '@types/xast': 2.0.4
 
   yallist@3.1.1:
     optional: true

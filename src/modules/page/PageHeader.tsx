@@ -1,10 +1,12 @@
+"use client";
+
 import Link from "next/link";
-import { useRouter } from "next/router";
-import { type FocusEvent, type JSX, type KeyboardEvent, useEffect, useRef, useState } from "react";
+import { usePathname, useSearchParams } from "next/navigation";
+import { type FocusEvent, type JSX, type KeyboardEvent, Suspense, useRef, useState } from "react";
 import { Button, Disclosure, DisclosurePanel } from "react-aria-components";
 
 import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
-import { useCurrentLocale } from "@/lib/i18n/useCurrentLocale";
+import { createLocalePath, stripLocale } from "@/lib/i18n/localePath";
 import { Menu as MenuIcon } from "@/modules/icons/Menu";
 import navigation from "~/config/navigation.json" with { type: "json" };
 
@@ -22,9 +24,8 @@ const labels = {
 /**
  * Page header.
  */
-export function PageHeader(): JSX.Element {
-	const router = useRouter();
-	const locale = useCurrentLocale();
+export function PageHeader({ locale }: { locale: SiteLocale }): JSX.Element {
+	const pathname = stripLocale(usePathname());
 
 	const links = (navigation as Record<SiteLocale, Array<{ path: string; label: string }>>)[locale];
 
@@ -35,8 +36,8 @@ export function PageHeader(): JSX.Element {
 				style={{ gridTemplateColumns: "var(--sidepanel-width, 240px) 1fr" }}
 			>
 				<Link
-					href="/"
-					aria-current={router.pathname === "/" ? "page" : undefined}
+					href={createLocalePath(locale, "/")}
+					aria-current={pathname === "/" ? "page" : undefined}
 					className="z-20 flex items-center px-6 text-2xl font-extrabold tracking-wide text-white transition bg-yellow-400 hover:bg-yellow-500 focus:outline-hidden focus-visible:bg-yellow-500"
 				>
 					SOLA
@@ -44,11 +45,11 @@ export function PageHeader(): JSX.Element {
 				<div className="z-10 flex items-center justify-end px-6 space-x-4 shadow-sm xs:space-x-6">
 					<ul className="hidden space-x-4 lg:flex lg:items-center">
 						{links.map(({ path, label }) => {
-							const isCurrent = router.pathname === path;
+							const isCurrent = pathname === path;
 							return (
 								<li key={path}>
 									<Link
-										href={path}
+										href={createLocalePath(locale, path)}
 										aria-current={isCurrent ? "page" : undefined}
 										className="inline-block px-2 py-2 text-sm font-medium text-center text-gray-700 transition border-b border-transparent hover:border-gray-700 focus:outline-hidden focus-visible:ring-2 focus-visible:ring-yellow-400"
 									>
@@ -58,8 +59,10 @@ export function PageHeader(): JSX.Element {
 							);
 						})}
 					</ul>
-					<MobileNav links={links} t={labels[locale]} />
-					<LanguageToggle />
+					<MobileNav links={links} locale={locale} pathname={pathname} t={labels[locale]} />
+					<Suspense fallback={<LanguageToggleLink locale={locale} pathname={pathname} />}>
+						<LanguageToggle locale={locale} pathname={pathname} />
+					</Suspense>
 				</div>
 			</nav>
 		</header>
@@ -73,27 +76,25 @@ export function PageHeader(): JSX.Element {
  */
 function MobileNav({
 	links,
+	locale,
+	pathname,
 	t,
 }: {
 	links: Array<{ path: string; label: string }>;
+	locale: SiteLocale;
+	pathname: string;
 	t: (typeof labels)[SiteLocale];
 }) {
-	const router = useRouter();
 	const [isExpanded, setExpanded] = useState(false);
 	const containerRef = useRef<HTMLDivElement>(null);
 	const buttonRef = useRef<HTMLButtonElement>(null);
 
-	useEffect(() => {
-		function close() {
-			setExpanded(false);
-		}
-
-		router.events.on("routeChangeStart", close);
-
-		return () => {
-			router.events.off("routeChangeStart", close);
-		};
-	}, [router.events]);
+	/** Close after navigating to another page. */
+	const [previousPathname, setPreviousPathname] = useState(pathname);
+	if (pathname !== previousPathname) {
+		setPreviousPathname(pathname);
+		setExpanded(false);
+	}
 
 	/** Close on Escape and return focus to the toggle button. */
 	function onKeyDown(event: KeyboardEvent) {
@@ -132,8 +133,8 @@ function MobileNav({
 							return (
 								<li key={path}>
 									<Link
-										href={path}
-										aria-current={router.pathname === path ? "page" : undefined}
+										href={createLocalePath(locale, path)}
+										aria-current={pathname === path ? "page" : undefined}
 										onKeyDown={onKeyDown}
 										onBlur={onBlur}
 										className="block px-6 py-3 text-base font-medium transition hover:bg-gray-100 focus:outline-hidden focus-visible:bg-gray-100 focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400 aria-[current=page]:font-bold"
@@ -150,16 +151,37 @@ function MobileNav({
 	);
 }
 
-function LanguageToggle() {
-	const router = useRouter();
-	const locale = useCurrentLocale();
+/**
+ * Links to the current page in the other locale, keeping search params (e.g. the selected entity
+ * on the dataset page).
+ */
+function LanguageToggle({ locale, pathname }: { locale: SiteLocale; pathname: string }) {
+	const searchParams = useSearchParams();
 
+	return (
+		<LanguageToggleLink locale={locale} pathname={pathname} search={searchParams.toString()} />
+	);
+}
+
+function LanguageToggleLink({
+	locale,
+	pathname,
+	search = "",
+}: {
+	locale: SiteLocale;
+	pathname: string;
+	search?: string;
+}) {
 	const otherLocale = locale === "de" ? "en" : "de";
+	const path = createLocalePath(otherLocale, pathname);
 
 	return (
 		<Link
-			href={router.asPath}
-			locale={otherLocale}
+			href={search.length > 0 ? `${path}?${search}` : path}
+			onClick={() => {
+				/** Remember the choice, so `proxy.ts` does not redirect `/` back to the browser locale. */
+				document.cookie = `NEXT_LOCALE=${otherLocale}; path=/; max-age=31536000; samesite=lax`;
+			}}
 			className="p-2 text-sm font-medium transition bg-yellow-400 rounded-sm hover:bg-yellow-500 focus:outline-hidden focus-visible:bg-yellow-500"
 		>
 			{otherLocale.toUpperCase()}

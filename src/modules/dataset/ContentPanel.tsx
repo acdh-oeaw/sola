@@ -1,4 +1,4 @@
-import { Fragment, useEffect } from "react";
+import { type JSX, Fragment, useEffect, useRef } from "react";
 
 import { useSolaEntities, useSolaEntityRelations, useSolaSelectedEntity } from "@/lib/sola/hooks";
 import type { SolaPassagesFilter } from "@/lib/sola/types";
@@ -25,23 +25,21 @@ export function ContentPanel({
 	const { selectedSolaEntity, setSelectedSolaEntity } = useSolaSelectedEntity();
 	const selectedSolaEntityRelations = useSolaEntityRelations(selectedSolaEntity.data);
 
-	/** Reset detail view when filter set changes. */
+	/**
+	 * Reset detail view when filter set changes. Not on mount, which would clear an entity selected
+	 * via search params.
+	 */
+	const previousFilter = useRef(filter);
 	useEffect(() => {
+		if (previousFilter.current === filter) return;
+		previousFilter.current = filter;
 		setSelectedSolaEntity(null);
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [filter]);
+	}, [filter, setSelectedSolaEntity]);
 
 	const isLoadingInitialData = solaEntities.status === "pending";
 
 	if (isLoadingInitialData) {
-		return (
-			<div
-				className="flex flex-col items-center justify-center text-yellow-400"
-				style={{ gridRow: "span 2" }}
-			>
-				<Spinner className="w-12 h-12" />
-			</div>
-		);
+		return <ContentPanelLoading />;
 	}
 
 	return (
@@ -63,5 +61,16 @@ export function ContentPanel({
 				setFilter={setFilter}
 			/>
 		</Fragment>
+	);
+}
+
+export function ContentPanelLoading(): JSX.Element {
+	return (
+		<div
+			className="flex flex-col items-center justify-center text-yellow-400"
+			style={{ gridRow: "span 2" }}
+		>
+			<Spinner className="w-12 h-12" />
+		</div>
 	);
 }

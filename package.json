@@ -54,9 +54,6 @@
 		"strip-markdown": "^6.0.0",
 		"tailwindcss": "^4.3.5",
 		"unified": "^11.0.5",
-		"unist-builder": "^4.0.0",
-		"xast-util-to-xml": "^4.0.0",
-		"xastscript": "^4.0.1",
 		"yaml": "^2.9.1"
 	},
 	"devDependencies": {
@@ -71,7 +68,6 @@
 		"@types/node": "^26.6.6",
 		"@types/react": "^19",
 		"@types/react-dom": "^19",
-		"@types/xast": "^2.0.4",
 		"eslint-plugin-better-tailwindcss": "^4.11.0",
 		"eslint-plugin-regexp": "^3.3.3",
 		"lefthook": "^2.2.2",

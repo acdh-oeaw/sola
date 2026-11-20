@@ -39,7 +39,7 @@ export function FilterPanel({
 	const debouncedTitle = useDebouncedData(title.trim(), 150);
 
 	useEffect(() => {
-		setFilter({ name: debouncedTitle });
+		setFilter({ name: debouncedTitle.length > 0 ? debouncedTitle : undefined });
 	}, [debouncedTitle, setFilter]);
 
 	useEffect(() => {

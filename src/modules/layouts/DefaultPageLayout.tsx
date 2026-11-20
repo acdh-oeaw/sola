@@ -1,10 +1,12 @@
-import type { JSX } from "react";
+import type { JSX, ReactNode } from "react";
 
+import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { PageFooter } from "@/modules/page/PageFooter";
 import { PageHeader } from "@/modules/page/PageHeader";
 
 export interface DefaultPageLayoutProps {
-	children: JSX.Element;
+	children: ReactNode;
+	locale: SiteLocale;
 }
 
 /**
@@ -20,9 +22,9 @@ export function DefaultPageLayout(props: DefaultPageLayoutProps): JSX.Element {
 				gridTemplateAreas: '"header" "main" "footer"',
 			}}
 		>
-			<PageHeader />
+			<PageHeader locale={props.locale} />
 			{props.children}
-			<PageFooter />
+			<PageFooter locale={props.locale} />
 		</div>
 	);
 }

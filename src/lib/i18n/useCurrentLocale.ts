@@ -1,12 +1,10 @@
-import { useRouter } from "next/router";
-import { useMemo } from "react";
+"use client";
+
+import { useParams } from "next/navigation";
 
 import { type SiteLocale, getCurrentLocale } from "@/lib/i18n/getCurrentLocale";
 
 export function useCurrentLocale(): SiteLocale {
-	const router = useRouter();
-	const locale = useMemo(() => {
-		return getCurrentLocale(router.locale);
-	}, [router.locale]);
-	return locale;
+	const params = useParams<{ locale?: string }>();
+	return getCurrentLocale(params.locale);
 }

@@ -1,6 +1,6 @@
 import { groupBy, keyBy } from "@acdh-oeaw/lib";
 import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
-import { useRouter } from "next/router";
+import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
 
 import {
@@ -113,6 +113,11 @@ export function useSolaPassagesFilter() {
 		filter: SolaPassagesFilter,
 	) {
 		setFilter((prev) => {
+			/** Keep the same object when nothing changes, so effects depending on the filter don't re-run. */
+			const isUnchanged = Object.entries(filter).every(([key, value]) => {
+				return Object.is(prev[key as keyof SolaPassagesFilter], value);
+			});
+			if (isUnchanged) return prev;
 			return { ...prev, ...filter };
 		});
 	}, []);
@@ -208,41 +213,43 @@ export function isSolaEntityType(type: string): type is SolaEntityType {
  * Fetches currently selected SOLA entity.
  */
 export function useSolaSelectedEntity() {
-	const router = useRouter();
+	const searchParams = useSearchParams();
 	const locale = useCurrentLocale();
 	const queryClient = useQueryClient();
 
-	const setSelectedSolaEntity = useCallback(
-		function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
-			if (entity !== null) {
-				const { id, type } = entity;
-				void router.push({ query: { ...router.query, id, type } }, undefined, {
-					shallow: true,
-				});
-			} else {
-				const { id, type, ...query } = router.query;
-				if (id !== undefined || type !== undefined) {
-					void router.push({ query }, undefined, { shallow: true });
-				}
-			}
-		},
-		[router],
-	);
+	/**
+	 * Updates search params via the history API, which the router picks up without a navigation
+	 * (like shallow routing in the Pages Router).
+	 */
+	const setSelectedSolaEntity = useCallback(function setSelectedSolaEntity(
+		entity: SolaSelectedEntity | null,
+	) {
+		const params = new URLSearchParams(window.location.search);
+
+		if (entity !== null) {
+			params.set("id", String(entity.id));
+			params.set("type", entity.type);
+		} else {
+			if (!params.has("id") && !params.has("type")) return;
+			params.delete("id");
+			params.delete("type");
+		}
+
+		const search = params.toString();
+		window.history.pushState(null, "", search.length > 0 ? `?${search}` : window.location.pathname);
+	}, []);
 
 	const selected: SolaSelectedEntity | null = useMemo(() => {
-		if (router.isReady) {
-			const { query } = router;
-			const id = getQueryParam(query.id, false, Number);
-			if (id !== undefined && id > 0) {
-				const type = getQueryParam(query.type, false, capitalize);
-				if (type !== undefined && isSolaEntityType(type)) {
-					return { id, type };
-				}
+		const id = getQueryParam(searchParams.get("id") ?? undefined, false, Number);
+		if (id !== undefined && id > 0) {
+			const type = getQueryParam(searchParams.get("type") ?? undefined, false, capitalize);
+			if (type !== undefined && isSolaEntityType(type)) {
+				return { id, type };
 			}
 		}
 
 		return null;
-	}, [router]);
+	}, [searchParams]);
 
 	const selectedSolaEntity = useQuery<SolaEntityDetails>({
 		queryKey: ["getSolaEntityById", locale, selected, {}],
