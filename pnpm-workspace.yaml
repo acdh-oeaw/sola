@@ -1,6 +1,9 @@
 allowBuilds:
   sharp: true
   lefthook: true
+  # Dependencies of next-intl, which ship prebuilt binaries.
+  "@parcel/watcher": false
+  "@swc/core": false
 engineStrict: true
 
 shellEmulator: true
