@@ -169,8 +169,8 @@ function ImageGallery({
 								<Image
 									src={image.image}
 									alt={image.alt ?? ""}
-									layout="fill"
-									objectFit="cover"
+									className="object-cover"
+									fill={true}
 									sizes={"(max-width: 640px) 600px, 300px"}
 								/>
 							</a>

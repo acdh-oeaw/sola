@@ -47,11 +47,3 @@ function Prefetch() {
 	useSolaFilterOptions();
 	return null;
 }
-
-/**
- * Report web vitals.
- */
-export function reportWebVitals(/* metric: NextWebVitalsMetric */): void {
-	/** should be dispatched to an analytics service */
-	// console.info(metric)
-}
