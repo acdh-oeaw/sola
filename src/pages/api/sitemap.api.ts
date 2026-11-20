@@ -9,6 +9,7 @@ import type { SiteLocale } from "@/lib/i18n/getCurrentLocale";
 import { createLink } from "@/lib/sitemap/createLink";
 import { createSitemap } from "@/lib/sitemap/createSitemap";
 import { getStaticPages } from "@/lib/sitemap/getStaticPages";
+import site from "~/config/site.json" with { type: "json" };
 
 const query = { limit: 10_000 };
 
@@ -21,8 +22,8 @@ export default async function handler(
 	response: NextApiResponse,
 ): Promise<void> {
 	try {
-		const locales = ["en", "de"] as Array<SiteLocale>;
-		const defaultLocale: SiteLocale = "en";
+		const locales = site.locales as Array<SiteLocale>;
+		const defaultLocale = site.defaultLocale as SiteLocale;
 
 		/** Static pages (without imprint page). */
 		const pages = await getStaticPages();

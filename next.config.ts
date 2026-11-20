@@ -1,9 +1,8 @@
 import type { NextConfig } from "next";
 
-import metadata from "~/config/metadata.json";
+import site from "~/config/site.json" with { type: "json" };
 
-const locales = Object.keys(metadata);
-const defaultLocale = locales[0]!;
+const { defaultLocale, locales } = site;
 
 const config: NextConfig = {
 	i18n: {
