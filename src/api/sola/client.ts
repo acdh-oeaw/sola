@@ -607,11 +607,11 @@ export async function getSolaEntityBibliographyById({
 	return data;
 }
 
+/** Users are not localised. */
 export async function getSolaUsers({
 	query,
-	// locale,
 	options,
-}: GetAllRequestConfig): Promise<Results<SolaUser>> {
+}: Omit<GetAllRequestConfig, "locale">): Promise<Results<SolaUser>> {
 	const data = await request<Results<SolaUser>>({
 		path: "/apis/api/users/",
 		baseUrl,

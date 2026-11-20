@@ -7,11 +7,15 @@ import {
 	QueryClientProvider,
 } from "@tanstack/react-query";
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
-import { useLocale } from "next-intl";
-import type { JSX, ReactNode } from "react";
+import { type Locale, useLocale } from "next-intl";
+import { type JSX, type ReactNode, useEffect } from "react";
 import { I18nProvider } from "react-aria-components";
 
-import { useSolaEntities, useSolaFilterOptions } from "@/lib/sola/hooks";
+import {
+	solaEntitiesQueryOptions,
+	solaPassageTopicsQueryOptions,
+	solaPassageTypesQueryOptions,
+} from "@/lib/sola/hooks";
 
 function createQueryClient() {
 	return new QueryClient({
@@ -52,17 +56,25 @@ export function Providers(props: ProvidersProps): JSX.Element {
 	return (
 		<QueryClientProvider client={queryClient}>
 			<I18nProvider locale={locale}>{props.children}</I18nProvider>
-			<Prefetch />
+			<Prefetch locale={locale} queryClient={queryClient} />
 			<ReactQueryDevtools initialIsOpen={false} />
 		</QueryClientProvider>
 	);
 }
 
+function noop() {
+	/** Errors are handled by the queries using the data. */
+}
+
 /**
- * Start fetching SOLA entities early to reduce wait on `/dataset` page.
+ * Start fetching SOLA entities and filter options early to reduce wait on `/dataset` page.
  */
-function Prefetch() {
-	useSolaEntities();
-	useSolaFilterOptions();
+function Prefetch({ locale, queryClient }: { locale: Locale; queryClient: QueryClient }) {
+	useEffect(() => {
+		queryClient.query(solaEntitiesQueryOptions(locale)).catch(noop);
+		queryClient.query(solaPassageTopicsQueryOptions(locale)).catch(noop);
+		queryClient.query(solaPassageTypesQueryOptions(locale)).catch(noop);
+	}, [locale, queryClient]);
+
 	return null;
 }

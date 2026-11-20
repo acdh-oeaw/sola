@@ -1,5 +1,5 @@
 import { groupBy, keyBy } from "@acdh-oeaw/lib";
-import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery } from "@tanstack/react-query";
 import { type Locale, useLocale } from "next-intl";
 import { useSearchParams } from "next/navigation";
 import { useCallback, useMemo, useState } from "react";
@@ -43,16 +43,18 @@ function noop() {
 /** Fetch everything from the list endpoint in one request. */
 const defaultQuery = { limit: 10_000 };
 
-/**
- * Fetches all SOLA entities and returns entities mapped by id.
- */
-export function useSolaEntities() {
-	const locale = useLocale();
+/** Query params for the SOLA entities list endpoint, in addition to `defaultQuery`. */
+type SolaEntitiesQuery = Record<string, unknown>;
 
-	return useQuery({
-		queryKey: ["getSolaEntities", locale, {}],
+/**
+ * Fetches SOLA entities matching `query`, and returns entities grouped by type and mapped by id.
+ * An empty query fetches all entities.
+ */
+export function solaEntitiesQueryOptions(locale: Locale, query: SolaEntitiesQuery = {}) {
+	return queryOptions({
+		queryKey: ["getSolaEntities", locale, query],
 		queryFn: async () => {
-			const data = await getSolaEntities({ query: defaultQuery, locale });
+			const data = await getSolaEntities({ query: { ...defaultQuery, ...query }, locale });
 
 			const grouped = groupBy(data.results, (result) => {
 				return result.type;
@@ -82,6 +84,15 @@ export function useSolaEntities() {
 			return results;
 		},
 	});
+}
+
+/**
+ * Fetches all SOLA entities and returns entities mapped by id.
+ */
+export function useSolaEntities() {
+	const locale = useLocale();
+
+	return useQuery(solaEntitiesQueryOptions(locale));
 }
 
 /**
@@ -158,39 +169,7 @@ export function useSolaFilteredPassages(
 		});
 	}, [filter, searchTerm, passage]);
 
-	return useQuery({
-		queryKey: ["getSolaEntities", locale, query],
-		queryFn: async () => {
-			const data = await getSolaEntities({ query: { ...defaultQuery, ...query }, locale });
-
-			const grouped = groupBy(data.results, (result) => {
-				return result.type;
-			});
-
-			const results = {
-				events: keyBy(grouped.Event ?? [], (entry) => {
-					return entry.id;
-				}),
-				institutions: keyBy(grouped.Institution ?? [], (entry) => {
-					return entry.id;
-				}),
-				passages: keyBy(grouped.Passage ?? [], (entry) => {
-					return entry.id;
-				}),
-				persons: keyBy(grouped.Person ?? [], (entry) => {
-					return entry.id;
-				}),
-				places: keyBy(grouped.Place ?? [], (entry) => {
-					return entry.id;
-				}),
-				publications: keyBy(grouped.Publication ?? [], (entry) => {
-					return entry.id;
-				}),
-			};
-
-			return results;
-		},
-	});
+	return useQuery(solaEntitiesQueryOptions(locale, query));
 }
 
 /**
@@ -214,7 +193,6 @@ export function isSolaEntityType(type: string): type is SolaEntityType {
 export function useSolaSelectedEntity() {
 	const searchParams = useSearchParams();
 	const locale = useLocale();
-	const queryClient = useQueryClient();
 
 	/**
 	 * Updates search params via the history API, which the router picks up without a navigation
@@ -250,49 +228,8 @@ export function useSolaSelectedEntity() {
 		return null;
 	}, [searchParams]);
 
-	const selectedSolaEntity = useQuery<SolaEntityDetails>({
-		queryKey: ["getSolaEntityById", locale, selected, {}],
-		/**
-		 * Texts, bibliography, and passage authors and bible passages are fetched in dependent
-		 * queries. Prefetch them before resolving, so the details panel can switch to the new entity
-		 * in one go, instead of individual sections loading one after the other.
-		 *
-		 * Prefetch errors are ignored, and left to the dependent queries to handle.
-		 */
-		queryFn: async () => {
-			const { id, type } = selected!;
-
-			const bibliography = queryClient
-				.query(solaEntityBibliographyQueryOptions(locale, id, type))
-				.catch(noop);
-			const textTypes = queryClient.query(solaTextTypesQueryOptions(locale)).catch(noop);
-
-			const entity = await getSolaEntityById(id, type, locale);
-
-			const textIds = getSolaTextIds(entity);
-			const texts =
-				textIds.length > 0
-					? queryClient.query(solaTextsQueryOptions(locale, textIds)).catch(noop)
-					: null;
-
-			const passage = entity.type === "Passage" ? entity : undefined;
-			const publicationId = getSolaPassagePublicationId(passage);
-			const authors =
-				publicationId !== undefined
-					? queryClient.query(solaPublicationQueryOptions(locale, publicationId)).catch(noop)
-					: null;
-			const bibleRelationIds = getSolaBibleRelationIds(passage);
-			const biblePassages =
-				bibleRelationIds.length > 0
-					? queryClient
-							.query(solaPassagePublicationRelationsQueryOptions(locale, bibleRelationIds))
-							.catch(noop)
-					: null;
-
-			await Promise.all([bibliography, textTypes, texts, authors, biblePassages]);
-
-			return entity;
-		},
+	const selectedSolaEntity = useQuery({
+		...solaEntityQueryOptions(locale, selected),
 		enabled: selected !== null,
 		/**
 		 * Keep showing the previous entity while switching entities, but not when the selection
@@ -305,6 +242,56 @@ export function useSolaSelectedEntity() {
 		selectedSolaEntity,
 		setSelectedSolaEntity,
 	};
+}
+
+/**
+ * Fetches a SOLA entity by id and type.
+ */
+function solaEntityQueryOptions(locale: Locale, selected: SolaSelectedEntity | null) {
+	return queryOptions({
+		queryKey: ["getSolaEntityById", locale, selected, {}],
+		/**
+		 * Texts, bibliography, and passage authors and bible passages are fetched in dependent
+		 * queries. Prefetch them before resolving, so the details panel can switch to the new entity
+		 * in one go, instead of individual sections loading one after the other.
+		 *
+		 * Prefetch errors are ignored, and left to the dependent queries to handle.
+		 */
+		queryFn: async ({ client }): Promise<SolaEntityDetails> => {
+			const { id, type } = selected!;
+
+			const bibliography = client
+				.query(solaEntityBibliographyQueryOptions(locale, id, type))
+				.catch(noop);
+			const textTypes = client.query(solaTextTypesQueryOptions(locale)).catch(noop);
+
+			const entity = await getSolaEntityById(id, type, locale);
+
+			const textIds = getSolaTextIds(entity);
+			const texts =
+				textIds.length > 0
+					? client.query(solaTextsQueryOptions(locale, textIds)).catch(noop)
+					: null;
+
+			const passage = entity.type === "Passage" ? entity : undefined;
+			const publicationId = getSolaPassagePublicationId(passage);
+			const authors =
+				publicationId !== undefined
+					? client.query(solaPublicationQueryOptions(locale, publicationId)).catch(noop)
+					: null;
+			const bibleRelationIds = getSolaBibleRelationIds(passage);
+			const biblePassages =
+				bibleRelationIds.length > 0
+					? client
+							.query(solaPassagePublicationRelationsQueryOptions(locale, bibleRelationIds))
+							.catch(noop)
+					: null;
+
+			await Promise.all([bibliography, textTypes, texts, authors, biblePassages]);
+
+			return entity;
+		},
+	});
 }
 
 function getSolaEntityById(
@@ -328,6 +315,24 @@ function getSolaEntityById(
 	}
 }
 
+export function solaPassageTopicsQueryOptions(locale: Locale) {
+	return queryOptions({
+		queryKey: ["getSolaPassageTopics", locale, {}],
+		queryFn: () => {
+			return getSolaPassageTopics({ query: defaultQuery, locale });
+		},
+	});
+}
+
+export function solaPassageTypesQueryOptions(locale: Locale) {
+	return queryOptions({
+		queryKey: ["getSolaPassageTypes", locale, {}],
+		queryFn: () => {
+			return getSolaPassageTypes({ query: defaultQuery, locale });
+		},
+	});
+}
+
 /**
  * Fetches possible values for SOLA passage filters.
  */
@@ -335,17 +340,11 @@ export function useSolaFilterOptions() {
 	const locale = useLocale();
 
 	const passageTopics = useQuery({
-		queryKey: ["getSolaPassageTopics", locale, {}],
-		queryFn: () => {
-			return getSolaPassageTopics({ query: defaultQuery, locale });
-		},
+		...solaPassageTopicsQueryOptions(locale),
 		select: mapResultsById,
 	});
 	const passageTypes = useQuery({
-		queryKey: ["getSolaPassageTypes", locale, {}],
-		queryFn: () => {
-			return getSolaPassageTypes({ query: defaultQuery, locale });
-		},
+		...solaPassageTypesQueryOptions(locale),
 		select: mapResultsById,
 	});
 
@@ -787,17 +786,22 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 	return texts;
 }
 
+/** Users are not localised, so the query key does not include the locale. */
+function solaUsersQueryOptions() {
+	return queryOptions({
+		queryKey: ["users"],
+		queryFn: () => {
+			return getSolaUsers({});
+		},
+	});
+}
+
 /**
  * Provides full user info, grouped by username.
  */
 export function useSolaUsers() {
-	const locale = useLocale();
-
 	const users = useQuery({
-		queryKey: ["users"],
-		queryFn: () => {
-			return getSolaUsers({ locale });
-		},
+		...solaUsersQueryOptions(),
 		select(data) {
 			const map: Record<string, SolaUser> = {};
 
