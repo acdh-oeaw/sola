@@ -481,7 +481,8 @@ function getSolaBibleRelationIds(passage: SolaPassageDetails | undefined): Array
 			relation.related_entity.type === "Publication" &&
 			relation.related_entity.id === 248 /* bible id */ &&
 			[
-				solaRelationTypes.passage.hasBibleCitation || solaRelationTypes.passage.hasBibleReference,
+				solaRelationTypes.passage.hasBibleCitation,
+				solaRelationTypes.passage.hasBibleReference,
 			].includes(relation.relation_type.id)
 		);
 	});
