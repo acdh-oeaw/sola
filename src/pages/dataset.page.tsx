@@ -956,6 +956,13 @@ function DetailsPanel({
 		);
 	}
 
+	/**
+	 * When switching entities, the previous entity is kept as placeholder while the next one
+	 * loads. Dependent texts and bibliography are prefetched with the entity, so they switch
+	 * together with it.
+	 */
+	const isLoadingNextEntity = selectedSolaEntity.isPlaceholderData;
+
 	/** Updating metadata on the client is not optimal for SEO, but better than nothing. */
 	let metadata = null;
 
@@ -987,8 +994,15 @@ function DetailsPanel({
 			<section
 				className="overflow-y-auto focus:outline-hidden focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-yellow-400"
 				style={{ gridArea: "details" }}
+				aria-busy={isLoadingNextEntity || undefined}
 			>
-				<div className="grid min-h-full gap-6 p-6 details-panel">
+				<div
+					className={cx(
+						"grid min-h-full gap-6 p-6 details-panel transition-opacity",
+						/** Delay fading out, so fast responses don't cause a flash. */
+						isLoadingNextEntity ? "opacity-50 duration-300 delay-200" : "duration-150",
+					)}
+				>
 					<div className="space-y-4">
 						<div className="space-y-3">
 							<div className="flex items-center justify-between">

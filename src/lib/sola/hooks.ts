@@ -1,5 +1,5 @@
 import { groupBy, keyBy } from "@acdh-oeaw/lib";
-import { useQuery } from "@tanstack/react-query";
+import { keepPreviousData, queryOptions, useQuery, useQueryClient } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import { useCallback, useMemo, useState } from "react";
 
@@ -36,6 +36,10 @@ import type { SolaPassagesFilter, SolaSelectedEntity } from "@/lib/sola/types";
 import { getQueryParam } from "@/lib/url/getQueryParam";
 import { capitalize } from "@/lib/util/capitalize";
 import bibleBooks from "~/config/bible.json" with { type: "json" };
+
+function noop() {
+	/** Noop. */
+}
 
 /** Fetch everything from the list endpoint in one request. */
 const defaultQuery = { limit: 10_000 };
@@ -206,6 +210,7 @@ export function isSolaEntityType(type: string): type is SolaEntityType {
 export function useSolaSelectedEntity() {
 	const router = useRouter();
 	const locale = useCurrentLocale();
+	const queryClient = useQueryClient();
 
 	const setSelectedSolaEntity = useCallback(
 		function setSelectedSolaEntity(entity: SolaSelectedEntity | null) {
@@ -241,30 +246,80 @@ export function useSolaSelectedEntity() {
 
 	const selectedSolaEntity = useQuery<SolaEntityDetails>({
 		queryKey: ["getSolaEntityById", locale, selected, {}],
-		queryFn: () => {
+		/**
+		 * Texts, bibliography, and passage authors and bible passages are fetched in dependent
+		 * queries. Prefetch them before resolving, so the details panel can switch to the new entity
+		 * in one go, instead of individual sections loading one after the other.
+		 *
+		 * Prefetch errors are ignored, and left to the dependent queries to handle.
+		 */
+		queryFn: async () => {
 			const { id, type } = selected!;
-			switch (type) {
-				case "Event":
-					return getSolaEventById({ id, locale });
-				case "Institution":
-					return getSolaInstitutionById({ id, locale });
-				case "Passage":
-					return getSolaPassageById({ id, locale });
-				case "Person":
-					return getSolaPersonById({ id, locale });
-				case "Place":
-					return getSolaPlaceById({ id, locale });
-				case "Publication":
-					return getSolaPublicationById({ id, locale });
-			}
+
+			const bibliography = queryClient
+				.query(solaEntityBibliographyQueryOptions(locale, id, type))
+				.catch(noop);
+			const textTypes = queryClient.query(solaTextTypesQueryOptions(locale)).catch(noop);
+
+			const entity = await getSolaEntityById(id, type, locale);
+
+			const textIds = getSolaTextIds(entity);
+			const texts =
+				textIds.length > 0
+					? queryClient.query(solaTextsQueryOptions(locale, textIds)).catch(noop)
+					: null;
+
+			const passage = entity.type === "Passage" ? entity : undefined;
+			const publicationId = getSolaPassagePublicationId(passage);
+			const authors =
+				publicationId !== undefined
+					? queryClient.query(solaPublicationQueryOptions(locale, publicationId)).catch(noop)
+					: null;
+			const bibleRelationIds = getSolaBibleRelationIds(passage);
+			const biblePassages =
+				bibleRelationIds.length > 0
+					? queryClient
+							.query(solaPassagePublicationRelationsQueryOptions(locale, bibleRelationIds))
+							.catch(noop)
+					: null;
+
+			await Promise.all([bibliography, textTypes, texts, authors, biblePassages]);
+
+			return entity;
 		},
 		enabled: selected !== null,
+		/**
+		 * Keep showing the previous entity while switching entities, but not when the selection
+		 * has been cleared: disabled queries would otherwise keep placeholder data indefinitely.
+		 */
+		placeholderData: selected !== null ? keepPreviousData : undefined,
 	});
 
 	return {
 		selectedSolaEntity,
 		setSelectedSolaEntity,
 	};
+}
+
+function getSolaEntityById(
+	id: number,
+	type: SolaEntityType,
+	locale: SiteLocale,
+): Promise<SolaEntityDetails> {
+	switch (type) {
+		case "Event":
+			return getSolaEventById({ id, locale });
+		case "Institution":
+			return getSolaInstitutionById({ id, locale });
+		case "Passage":
+			return getSolaPassageById({ id, locale });
+		case "Person":
+			return getSolaPersonById({ id, locale });
+		case "Place":
+			return getSolaPlaceById({ id, locale });
+		case "Publication":
+			return getSolaPublicationById({ id, locale });
+	}
 }
 
 /**
@@ -396,19 +451,64 @@ export function useSolaPassagesFilterOptionsTree(
  * Returns relation type ids, mapped by entity type.
  */
 export function useSolaRelationTypes() {
-	const relationTypes = useMemo(() => {
-		return {
-			passage: {
-				hasBibleCitation: 205,
-				hasBibleReference: 204,
-				isIncludedIn: 189,
-			},
-			person: {
-				isAuthorOf: 187,
-			},
-		};
-	}, []);
-	return relationTypes;
+	return solaRelationTypes;
+}
+
+const solaRelationTypes = {
+	passage: {
+		hasBibleCitation: 205,
+		hasBibleReference: 204,
+		isIncludedIn: 189,
+	},
+	person: {
+		isAuthorOf: 187,
+	},
+};
+
+function getSolaPassagePublicationId(passage: SolaPassageDetails | undefined) {
+	const isIncludedInRelation = passage?.relations.find((relation) => {
+		return (
+			relation.related_entity.type === "Publication" &&
+			relation.relation_type.id === solaRelationTypes.passage.isIncludedIn
+		);
+	});
+	return isIncludedInRelation?.related_entity.id;
+}
+
+function getSolaBibleRelationIds(passage: SolaPassageDetails | undefined): Array<number> {
+	const bibleRelations = passage?.relations.filter((relation) => {
+		return (
+			relation.related_entity.type === "Publication" &&
+			relation.related_entity.id === 248 /* bible id */ &&
+			[
+				solaRelationTypes.passage.hasBibleCitation || solaRelationTypes.passage.hasBibleReference,
+			].includes(relation.relation_type.id)
+		);
+	});
+	return (
+		bibleRelations?.map((relation) => {
+			return relation.id;
+		}) ?? []
+	);
+}
+
+function solaPublicationQueryOptions(locale: SiteLocale, id: number | undefined) {
+	return queryOptions({
+		queryKey: ["getPublicationById", locale, id, {}],
+		queryFn: () => {
+			return getSolaPublicationById({ id: id!, locale });
+		},
+	});
+}
+
+function solaPassagePublicationRelationsQueryOptions(locale: SiteLocale, ids: Array<number>) {
+	const query = { id__in: ids };
+	return queryOptions({
+		queryKey: ["getSolaPassagePublicationRelations", locale, query],
+		queryFn: () => {
+			return getSolaPassagePublicationRelations({ query, locale });
+		},
+	});
 }
 
 /**
@@ -425,13 +525,7 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
 	 * "is_included_in" (id 189), then get related author of that publication with
 	 * relation type "is_author_of" (id 187).
 	 */
-	const isIncludedInRelation = passage?.relations.find((relation) => {
-		return (
-			relation.related_entity.type === "Publication" &&
-			relation.relation_type.id === relationTypes.passage.isIncludedIn
-		);
-	});
-	const publicationId = isIncludedInRelation?.related_entity.id;
+	const publicationId = getSolaPassagePublicationId(passage);
 
 	/**
 	 * No need to fetch authors with `getSolaPersons?id__in=authorIds`,
@@ -441,11 +535,10 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
 	const persons = q.data?.persons;
 
 	const authors = useQuery({
-		queryKey: ["getPublicationById", locale, publicationId, {}],
-		queryFn: () => {
-			return getSolaPublicationById({ id: publicationId!, locale });
-		},
+		...solaPublicationQueryOptions(locale, publicationId),
 		enabled: publicationId !== undefined && persons !== undefined,
+		/** Never show data of a previously selected entity. */
+		placeholderData: undefined,
 		select: (results) => {
 			const isAuthorOfRelations = results.relations.filter((relation) => {
 				return (
@@ -464,33 +557,15 @@ export function useSolaPassageMetadata(passage: SolaPassageDetails | undefined) 
 	});
 
 	/**
-	 * Fetch relations to bible and corresponding bible passages.
+	 * Fetch relations to bible and corresponding bible passages. Info about the referenced/cited
+	 * bible passage is a property of passage->publication relation.
 	 */
-	const bibleRelations = passage?.relations.filter((relation) => {
-		return (
-			relation.related_entity.type === "Publication" &&
-			relation.related_entity.id === 248 /* bible id */ &&
-			[relationTypes.passage.hasBibleCitation || relationTypes.passage.hasBibleReference].includes(
-				relation.relation_type.id,
-			)
-		);
-	});
-
-	/**
-	 * Info about the referenced/cited bible passage is a property of
-	 * passage->publication relation.
-	 */
-	const bibleRelationIds =
-		bibleRelations?.map((relation) => {
-			return relation.id;
-		}) ?? [];
-	const query = { id__in: bibleRelationIds };
+	const bibleRelationIds = getSolaBibleRelationIds(passage);
 	const biblePassages = useQuery({
-		queryKey: ["getSolaPassagePublicationRelations", locale, query],
-		queryFn: () => {
-			return getSolaPassagePublicationRelations({ query, locale });
-		},
+		...solaPassagePublicationRelationsQueryOptions(locale, bibleRelationIds),
 		enabled: bibleRelationIds.length > 0,
+		/** Never show data of a previously selected entity. */
+		placeholderData: undefined,
 		select: (results) => {
 			const map: Record<string, string> = {};
 			results.results.forEach((result) => {
@@ -553,16 +628,12 @@ export function useSolaEntityRelations(entity: SolaEntityDetails | undefined) {
 	}, [entity]);
 }
 
-/**
- * Fetches bibliography for SOLA entity.
- */
-export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
-	const locale = useCurrentLocale();
-
-	const id = entity?.id;
-	const type = entity?.type;
-
-	const bibliography = useQuery({
+function solaEntityBibliographyQueryOptions(
+	locale: SiteLocale,
+	id: number | undefined,
+	type: SolaEntityType | undefined,
+) {
+	return queryOptions({
 		queryKey: [
 			"getSolaEntityBibliographyById",
 			locale,
@@ -573,7 +644,23 @@ export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
 			const query = { attribute: "include", contenttype: type! };
 			return getSolaEntityBibliographyById({ id: id!, query, locale });
 		},
+	});
+}
+
+/**
+ * Fetches bibliography for SOLA entity.
+ */
+export function useSolaEntityBibliography(entity: SolaEntity | undefined) {
+	const locale = useCurrentLocale();
+
+	const id = entity?.id;
+	const type = entity?.type;
+
+	const bibliography = useQuery({
+		...solaEntityBibliographyQueryOptions(locale, id, type),
 		enabled: id !== undefined && type !== undefined,
+		/** Never show data of a previously selected entity. */
+		placeholderData: undefined,
 	});
 
 	return bibliography;
@@ -604,6 +691,39 @@ export function useSolaTextTypes() {
 	return textTypesByLocale;
 }
 
+function solaTextTypesQueryOptions(locale: SiteLocale) {
+	return queryOptions({
+		queryKey: ["getTextTypes", locale, {}],
+		queryFn: () => {
+			return getSolaTextTypes({ locale, query: defaultQuery });
+		},
+	});
+}
+
+/** Include annotations and inline HTML `<mark>` elements. */
+const solaTextsQuery = { highlight: true, inline_annotations: true };
+
+function solaTextsQueryOptions(locale: SiteLocale, ids: Array<number>) {
+	return queryOptions({
+		queryKey: ["getSolaTextsByIds", locale, ids, solaTextsQuery],
+		queryFn: () => {
+			return Promise.all(
+				ids.map((id) => {
+					return getSolaTextById({ id, query: solaTextsQuery, locale });
+				}),
+			);
+		},
+	});
+}
+
+function getSolaTextIds(entity: SolaEntityDetails | undefined): Array<number> {
+	return (
+		entity?.text.map((text) => {
+			return text.id;
+		}) ?? []
+	);
+}
+
 /**
  * Fetches associated texts for a SOLA entity, filtered by current locale.
  *
@@ -618,33 +738,19 @@ export function useSolaTexts(entity: SolaEntityDetails | undefined) {
 	 * labels on `text.kind.label` are not localised.
 	 */
 	const textTypes = useQuery({
-		queryKey: ["getTextTypes", locale, {}],
-		queryFn: () => {
-			return getSolaTextTypes({ locale, query: defaultQuery });
-		},
+		...solaTextTypesQueryOptions(locale),
 		select: mapResultsById,
 	});
 
-	/** Include annotations and inline HTML `<mark>` elements. */
-	const query = { highlight: true, inline_annotations: true };
-
-	const ids =
-		entity?.text.map((text) => {
-			return text.id;
-		}) ?? [];
+	const ids = getSolaTextIds(entity);
 
 	const textTypesByLocale = useSolaTextTypes();
 
 	const texts = useQuery({
-		queryKey: ["getSolaTextsByIds", locale, ids, query],
-		queryFn: () => {
-			return Promise.all(
-				ids.map((id) => {
-					return getSolaTextById({ id, query, locale });
-				}),
-			);
-		},
+		...solaTextsQueryOptions(locale, ids),
 		enabled: entity !== undefined && ids.length > 0 && textTypes.data !== undefined,
+		/** Never show data of a previously selected entity. */
+		placeholderData: undefined,
 		select: (results) => {
 			const map: Record<number, SolaTextDetails> = {};
 			results.forEach((text) => {
