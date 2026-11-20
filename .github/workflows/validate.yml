@@ -61,6 +61,10 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      # Lint and typecheck need generated types, e.g. for `next/root-params`.
+      - name: Generate types
+        run: pnpm run types:generate
+
       - name: Format
         run: pnpm run format:check
 

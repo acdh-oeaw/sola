@@ -25,7 +25,8 @@
 		"start": "next start",
 		"styles:check": "stylelint \"./**/*.css\" --cache --ignore-path ./.gitignore",
 		"styles:fix": "pnpm run styles:check --fix",
-		"types:check": "tsc --noEmit"
+		"types:check": "tsc --noEmit",
+		"types:generate": "next typegen"
 	},
 	"dependencies": {
 		"@acdh-oeaw/lib": "^0.2.2",
