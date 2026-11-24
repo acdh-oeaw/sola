@@ -10,5 +10,5 @@
 	"useTabs": true,
 	"sortPackageJson": false,
 	"sortImports": true,
-	"ignorePatterns": ["pnpm-lock.yaml", "content/**", "public/**"]
+	"ignorePatterns": ["pnpm-lock.yaml", "pnpm-workspace.yaml", "content/**", "public/**"]
 }
