@@ -1,11 +1,16 @@
 allowBuilds:
-  sharp: true
+  '@parcel/watcher': true
+  '@swc/core': true
   lefthook: true
-  # Dependencies of next-intl, which ship prebuilt binaries.
-  "@parcel/watcher": false
-  "@swc/core": false
+autoDedupe: true
+
 engineStrict: true
 
-shellEmulator: true
+lockfile:
+  includeResolutionSettings: true
 
-strictDepBuilds: true
+minimumReleaseAge: 720
+
+saveTypes: true
+
+shellEmulator: true
