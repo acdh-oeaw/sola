@@ -18,6 +18,8 @@ const withNextIntl = createNextIntlPlugin({
 });
 
 const config: NextConfig = {
+	/** Compression is handled by the traefik reverse proxy, see `.github/auto-deploy-values.yaml`. */
+	compress: false,
 	experimental: {
 		/**
 		 * Render 404s for unmatched URLs with `app/global-not-found.tsx`. Not-found pages nested in
